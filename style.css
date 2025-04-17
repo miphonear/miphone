@@ -1,0 +1,368 @@
+/* Global */
+body {
+  font-family: 'Open Sans', sans-serif;
+  background-color: #ffffff;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; /* Importante para un mejor control de los elementos */
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* Header */
+header {
+  background-color: #ffffff;
+}
+
+/* Cuadro de búsqueda */
+#searchGeneralWrapper {
+  position: relative;
+  width: 70%;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+#searchGeneralWrapper i {
+  position: absolute;
+  top: 50%;
+  left: 16px;
+  transform: translateY(-50%);
+  color: #aaa;
+  font-size: 1.2rem;
+  pointer-events: none;
+}
+
+#searchGeneral {
+  width: 100%;
+  padding-left: 45px;
+  border-radius: 10px;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+  font-size: 1rem; /* Tamaño de fuente adaptable */
+}
+
+/* WhatsApp */
+.whatsapp-float {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #25d366;
+  color: white;
+  font-size: 32px;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+}
+
+/* Acordeones */
+.accordion-button {
+  background-color: #f8f9fa;
+  color: #333;
+  font-weight: 600;
+  border: 0 solid #ddd;
+  box-shadow: none;
+  border-radius: none;
+}
+
+.accordion-button:not(.collapsed) {
+  background-color: #ff8000;
+  color: white;
+}
+
+.accordion-button:hover {
+  box-shadow: 0 0 2px 1px #ff8000; /* Sombra naranja */
+}
+
+/* Tabla dentro del acordeón */
+.accordion-collapse table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 5px;
+  margin-bottom: 0;
+  font-size: 0.95rem;
+}
+
+/* Encabezado sin bordes */
+.accordion-collapse table th {
+  background-color: #f1f1f1;
+  font-weight: 600;
+  padding: 8px;
+  border: none !important;
+  border-bottom: none !important;
+}
+
+/* Filas de datos */
+.accordion-collapse table td {
+  padding: 5px;
+  border: none;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Eliminar línea de la última fila */
+.accordion-collapse table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Quitar cualquier borde residual en <tr> */
+.accordion-collapse table tr {
+  border: none !important;
+}
+
+/* Hover opcional */
+.accordion-collapse table tbody tr:hover td {
+  background-color: #fff3e0;
+}
+
+/* Ajustes columna Label (L) */
+th:nth-child(4) {
+  color: transparent;
+}
+
+td:nth-child(4) {
+  width: 1%;
+  white-space: nowrap;
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* Hover FAQ */
+.accordion-body .list-group-item {
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 8px 14px;
+  transition: background-color 0.2s, color 0.2s;
+  color: #333;
+  background-color: #f8f9fa;
+  margin-bottom: 5px;
+}
+
+.accordion-body .list-group-item:hover {
+  background-color: #fff3e0;
+  text-decoration: none;
+}
+
+/* === MEDIA QUERIES PARA RESPONSIVE === */
+@media (max-width: 1024px) {
+  /* Header */
+  header .container {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center;
+  }
+
+  header img {
+    max-width: 180px;
+    height: auto;
+  }
+
+  header .text-end {
+    text-align: center !important;
+    margin-top: 10px;
+  }
+
+  /* Cuadro de búsqueda */
+  #searchGeneralWrapper {
+    max-width: 90%;
+    margin: 15px auto;
+  }
+
+  #searchGeneral {
+    padding-left: 40px;
+    font-size: 1rem;
+  }
+
+  #searchGeneralWrapper i {
+    left: 12px;
+    font-size: 1rem;
+  }
+
+  /* Acordeones */
+  .accordion-button {
+    font-size: 1rem;
+    padding: 10px 15px;
+  }
+
+  .accordion-collapse table {
+    font-size: 0.9rem;
+  }
+
+  /* WhatsApp button */
+  .whatsapp-float {
+    bottom: 19px;
+    right: 15px;
+    width: 60px;
+    height: 60px;
+    font-size: 26px;
+  }
+
+  /* Footer */
+  footer .container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  footer .text-start, 
+  footer .text-end {
+    text-align: center !important;
+    margin: 5px 0;
+  }
+
+  /* FAQ List */
+  .accordion-body .list-group-item {
+    font-size: 0.85rem;
+    padding: 7px 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Header */
+  header .container {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center;
+  }
+
+  header img {
+    max-width: 150px;
+    height: auto;
+  }
+
+  header .text-end {
+    text-align: center !important;
+    margin-top: 10px;
+  }
+
+  /* Cuadro de búsqueda */
+  #searchGeneralWrapper {
+    max-width: 90%;
+    margin: 10px auto;
+  }
+
+  #searchGeneral {
+    padding-left: 35px;
+    font-size: 0.9rem;
+  }
+
+  #searchGeneralWrapper i {
+    left: 10px;
+    font-size: 1rem;
+  }
+
+  /* Acordeones */
+  .accordion-button {
+    font-size: 0.95rem;
+    padding: 12px 18px;
+  }
+
+  .accordion-collapse table {
+    font-size: 0.85rem;
+  }
+
+  /* WhatsApp button */
+  .whatsapp-float {
+    bottom: 10px;
+    right: 10px;
+    width: 55px;
+    height: 55px;
+    font-size: 24px;
+  }
+
+  /* Footer */
+  footer .container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  footer .text-start, 
+  footer .text-end {
+    text-align: center !important;
+    margin: 5px 0;
+  }
+
+  /* FAQ List */
+  .accordion-body .list-group-item {
+    font-size: 0.8rem;
+    padding: 6px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Header */
+  header .container {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center;
+  }
+
+  header img {
+    max-width: 120px;
+    height: auto;
+  }
+
+  header .text-end {
+    text-align: center !important;
+    margin-top: 10px;
+  }
+
+  /* Cuadro de búsqueda */
+  #searchGeneralWrapper {
+    max-width: 90%;
+    margin: 10px auto;
+  }
+
+  #searchGeneral {
+    padding-left: 30px;
+    font-size: 0.85rem;
+  }
+
+  #searchGeneralWrapper i {
+    left: 8px;
+    font-size: 0.9rem;
+  }
+
+  /* Acordeones */
+  .accordion-button {
+    font-size: 0.9rem;
+    padding: 10px 15px;
+  }
+
+  .accordion-collapse table {
+    font-size: 0.8rem;
+  }
+
+  /* WhatsApp button */
+  .whatsapp-float {
+    bottom: 5px;
+    right: 5px;
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+  }
+
+  /* Footer */
+  footer .container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  footer .text-start, 
+  footer .text-end {
+    text-align: center !important;
+    margin: 5px 0;
+  }
+
+  /* FAQ List */
+  .accordion-body .list-group-item {
+    font-size: 0.75rem;
+    padding: 5px 8px;
+  }
+}
