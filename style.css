@@ -51,15 +51,15 @@ header {
   right: 20px;
   background-color: #25d366;
   color: white;
-  font-size: 32px;
-  width: 70px;
-  height: 70px;
+  font-size: 38px;
+  width: 75px;
+  height: 75px;
   border-radius: 50%;
   z-index: 100;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  box-shadow: 0 0 12px rgba(255, 128, 0, 0.3);
 }
 
 /* Acordeones */
@@ -197,11 +197,9 @@ td:nth-child(4) {
 
   /* WhatsApp button */
   .whatsapp-float {
-    bottom: 19px;
-    right: 15px;
-    width: 60px;
-    height: 60px;
-    font-size: 26px;
+    width: 75px;
+    height: 75px;
+    font-size: 38px;
   }
 
   /* Footer */
@@ -269,11 +267,11 @@ td:nth-child(4) {
 
   /* WhatsApp button */
   .whatsapp-float {
-    bottom: 10px;
-    right: 10px;
-    width: 55px;
-    height: 55px;
-    font-size: 24px;
+    width: 60px;
+    height: 60px;
+    font-size: 28px;
+    bottom: 18px;
+    right: 16px;
   }
 
   /* Footer */
@@ -341,11 +339,11 @@ td:nth-child(4) {
 
   /* WhatsApp button */
   .whatsapp-float {
-    bottom: 5px;
-    right: 5px;
-    width: 50px;
-    height: 50px;
+    width: 55px;
+    height: 55px;
     font-size: 24px;
+    bottom: 16px;
+    right: 12px;
   }
 
   /* Footer */
