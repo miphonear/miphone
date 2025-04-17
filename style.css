@@ -59,7 +59,7 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 12px rgba(255, 128, 0, 0.3);
+  box-shadow: 0 0 12px #fff3e0;
 }
 
 /* Acordeones */
@@ -200,6 +200,7 @@ td:nth-child(4) {
     width: 75px;
     height: 75px;
     font-size: 38px;
+    color: yellow
   }
 
   /* Footer */
@@ -269,9 +270,10 @@ td:nth-child(4) {
   .whatsapp-float {
     width: 75px;
     height: 75px;
-    font-size:75px;
+    font-size: 38px;
     bottom: 18px;
     right: 16px;
+    color: red
   }
 
   /* Footer */
@@ -344,6 +346,7 @@ td:nth-child(4) {
     font-size: 28px;
     bottom: 18px;
     right: 16px;
+    color: blue
   }
 
   /* Footer */
