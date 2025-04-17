@@ -4,7 +4,7 @@ body {
   background-color: #ffffff;
   margin: 0;
   padding: 0;
-  box-sizing: border-box; /* Importante para un mejor control de los elementos */
+  box-sizing: border-box;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -16,7 +16,7 @@ header {
   background-color: #ffffff;
 }
 
-/* Cuadro de búsqueda */
+/* Search */
 #searchGeneralWrapper {
   position: relative;
   width: 70%;
@@ -150,7 +150,7 @@ td:nth-child(4) {
   text-decoration: none;
 }
 
-/* === MEDIA QUERIES PARA RESPONSIVE === */
+/* === MEDIA QUERIES === */
 @media (max-width: 1024px) {
   /* Header */
   header .container {
@@ -339,11 +339,11 @@ td:nth-child(4) {
 
   /* WhatsApp button */
   .whatsapp-float {
-    width: 55px;
-    height: 55px;
-    font-size: 24px;
-    bottom: 16px;
-    right: 12px;
+    width: 60px;
+    height: 60px;
+    font-size: 28px;
+    bottom: 18px;
+    right: 16px;
   }
 
   /* Footer */
