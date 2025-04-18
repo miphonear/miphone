@@ -16,6 +16,17 @@ header {
   background-color: #ffffff;
 }
 
+/* Header buttons hover */
+header .btn {
+  transition: all 0.2s ease;
+}
+
+header .btn:hover {
+  border-color: #ff8000 !important;
+  box-shadow: 0 0 8px rgba(255, 128, 0, 0.3);
+  transform: translateY(-2px);
+}
+
 /* Search */
 #searchGeneralWrapper {
   position: relative;
@@ -59,7 +70,7 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 12px #fff3e0;
+  box-shadow: 0 0 8px #b6b6b6;
 }
 
 /* Acordeones */
@@ -169,7 +180,7 @@ td:nth-child(4) {
     margin-top: 10px;
   }
 
-  /* Cuadro de búsqueda */
+  /* Search */
   #searchGeneralWrapper {
     max-width: 90%;
     margin: 15px auto;
@@ -240,7 +251,7 @@ td:nth-child(4) {
     margin-top: 10px;
   }
 
-  /* Cuadro de búsqueda */
+  /* Search */
   #searchGeneralWrapper {
     max-width: 90%;
     margin: 10px auto;
@@ -295,7 +306,7 @@ td:nth-child(4) {
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 480px) {   /* Mobile */
   /* Header */
   header .container {
     flex-direction: column !important;
@@ -313,7 +324,7 @@ td:nth-child(4) {
     margin-top: 10px;
   }
 
-  /* Cuadro de búsqueda */
+  /* Search */
   #searchGeneralWrapper {
     max-width: 90%;
     margin: 10px auto;
