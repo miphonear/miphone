@@ -1,12 +1,24 @@
 const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRr62BlKCzICpC0ctnU2mRB8cq_SOCcsgydXQJXD5pQvasO1b1iT0Wp_L7sFxH8UGJCepaMjng1GUO0/pub?gid=1610793698&single=true&output=csv";
 
-// Fecha de actualización
-document.addEventListener("DOMContentLoaded", () => {
+// Cotizacion
+  fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vQJ7PS8pvnCKdpLgJFonsZNN54Rs8oTpzGgCxhbfZzd3KmKb9k12OEwgAWuDAHiIPraWKxoS5TlCm4X/pub?gid=0&single=true&output=csv")
+    .then(res => res.text())
+    .then(csv => {
+      const lineas = csv.trim().split("\n");
+      const valorDolar = lineas[1] ? lineas[1].replace(",", ".") : "N/A"; // fila 2, columna 1
+      document.getElementById("dolarValor").textContent = "$" + valorDolar;
+    })
+    .catch(err => {
+      document.getElementById("dolarValor").textContent = "Error";
+      console.error("Error al obtener dólar:", err);
+    });
+
+  // Fecha
   const fecha = new Date();
-  const opciones = { day: "2-digit", month: "2-digit", year: "numeric" };
-  const fechaFormateada = fecha.toLocaleDateString("es-AR", opciones);
-  document.getElementById("fecha-actualizacion").textContent = fechaFormateada;
-});
+  const dia = String(fecha.getDate()).padStart(2, "0");
+  const mes = String(fecha.getMonth() + 1).padStart(2, "0");
+  const anio = fecha.getFullYear();
+  document.getElementById("fechaActual").textContent = `${dia}/${mes}/${anio}`;
 
 // Obtener y procesar datos CSV
 fetch(csvUrl)
