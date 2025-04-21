@@ -55,6 +55,18 @@ header .btn:hover {
   font-size: 1rem; /* Tamaño de fuente adaptable */
 }
 
+/* Estilo sin coincidencias */
+.no-resultado {
+  color: #ff4040;
+  font-weight: 600;
+}
+
+/* Estilo coincidencias */
+.resultado-encontrado {
+  color: green;
+  font-weight: 600;
+}
+
 /* WhatsApp */
 .whatsapp-float {
   position: fixed;
@@ -80,7 +92,7 @@ header .btn:hover {
   font-weight: 600;
   border: 0 solid #ddd;
   box-shadow: none;
-  border-radius: none;
+  border-radius: 0;
 }
 
 .accordion-button:not(.collapsed) {
@@ -90,6 +102,11 @@ header .btn:hover {
 
 .accordion-button:hover {
   box-shadow: 0 0 2px 1px #ff8000; /* Sombra naranja */
+}
+
+.accordion-collapse {
+  transition: height 0.5s ease;
+  overflow: hidden;
 }
 
 /* Tabla dentro del acordeón */
@@ -104,22 +121,16 @@ header .btn:hover {
 /* Encabezado sin bordes */
 .accordion-collapse table th {
   background-color: #f1f1f1;
-  font-weight: 600;
+  font-weight: 700;
   padding: 8px;
-  border: none !important;
-  border-bottom: none !important;
+  border: none;
 }
 
 /* Filas de datos */
 .accordion-collapse table td {
-  padding: 5px;
+  padding: 4px;
   border: none;
   border-bottom: 1px solid #ddd;
-}
-
-/* Eliminar línea de la última fila */
-.accordion-collapse table tbody tr:last-child td {
-  border-bottom: none;
 }
 
 /* Quitar cualquier borde residual en <tr> */
@@ -130,6 +141,7 @@ header .btn:hover {
 /* Hover opcional */
 .accordion-collapse table tbody tr:hover td {
   background-color: #fff3e0;
+  transition: background-color 0.3s ease;
 }
 
 /* Ajustes columna Label (L) */
@@ -157,7 +169,7 @@ td:nth-child(4) {
 }
 
 .accordion-body .list-group-item:hover {
-  background-color: #fff3e0;
+  background-color: #ffe0e0;
   text-decoration: none;
 }
 
@@ -211,7 +223,6 @@ td:nth-child(4) {
     width: 75px;
     height: 75px;
     font-size: 38px;
-    color: yellow
   }
 
   /* Footer */
@@ -284,7 +295,6 @@ td:nth-child(4) {
     font-size: 38px;
     bottom: 18px;
     right: 16px;
-    color: red
   }
 
   /* Footer */
@@ -357,7 +367,6 @@ td:nth-child(4) {
     font-size: 28px;
     bottom: 18px;
     right: 16px;
-    color: blue
   }
 
   /* Footer */
