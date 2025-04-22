@@ -195,7 +195,6 @@ td:nth-child(4) {
   }
 
   header img {
-    max-width: 250;
     height: auto;
   }
 
@@ -264,12 +263,6 @@ td:nth-child(4) {
     text-align: center;
   }
 
-  header img {
-    content: url("images/logo-miphone-2.svg"); /* Cambia el logo en versión móvil */
-    max-width: 150px;
-    height: auto;
-  }
-
   header .text-end {
     text-align: center !important;
     margin-top: 10px;
@@ -306,12 +299,13 @@ td:nth-child(4) {
     width: 75px;
     height: 75px;
     font-size: 38px;
-    bottom: 18px;
+    bottom: calc(18px + env(safe-area-inset-bottom));
     right: 16px;
   }
 
   /* Footer */
   footer .container {
+    padding-bottom: calc(1rem + env(safe-area-inset-bottom));
     flex-direction: column;
     text-align: center;
   }
@@ -335,12 +329,6 @@ td:nth-child(4) {
     flex-direction: column !important;
     align-items: center !important;
     text-align: center;
-  }
-
-  header img {
-    content: url("images/logo-miphone-2.svg"); /* Cambia el logo en versión móvil */
-    max-width: 140px;
-    height: auto;
   }
 
   header .text-end {
@@ -378,12 +366,13 @@ td:nth-child(4) {
     width: 60px;
     height: 61px;
     font-size: 28px;
-    bottom: 18px;
+    bottom: calc(18px + env(safe-area-inset-bottom));
     right: 16px;
   }
 
   /* Footer */
   footer .container {
+    padding-bottom: calc(1rem + env(safe-area-inset-bottom));
     flex-direction: column;
     text-align: center;
   }
