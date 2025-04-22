@@ -1,20 +1,25 @@
 /* Global */
 body {
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
   background-color: #ffffff;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'Montserrat', sans-serif;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Montserrat", sans-serif;
 }
 
 /* Header */
 header {
   background: linear-gradient(to bottom, #ffffff 0%, #f8f9fa 100%);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03); 
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
 }
 
 header .container {
@@ -167,7 +172,9 @@ td:nth-child(4) {
   border: none;
   border-radius: 0.5rem;
   padding: 8px 14px;
-  transition: background-color 0.2s, color 0.2s;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
   color: #333;
   background-color: #f8f9fa;
   margin-bottom: 5px;
@@ -236,7 +243,7 @@ td:nth-child(4) {
     text-align: center;
   }
 
-  footer .text-start, 
+  footer .text-start,
   footer .text-end {
     text-align: center !important;
     margin: 5px 0;
@@ -258,7 +265,7 @@ td:nth-child(4) {
   }
 
   header img {
-    content: url('images/logo-miphone-2.svg'); /* Cambia el logo en versión móvil */
+    content: url("images/logo-miphone-2.svg"); /* Cambia el logo en versión móvil */
     max-width: 150px;
     height: auto;
   }
@@ -309,7 +316,7 @@ td:nth-child(4) {
     text-align: center;
   }
 
-  footer .text-start, 
+  footer .text-start,
   footer .text-end {
     text-align: center !important;
     margin: 5px 0;
@@ -331,7 +338,7 @@ td:nth-child(4) {
   }
 
   header img {
-    content: url('images/logo-miphone-2.svg'); /* Cambia el logo en versión móvil */
+    content: url("images/logo-miphone-2.svg"); /* Cambia el logo en versión móvil */
     max-width: 140px;
     height: auto;
   }
@@ -381,7 +388,7 @@ td:nth-child(4) {
     text-align: center;
   }
 
-  footer .text-start, 
+  footer .text-start,
   footer .text-end {
     text-align: center !important;
     margin: 5px 0;
