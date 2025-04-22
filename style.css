@@ -5,6 +5,7 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  padding-bottom: calc(140px + env(safe-area-inset-bottom)); /* NUEVO */
 }
 
 h1,
@@ -62,7 +63,7 @@ header .btn:hover {
   background-color: #f8f9fa;
   border: 1px solid #ddd;
   box-sizing: border-box;
-  font-size: 1rem; /* Tamaño de fuente adaptable */
+  font-size: 1rem;
 }
 
 /* Estilo sin coincidencias */
@@ -111,7 +112,7 @@ header .btn:hover {
 }
 
 .accordion-button:hover {
-  box-shadow: 0 0 2px 1px #ff8000; /* Sombra naranja */
+  box-shadow: 0 0 2px 1px #ff8000;
 }
 
 .accordion-collapse {
@@ -119,7 +120,6 @@ header .btn:hover {
   overflow: hidden;
 }
 
-/* Tabla dentro del acordeón */
 .accordion-collapse table {
   width: 100%;
   border-collapse: collapse;
@@ -128,7 +128,6 @@ header .btn:hover {
   font-size: 0.95rem;
 }
 
-/* Encabezado sin bordes */
 .accordion-collapse table th {
   background-color: #f1f1f1;
   font-weight: 700;
@@ -136,19 +135,16 @@ header .btn:hover {
   border: none;
 }
 
-/* Filas de datos */
 .accordion-collapse table td {
   padding: 4px;
   border: none;
   border-bottom: 1px solid #ddd;
 }
 
-/* Quitar cualquier borde residual en <tr> */
 .accordion-collapse table tr {
   border: none !important;
 }
 
-/* Hover opcional */
 .accordion-collapse table tbody tr:hover td {
   background-color: #fff3e0;
   transition: background-color 0.3s ease;
@@ -172,9 +168,7 @@ td:nth-child(4) {
   border: none;
   border-radius: 0.5rem;
   padding: 8px 14px;
-  transition:
-    background-color 0.2s,
-    color 0.2s;
+  transition: background-color 0.2s, color 0.2s;
   color: #333;
   background-color: #f8f9fa;
   margin-bottom: 5px;
@@ -185,13 +179,13 @@ td:nth-child(4) {
   text-decoration: none;
 }
 
+/* Spacer para que el footer no se tape */
 .footer-spacer {
-  height: 100px; /* Ajustá según el alto de tu footer */
+  height: 140px;
 }
 
 /* === MEDIA QUERIES === */
 @media (max-width: 1024px) {
-  /* Header */
   header .container {
     flex-direction: column !important;
     align-items: center !important;
@@ -207,7 +201,6 @@ td:nth-child(4) {
     margin-top: 10px;
   }
 
-  /* Search */
   #searchGeneralWrapper {
     max-width: 90%;
     margin: 15px auto;
@@ -223,7 +216,6 @@ td:nth-child(4) {
     font-size: 1rem;
   }
 
-  /* Acordeones */
   .accordion-button {
     font-size: 1rem;
     padding: 10px 15px;
@@ -233,14 +225,12 @@ td:nth-child(4) {
     font-size: 0.9rem;
   }
 
-  /* WhatsApp button */
   .whatsapp-float {
     width: 75px;
     height: 75px;
     font-size: 38px;
-    }
+  }
 
-  /* Footer */
   footer .container {
     flex-direction: column;
     text-align: center;
@@ -252,7 +242,6 @@ td:nth-child(4) {
     margin: 5px 0;
   }
 
-  /* FAQ List */
   .accordion-body .list-group-item {
     font-size: 0.85rem;
     padding: 7px 12px;
@@ -260,7 +249,6 @@ td:nth-child(4) {
 }
 
 @media (max-width: 768px) {
-  /* Header */
   header .container {
     flex-direction: column !important;
     align-items: center !important;
@@ -272,7 +260,6 @@ td:nth-child(4) {
     margin-top: 10px;
   }
 
-  /* Search */
   #searchGeneralWrapper {
     max-width: 90%;
     margin: 10px auto;
@@ -288,7 +275,6 @@ td:nth-child(4) {
     font-size: 1rem;
   }
 
-  /* Acordeones */
   .accordion-button {
     font-size: 0.95rem;
     padding: 12px 18px;
@@ -298,7 +284,6 @@ td:nth-child(4) {
     font-size: 0.85rem;
   }
 
-  /* WhatsApp button */
   .whatsapp-float {
     width: 75px;
     height: 75px;
@@ -307,7 +292,6 @@ td:nth-child(4) {
     right: 16px;
   }
 
-  /* Footer */
   footer {
     padding-bottom: 20px;
   }
@@ -323,7 +307,6 @@ td:nth-child(4) {
     margin: 5px 0;
   }
 
-  /* FAQ List */
   .accordion-body .list-group-item {
     font-size: 0.8rem;
     padding: 6px 10px;
@@ -331,7 +314,6 @@ td:nth-child(4) {
 }
 
 @media (max-width: 480px) {
-  /* Header */
   header .container {
     flex-direction: column !important;
     align-items: center !important;
@@ -342,7 +324,7 @@ td:nth-child(4) {
     text-align: center !important;
     margin-top: 10px;
   }
-  /* Search */
+
   #searchGeneralWrapper {
     max-width: 90%;
     margin: 10px auto;
@@ -358,7 +340,6 @@ td:nth-child(4) {
     font-size: 0.9rem;
   }
 
-  /* Acordeones */
   .accordion-button {
     font-size: 0.9rem;
     padding: 10px 15px;
@@ -368,7 +349,6 @@ td:nth-child(4) {
     font-size: 0.8rem;
   }
 
-  /* WhatsApp button */
   .whatsapp-float {
     width: 60px;
     height: 61px;
@@ -377,7 +357,6 @@ td:nth-child(4) {
     right: 16px;
   }
 
-  /* Footer */
   footer {
     padding-bottom: 20px;
   }
@@ -393,7 +372,6 @@ td:nth-child(4) {
     margin: 5px 0;
   }
 
-  /* FAQ List */
   .accordion-body .list-group-item {
     font-size: 0.75rem;
     padding: 5px 8px;
