@@ -13,7 +13,12 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Header */
 header {
-  background-color: #ffffff;
+  background: linear-gradient(to bottom, #ffffff 0%, #f8f9fa 100%);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03); 
+}
+
+header .container {
+  letter-spacing: 0.2px;
 }
 
 /* Header buttons hover */
@@ -31,7 +36,7 @@ header .btn:hover {
 #searchGeneralWrapper {
   position: relative;
   width: 70%;
-  max-width: 300px;
+  max-width: 299px;
   margin: 0 auto;
 }
 
@@ -105,7 +110,7 @@ header .btn:hover {
 }
 
 .accordion-collapse {
-  transition: height 0.5s ease;
+  transition: height 1s ease;
   overflow: hidden;
 }
 
@@ -183,7 +188,7 @@ td:nth-child(4) {
   }
 
   header img {
-    max-width: 180px;
+    max-width: 250;
     height: auto;
   }
 
@@ -253,6 +258,7 @@ td:nth-child(4) {
   }
 
   header img {
+    content: url('images/logo-miphone-2.svg'); /* Cambia el logo en versión móvil */
     max-width: 150px;
     height: auto;
   }
@@ -316,7 +322,7 @@ td:nth-child(4) {
   }
 }
 
-@media (max-width: 480px) {   /* Mobile */
+@media (max-width: 480px) {
   /* Header */
   header .container {
     flex-direction: column !important;
@@ -325,7 +331,8 @@ td:nth-child(4) {
   }
 
   header img {
-    max-width: 120px;
+    content: url('images/logo-miphone-2.svg'); /* Cambia el logo en versión móvil */
+    max-width: 140px;
     height: auto;
   }
 
@@ -333,7 +340,6 @@ td:nth-child(4) {
     text-align: center !important;
     margin-top: 10px;
   }
-
   /* Search */
   #searchGeneralWrapper {
     max-width: 90%;
