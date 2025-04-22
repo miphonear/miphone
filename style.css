@@ -234,7 +234,7 @@ td:nth-child(4) {
     width: 75px;
     height: 75px;
     font-size: 38px;
-  }
+    }
 
   /* Footer */
   footer .container {
@@ -299,14 +299,14 @@ td:nth-child(4) {
     width: 75px;
     height: 75px;
     font-size: 38px;
-    bottom: calc(18px + env(safe-area-inset-bottom));
+    bottom: 90px;
     right: 16px;
   }
 
   /* Footer */
   footer {
-  padding-bottom: calc(1rem + env(safe-area-inset-bottom));
-}
+    padding-bottom: 80px;
+  }
 
   footer .container {
     flex-direction: column;
@@ -369,15 +369,15 @@ td:nth-child(4) {
     width: 60px;
     height: 61px;
     font-size: 28px;
-    bottom: calc(18px + env(safe-area-inset-bottom));
+    bottom: 90px;
     right: 16px;
   }
 
   /* Footer */
-    footer {
-  padding-bottom: calc(1rem + env(safe-area-inset-bottom));
-}
-  
+  footer {
+    padding-bottom: 80px;
+  }
+
   footer .container {
     flex-direction: column;
     text-align: center;
