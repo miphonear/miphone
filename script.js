@@ -61,11 +61,13 @@ fetch(csvUrl)
 
 // Definir los íconos para las categorías
 const iconosCategorias = {
-  IPHONE: "bi bi-apple",
-  AIRPODS: "bi bi-earbuds",
-  "APPLE WATCH": "bi bi-smartwatch",
-  AIRTAG: "bi bi-smartwatch",
-  IPAD: "bi-tablet-fill"
+  IPHONE: "bi-apple",
+  AIRPODS: "bi-earbuds",
+  "APPLE WATCH": "bi-smartwatch",
+  AIRTAG: "bi-tag",
+  IPAD: "bi-tablet-fill",
+  "MACBOOK AIR": "bi-laptop",
+  "MACBOOK PRO": "bi-laptop"
 };
 
 // Definir los Badges
@@ -177,10 +179,15 @@ function filtrarGeneral() {
         const palabras = valor.split(" ");
         const mostrarFila = palabras.every((palabra) => textoFila.includes(palabra));
 
-        fila.style.display = mostrarFila ? "" : "none";
-        if (mostrarFila) {
+        // Si la fila está vacía, siempre se muestra, pero no la cuenta como coincidencia
+        if (fila.innerText.trim() === "") {
+          fila.style.display = ""; // Se muestra siempre
+        } else if (mostrarFila) {
+          fila.style.display = ""; // Se muestra si hay coincidencias
           encontradoCategoria = true;
           totalCoincidencias++;
+        } else {
+          fila.style.display = "none"; // Se oculta si no hay coincidencias
         }
       });
 
@@ -214,6 +221,7 @@ function filtrarGeneral() {
     }
   }, 300);
 }
+
 // Cerrar acordeones dentro del modal FAQ
 document.getElementById("faqModal").addEventListener("hidden.bs.modal", () => {
   const accordions = document.querySelectorAll("#faqModal .accordion-collapse.show");
