@@ -161,7 +161,6 @@ function filtrarGeneral() {
     const valor = document.getElementById("searchGeneral").value.toLowerCase();
     const resultadoBusqueda = document.getElementById("resultadoBusqueda");
     const categorias = document.querySelectorAll(".accordion-item");
-    let encontradoGeneral = false;
     let totalCoincidencias = 0;
 
     categorias.forEach((categoria) => {
@@ -170,8 +169,23 @@ function filtrarGeneral() {
       let encontradoCategoria = false;
 
       filas.forEach((fila) => {
+        const esFilaVacia = fila.innerText.trim() === "";
+
+        if (valor === "") {
+          // Si no hay búsqueda, mostrar todas las filas (incluso vacías)
+          fila.style.display = "";
+          return;
+        }
+
+        if (esFilaVacia) {
+          // Si hay búsqueda activa y la fila está vacía, la ocultamos
+          fila.style.display = "none";
+          return;
+        }
+
+        // Filtrado normal
         const celdasFiltradas = Array.from(fila.cells)
-          .filter((_, index) => index !== 2) // Ignora columna de precios
+          .filter((_, index) => index !== 2)
           .map((cell) => cell.innerText)
           .join(" ");
 
@@ -179,45 +193,38 @@ function filtrarGeneral() {
         const palabras = valor.split(" ");
         const mostrarFila = palabras.every((palabra) => textoFila.includes(palabra));
 
-        // Si la fila está vacía, siempre se muestra, pero no la cuenta como coincidencia
-        if (fila.innerText.trim() === "") {
-          fila.style.display = ""; // Se muestra siempre
-        } else if (mostrarFila) {
-          fila.style.display = ""; // Se muestra si hay coincidencias
+        fila.style.display = mostrarFila ? "" : "none";
+        if (mostrarFila) {
           encontradoCategoria = true;
           totalCoincidencias++;
-        } else {
-          fila.style.display = "none"; // Se oculta si no hay coincidencias
         }
       });
 
+      // Mostrar u ocultar el acordeón según haya coincidencias
       const acordeon = categoria.querySelector(".accordion-collapse");
-      if (encontradoCategoria) {
+      if (valor === "") {
+        acordeon.classList.remove("show");
+      } else if (encontradoCategoria) {
         acordeon.classList.add("show");
-        encontradoGeneral = true;
       } else {
         acordeon.classList.remove("show");
       }
     });
 
-    const acordeones = document.querySelectorAll(".accordion-collapse");
+    // Actualizar texto de resultados
     if (valor === "") {
       resultadoBusqueda.textContent = "";
-      resultadoBusqueda.classList.remove("no-resultado", "resultado-encontrado"); // Elimina ambas clases si se borra el valor
-      acordeones.forEach((collapse) => collapse.classList.remove("show"));
+      resultadoBusqueda.classList.remove("no-resultado", "resultado-encontrado");
     } else {
-      let mensajeResultado = "";
       if (totalCoincidencias === 0) {
-        mensajeResultado = "Sin resultados. Consultar existencia por WhatsApp";
-        resultadoBusqueda.classList.add("no-resultado"); // Agrega la clase no-resultado si no hay resultados
-        resultadoBusqueda.classList.remove("resultado-encontrado"); // Elimina la clase resultado-encontrado si no hay resultados
+        resultadoBusqueda.textContent = "Sin resultados. Consultar existencia por WhatsApp";
+        resultadoBusqueda.classList.add("no-resultado");
+        resultadoBusqueda.classList.remove("resultado-encontrado");
       } else {
-        mensajeResultado = `${totalCoincidencias} resultado${totalCoincidencias !== 1 ? "s" : ""} encontrado${totalCoincidencias !== 1 ? "s" : ""}`;
-        resultadoBusqueda.classList.add("resultado-encontrado"); // Agrega la clase resultado-encontrado si hay resultados
-        resultadoBusqueda.classList.remove("no-resultado"); // Elimina la clase no-resultado si hay resultados
+        resultadoBusqueda.textContent = `${totalCoincidencias} resultado${totalCoincidencias !== 1 ? "s" : ""} encontrado${totalCoincidencias !== 1 ? "s" : ""}`;
+        resultadoBusqueda.classList.add("resultado-encontrado");
+        resultadoBusqueda.classList.remove("no-resultado");
       }
-
-      resultadoBusqueda.textContent = mensajeResultado;
     }
   }, 300);
 }
