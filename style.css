@@ -5,7 +5,7 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  padding-bottom: calc(40px + env(safe-area-inset-bottom));
+  padding-bottom: calc(10px + env(safe-area-inset-bottom));
 }
 
 h1,
@@ -126,6 +126,7 @@ header .btn:hover {
   margin-top: 5px;
   margin-bottom: 0;
   font-size: 0.95rem;
+  vertical-align: middle;
 }
 
 .accordion-collapse table th {
@@ -291,7 +292,7 @@ footer {
     width: 75px;
     height: 75px;
     font-size: 38px;
-    bottom: 40px;
+    bottom: 20px;
     right: 16px;
   }
 
@@ -370,5 +371,42 @@ footer {
   .accordion-body .list-group-item {
     font-size: 0.75rem;
     padding: 5px 8px;
+  }
+}
+
+/* Estilos para pantallas pequeñas (mobile) */
+@media (max-width: 767px) {
+  /* Mostrar tabla con desplazamiento horizontal */
+  .table-responsive {
+    -webkit-overflow-scrolling: touch;
+    overflow-x: auto; /* Permite desplazamiento horizontal */
+    -ms-overflow-style: none;
+  }
+
+  /* Ajuste del tamaño de la tabla en móvil */
+  .table {
+    font-size: 0.85rem; /* Tamaño de fuente moderado */
+    min-width: 600px; /* Asegura que la tabla no se vuelva demasiado pequeña */
+  }
+
+  /* Ajuste de las celdas */
+  .table th, .table td {
+    padding: 8px; /* Menos padding para ahorrar espacio */
+  }
+
+  /* Ocultar columna L en dispositivos móviles */
+  .table th:nth-child(12), .table td:nth-child(12) {
+    display: none;
+  }
+
+  /* Ajuste en el header de la tabla */
+  .table thead th {
+    font-size: 0.9rem; /* Font-size más pequeño para las cabeceras */
+  }
+
+  /* Ajuste de la visibilidad de los badges en móvil */
+  .badge {
+    font-size: 0.75rem; /* Badge más pequeño */
+    padding: 4px 8px; /* Ajuste de padding en badges */
   }
 }
