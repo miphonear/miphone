@@ -67,7 +67,11 @@ const iconosCategorias = {
   AIRTAG: "bi-tag",
   IPAD: "bi-tablet-fill",
   "MACBOOK AIR": "bi-laptop",
-  "MACBOOK PRO": "bi-laptop"
+  "MACBOOK PRO": "bi-laptop",
+  "SONY PLAYSTATION": "bi-playstation",
+  "MICROSOFT XBOX": "bi-xbox",
+  "NINTENDO SWITCH": "bi-nintendo-switch",
+  VR: "bi-headset-vr"
 };
 
 // Definir los Badges
@@ -102,6 +106,7 @@ function renderCategorias(categorias) {
         </h2>
         <div id="collapse-${catId}" class="accordion-collapse collapse" aria-labelledby="heading-${catId}">
           <div class="accordion-body">
+  ${renderAlerta(cat.nombre)}
             <div class="table-responsive">
               <table class="table table-bordered table-sm text-center" id="tabla-${catId}">
                 <thead class="table-light">
@@ -152,13 +157,32 @@ function renderCategorias(categorias) {
   });
 }
 
+// Alertas
+function renderAlerta(nombreCategoria) {
+  const mensajes = {
+    "MACBOOK AIR": "Consultanos por versiones custom (Chip MAX, +RAM, etc). También traemos iMac, Mac mini, Mac Studio",
+    "MACBOOK PRO": "Consultanos por versiones custom (Chip MAX, +RAM, etc). También traemos iMac, Mac mini, Mac Studio",
+    IPHONE: "¡Combo cargador original (Apple 20W, MWVV3AM) + U$30!",
+    SAMSUNG: "Por otros productos de la marca (Linea Z, Samsung Tab, etc) consultanos por WhatsApp"
+  };
+
+  if (!mensajes[nombreCategoria]) return "";
+
+  return `
+    <div class="alert alert-warning d-flex align-items-center mb-3 py-2 px-3" role="alert">
+      <i class="bi bi-info-circle-fill me-2"></i>
+      <div class="small">${mensajes[nombreCategoria]}</div>
+    </div>
+  `;
+}
+
 // Filtro general con debounce
 let timeoutId;
 function filtrarGeneral() {
   clearTimeout(timeoutId);
 
   timeoutId = setTimeout(() => {
-    const valor = document.getElementById("searchGeneral").value.toLowerCase();
+    const valor = document.getElementById("searchGeneral").value.toLowerCase().trim();
     const resultadoBusqueda = document.getElementById("resultadoBusqueda");
     const categorias = document.querySelectorAll(".accordion-item");
     let totalCoincidencias = 0;
@@ -172,24 +196,21 @@ function filtrarGeneral() {
         const esFilaVacia = fila.innerText.trim() === "";
 
         if (valor === "") {
-          // Si no hay búsqueda, mostrar todas las filas (incluso vacías)
           fila.style.display = "";
           return;
         }
 
         if (esFilaVacia) {
-          // Si hay búsqueda activa y la fila está vacía, la ocultamos
           fila.style.display = "none";
           return;
         }
 
-        // Filtrado normal
-        const celdasFiltradas = Array.from(fila.cells)
+        const textoFila = Array.from(fila.cells)
           .filter((_, index) => index !== 2)
           .map((cell) => cell.innerText)
-          .join(" ");
+          .join(" ")
+          .toLowerCase() + " " + tituloCategoria;
 
-        const textoFila = (celdasFiltradas + " " + tituloCategoria).toLowerCase();
         const palabras = valor.split(" ");
         const mostrarFila = palabras.every((palabra) => textoFila.includes(palabra));
 
@@ -200,31 +221,29 @@ function filtrarGeneral() {
         }
       });
 
-      // Mostrar u ocultar el acordeón según haya coincidencias
       const acordeon = categoria.querySelector(".accordion-collapse");
-      if (valor === "") {
-        acordeon.classList.remove("show");
-      } else if (encontradoCategoria) {
-        acordeon.classList.add("show");
+      if (encontradoCategoria || valor === "") {
+        categoria.style.display = "";
+        if (valor !== "") acordeon.classList.add("show");
+        else acordeon.classList.remove("show");
       } else {
+        categoria.style.display = "none";
         acordeon.classList.remove("show");
       }
     });
 
-    // Actualizar texto de resultados
+    // Actualizar mensaje
     if (valor === "") {
       resultadoBusqueda.textContent = "";
       resultadoBusqueda.classList.remove("no-resultado", "resultado-encontrado");
+    } else if (totalCoincidencias === 0) {
+      resultadoBusqueda.textContent = "Sin resultados. Consultar existencia por WhatsApp";
+      resultadoBusqueda.classList.add("no-resultado");
+      resultadoBusqueda.classList.remove("resultado-encontrado");
     } else {
-      if (totalCoincidencias === 0) {
-        resultadoBusqueda.textContent = "Sin resultados. Consultar existencia por WhatsApp";
-        resultadoBusqueda.classList.add("no-resultado");
-        resultadoBusqueda.classList.remove("resultado-encontrado");
-      } else {
-        resultadoBusqueda.textContent = `${totalCoincidencias} resultado${totalCoincidencias !== 1 ? "s" : ""} encontrado${totalCoincidencias !== 1 ? "s" : ""}`;
-        resultadoBusqueda.classList.add("resultado-encontrado");
-        resultadoBusqueda.classList.remove("no-resultado");
-      }
+      resultadoBusqueda.textContent = `${totalCoincidencias} resultado${totalCoincidencias !== 1 ? "s" : ""} encontrado${totalCoincidencias !== 1 ? "s" : ""}`;
+      resultadoBusqueda.classList.add("resultado-encontrado");
+      resultadoBusqueda.classList.remove("no-resultado");
     }
   }, 300);
 }
