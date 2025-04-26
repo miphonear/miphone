@@ -11,6 +11,7 @@
       content="precios celulares Argentina, comprar iPhone, MacBook, Samsung, Xiaomi, consolas, gaming, fotografía, ofertas online" />
     <meta name="author" content="miPhone" />
     <title>miPhone™ – ¡Comprá fácil, comprá seguro!</title>
+    <link rel="icon" type="image/png" href="iamges/favicon.png" />
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
@@ -71,18 +72,66 @@
       </div>
     </header>
 
+    <div class="brand-carousel my-4">
+      <div class="brand-track">
+        <img src="images/brands/apple-logo.png" alt="Apple" onclick="buscarMarca('iPhone')" height="50" />
+        <img src="images/brands/xiaomi-logo.png" alt="Xiaomi" onclick="buscarMarca('Xiaomi')" height="50" />
+        <img src="images/brands/samsung-logo.png" alt="Samsung" onclick="buscarMarca('Samsung')" height="50" />
+        <img src="images/brands/pixel-logo.png" alt="Pixel" onclick="buscarMarca('Pixel')" height="50" />
+        <img src="images/brands/realme-logo.png" alt="Realme" onclick="buscarMarca('Realme')" height="50" />
+        <img
+          src="images/brands/playstation-logo.png"
+          alt="PlayStation"
+          onclick="buscarMarca('PlayStation')"
+          height="50" />
+        <img src="images/brands/nintendo-logo.png" alt="Nintendo" onclick="buscarMarca('Nintendo')" height="50" />
+        <img src="images/brands/xbox-logo.png" alt="Xbox" onclick="buscarMarca('Xbox')" height="50" />
+        <img src="images/brands/meta-logo.png" alt="Meta" onclick="buscarMarca('Meta')" height="50" />
+        <img src="images/brands/gopro-logo.png" alt="GoPro" onclick="buscarMarca('GoPro')" height="50" />
+        <img src="images/brands/insta360-logo.png" alt="Insta360" onclick="buscarMarca('Insta360')" height="50" />
+        <img src="images/brands/canon-logo.png" alt="Canon" onclick="buscarMarca('Canon')" height="50" />
+        <img src="images/brands/nikon-logo.png" alt="Nikon" onclick="buscarMarca('Nikon')" height="50" />
+        <img src="images/brands/sony-logo.png" alt="Sony" onclick="buscarMarca('Sony')" height="50" />
+        <img src="images/brands/sigma-logo.png" alt="Sigma" onclick="buscarMarca('Sigma')" height="50" />
+        <img src="images/brands/apple-logo.png" alt="Apple" onclick="buscarMarca('iPhone')" height="50" />
+        <img src="images/brands/xiaomi-logo.png" alt="Xiaomi" onclick="buscarMarca('Xiaomi')" height="50" />
+        <img src="images/brands/samsung-logo.png" alt="Samsung" onclick="buscarMarca('Samsung')" height="50" />
+        <img src="images/brands/pixel-logo.png" alt="Pixel" onclick="buscarMarca('Pixel')" height="50" />
+        <img src="images/brands/realme-logo.png" alt="Realme" onclick="buscarMarca('Realme')" height="50" />
+        <img
+          src="images/brands/playstation-logo.png"
+          alt="PlayStation"
+          onclick="buscarMarca('PlayStation')"
+          height="50" />
+        <img src="images/brands/nintendo-logo.png" alt="Nintendo" onclick="buscarMarca('Nintendo')" height="50" />
+        <img src="images/brands/xbox-logo.png" alt="Xbox" onclick="buscarMarca('Xbox')" height="50" />
+        <img src="images/brands/meta-logo.png" alt="Meta" onclick="buscarMarca('Meta')" height="50" />
+        <img src="images/brands/gopro-logo.png" alt="GoPro" onclick="buscarMarca('GoPro')" height="50" />
+        <img src="images/brands/insta360-logo.png" alt="Insta360" onclick="buscarMarca('Insta360')" height="50" />
+        <img src="images/brands/canon-logo.png" alt="Canon" onclick="buscarMarca('Canon')" height="50" />
+        <img src="images/brands/nikon-logo.png" alt="Nikon" onclick="buscarMarca('Nikon')" height="50" />
+        <img src="images/brands/sony-logo.png" alt="Sony" onclick="buscarMarca('Sony')" height="50" />
+        <img src="images/brands/sigma-logo.png" alt="Sigma" onclick="buscarMarca('Sigma')" height="50" />
+      </div>
+    </div>
+
     <!-- Search -->
     <div class="container mb-4">
       <div class="position-relative" style="max-width: 350px; margin: 0 auto">
         <i
           class="bi bi-search position-absolute text-secondary"
           style="top: 50%; left: 12px; transform: translateY(-50%); pointer-events: none"></i>
-        <input
-          type="text"
-          id="searchGeneral"
-          class="form-control ps-5"
-          placeholder="Buscar" />
+
+        <input type="text" id="searchGeneral" class="form-control ps-5 pe-5" placeholder="Buscar" />
+
+        <button
+          id="clearSearch"
+          type="button"
+          class="btn position-absolute end-0 top-50 translate-middle-y me-2 p-0 border-0 bg-transparent">
+          <i class="bi bi-x-lg text-secondary"></i>
+        </button>
       </div>
+
       <div id="resultadoBusqueda" class="mt-2 text-center small"></div>
     </div>
 
@@ -160,7 +209,7 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="pagosModalLabel">Medios de Pago</h5>
+            <h5 class="modal-title" id="pagosModalLabel">Medios de pago</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
           </div>
           <div class="modal-body">
@@ -171,7 +220,8 @@
               <li>❌ No financiamos, ni aceptamos transferencias bancarias nacionales</li>
             </ul>
             <p class="mt-2 small text-muted">
-              (*) No recibimos billetes rotos, escritos ni de cara chica (anteriores a 1977)
+              (*) No recibimos billetes rotos, escritos ni de cara chica (anteriores a 1977)<br />
+              Los precios publicados no incluyen IVA
             </p>
           </div>
           <div class="modal-footer">
