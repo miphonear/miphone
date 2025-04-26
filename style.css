@@ -89,6 +89,36 @@ header .btn:hover {
   box-shadow: 0 0 8px #b6b6b6;
 }
 
+/* === CAROUSEL === */
+.brand-carousel {
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+}
+
+.brand-track {
+  display: inline-block;
+  animation: scroll 70s linear infinite;
+}
+
+.brand-track img {
+  height: 50px;
+  margin: 0 2rem;
+  opacity: 0.6;
+  filter: grayscale(100%); /* todos en gris */
+  transition: all 0.5s ease;
+}
+
+.brand-track img:hover {
+  opacity: 1;
+  filter: grayscale(0%); /* en color al pasar el mouse */
+}
+
+@keyframes scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
 /* === ACORDEONES === */
 .accordion-button {
   background-color: #f8f9fa;
