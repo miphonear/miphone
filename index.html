@@ -34,17 +34,17 @@
     </div>
 
     <!-- Header -->
-<header class="border-bottom py-4 mb-4 text-center">
-  <div class="container">
-    <!-- Envolver la imagen con un enlace que redirija al home -->
-    <a href="/miphone" id="logo-link">
-      <picture>
-        <!-- Logo para dispositivos móviles -->
-        <source srcset="images/logo-miphone-2.svg" media="(max-width: 767px)" />
-        <!-- Logo para dispositivos de escritorio -->
-        <img id="logo-desktop" src="images/logo-miphone-1.svg" alt="Logo miPhone" height="200" class="mb-0" />
-      </picture>
-    </a>
+    <header class="border-bottom py-4 mb-4 text-center">
+      <div class="container">
+        <!-- Envolver la imagen con un enlace que redirija al home -->
+        <a href="/" id="logo-link">
+          <picture>
+            <!-- Logo para dispositivos móviles -->
+            <source srcset="images/logo-miphone-2.svg" media="(max-width: 767px)" />
+            <!-- Logo para dispositivos de escritorio -->
+            <img id="logo-desktop" src="images/logo-miphone-1.svg" alt="Logo miPhone" height="200" class="mb-0" />
+          </picture>
+        </a>
 
         <div class="text-dark mt-3 small d-flex justify-content-center flex-wrap gap-2 align-items-center">
           <span><i class="bi bi-shop-window"></i> Tienda Online</span>
@@ -113,26 +113,26 @@
       </div>
     </div>
 
-<!-- Search -->
-<div class="container my-4">
-  <div class="search-container">
-      <i class="bi bi-search search-icon text-secondary"></i>
+    <!-- Search -->
+    <div class="container my-4">
+      <div class="search-container">
+        <i class="bi bi-search search-icon text-secondary"></i>
 
-    <!-- Campo de texto para la búsqueda -->
-    <input type="text" id="searchGeneral" class="form-control search-input" placeholder="Buscar" aria-label="Buscar">
-    <button
-      id="clearSearch"
-      type="button"
-      class="btn clear-search-btn"
-      aria-label="Borrar búsqueda">
-      <i class="bi bi-x-lg text-secondary"></i>
-    </button>
+        <!-- Campo de texto para la búsqueda -->
+        <input
+          type="text"
+          id="searchGeneral"
+          class="form-control search-input"
+          placeholder="Buscar"
+          aria-label="Buscar" />
+        <button id="clearSearch" type="button" class="btn clear-search-btn" aria-label="Borrar búsqueda">
+          <i class="bi bi-x-lg text-secondary"></i>
+        </button>
+      </div>
 
-  </div>
-
-  <!-- Resultado de búsqueda -->
-  <div id="resultadoBusqueda" class="mt-2 text-center small"></div>
-</div>
+      <!-- Resultado de búsqueda -->
+      <div id="resultadoBusqueda" class="mt-2 text-center small"></div>
+    </div>
 
     <!-- Content -->
     <div class="container" id="categoriasContainer"></div>
