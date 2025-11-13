@@ -34,7 +34,7 @@ export default function HomePage() {
       <div className="max-w-6xl mx-auto px-4">
         <div className="my-6">
           <h1 className="text-xl md:text-2xl font-bold text-gray-800 text-center">
-            Resultados para: &quot;{query}&quot;
+            {`Resultados para: "${query}"`}
           </h1>
         </div>
 
