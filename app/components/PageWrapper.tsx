@@ -79,7 +79,7 @@ export default function PageWrapper({ children }: { children: React.ReactNode })
     <div className="flex flex-col min-h-screen relative">
       {/* 6. Metadatos estructurales para SEO */}
       <div className="sr-only">
-        <h1>miPhone™ - Descubrí los mejores precios en tecnología. ¡A un clic de distancia!'</h1>
+        <h1>miPhone™ - Descubrí los mejores precios en tecnología. ¡A un clic de distancia!</h1>
       </div>
 
       {/* Elementos de fondo y UI flotante */}
