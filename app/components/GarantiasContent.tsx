@@ -36,7 +36,7 @@ const garantias: Garantia[] = [
 
 export default function GarantiasContent() {
   return (
-    <div className="text-sm">
+    <div className="text-sm md:text-base">
       <ul className="space-y-4">
         {garantias.map((g) => (
           <li key={g.titulo} className="pb-4 border-b border-gray-300 last:border-none">
@@ -46,7 +46,7 @@ export default function GarantiasContent() {
             <p className="mb-1">Período de cobertura: {g.periodo}</p>
             <p className={g.link ? 'mb-1' : 'mb-0'}>{g.descripcion}</p>
             {g.link && (
-              <p className="mb-0">
+              <p className="mt-2 text-sm">
                 <em>
                   +info:{' '}
                   <a

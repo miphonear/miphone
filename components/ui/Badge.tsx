@@ -14,11 +14,11 @@ interface BadgeProps {
 // - px/py: padding
 // - text-xs/sm: tamaño de fuente responsive
 // - font-medium: peso medio
-// - text-gray-800: color de texto
+// - text-gray-900: color de texto
 // - gap: espacio entre emoji y texto
 // - shadow-sm: sombra suave en todo el contorno
 const BASE_CLASS =
-  'inline-flex items-center rounded-full bg-orange-50 px-3 py-1.5 text-xs sm:text-sm font-medium text-gray-800 gap-1 shadow-sm'
+  'inline-flex items-center rounded-full bg-orange-50 px-3 py-1.5 text-xs sm:text-sm font-medium text-gray-900 gap-1 shadow-sm'
 
 // Animación CSS
 // - badgeFadeIn: aparece con fade + leve desplazamiento hacia arriba

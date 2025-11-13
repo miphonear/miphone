@@ -5,7 +5,7 @@ export default function GoogleReviews() {
   return (
     <section className="mt-12">
       <div className="flex flex-col items-center justify-center mb-6">
-        <span className="text-3xl mb-2">🤝</span>
+        <span className="text-3xl mb-1">🤝</span>
         <h2 className="relative inline-block text-xl md:text-2xl font-bold text-gray-800 pb-2 text-center">
           {/* Texto responsivo */}
           <span className="sm:hidden">Nuestros clientes</span>
@@ -19,7 +19,7 @@ export default function GoogleReviews() {
         </h2>
       </div>
       {/* Contenedor */}
-      <div className="w-full h-[600px]">
+      <div className="w-full h-[630px]">
         <iframe
           // Agregado: loading="lazy" para mejorar la performance
           loading="lazy"

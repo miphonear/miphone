@@ -16,7 +16,7 @@ export default function AccesoriosAlertCard() {
           la categoría.
         </p>
         <Link
-          href="/?q=accesorios"
+          href="/accesorios"
           className="mt-2 px-4 py-1.5 bg-orange-500 text-white text-sm font-semibold rounded-xl hover:bg-orange-600 transition-colors"
         >
           Ver Accesorios

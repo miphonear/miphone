@@ -31,7 +31,7 @@ const ALERT_CONFIG = {
 } as const
 
 const BASE_CLASS =
-  'mb-4 rounded-lg border-l-4 px-3 py-1.5 text-[11px] font-semibold flex items-center gap-2 shadow-sm sm:text-sm'
+  'mb-4 rounded-lg border-l-4 px-3 py-1.5 text-[11px] font-medium flex items-center gap-2 shadow-sm sm:text-sm'
 
 // Animación CSS
 const WORD_FADE = `

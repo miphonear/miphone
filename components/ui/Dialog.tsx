@@ -9,24 +9,35 @@ interface Props {
   title?: string
   children: ReactNode
   size?: 'sm' | 'md' | 'lg'
+  // Opcional: permitir desactivar el backdrop click
+  closeOnBackdrop?: boolean
 }
 
-// Constante fuera del componente y clases simplificadas.
-// w-full en el panel se encarga de las pantallas pequeñas.
 const PANEL_SIZES = {
   sm: 'max-w-sm',
   md: 'max-w-lg',
   lg: 'max-w-2xl',
-}
+} as const
 
-export default function Dialog({ open, onClose, title, children, size = 'md' }: Props) {
-  // Ref para el foco inicial (accesibilidad)
-  const closeButtonRef = useRef(null)
+export default function Dialog({
+  open,
+  onClose,
+  title,
+  children,
+  size = 'md',
+  closeOnBackdrop = true,
+}: Props) {
+  // Tipado más específico del ref
+  const closeButtonRef = useRef<HTMLButtonElement>(null)
 
   return (
     <Transition.Root show={open} as={Fragment}>
-      {/* InitialFocus para mejorar la accesibilidad */}
-      <HDialog as="div" className="relative z-50" onClose={onClose} initialFocus={closeButtonRef}>
+      <HDialog
+        as="div"
+        className="relative z-50"
+        onClose={closeOnBackdrop ? onClose : () => {}}
+        initialFocus={closeButtonRef}
+      >
         {/* Overlay */}
         <Transition.Child
           as={Fragment}
@@ -41,7 +52,7 @@ export default function Dialog({ open, onClose, title, children, size = 'md' }: 
         </Transition.Child>
 
         {/* Dialog content */}
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 flex items-center justify-center p-4 overflow-y-auto">
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-200"
@@ -52,27 +63,32 @@ export default function Dialog({ open, onClose, title, children, size = 'md' }: 
             leaveTo="opacity-0 scale-95"
           >
             <HDialog.Panel
-              className={`relative w-full ${PANEL_SIZES[size]} rounded-lg bg-white p-6 shadow-xl ring-1 ring-black/5`}
+              className={`
+                relative w-full ${PANEL_SIZES[size]} 
+                rounded-lg bg-white p-6 shadow-xl ring-1 ring-black/5
+                max-h-[90vh] overflow-y-auto
+              `}
             >
               {/* Botón Cerrar */}
-              <div className="absolute right-4 top-4">
+              <div className="absolute right-4 top-4 z-10">
                 <button
-                  ref={closeButtonRef} // Asignar la ref
+                  ref={closeButtonRef}
                   type="button"
-                  className="text-gray-400 hover:text-orange-500 transition-colors focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 rounded-md"
+                  className="
+                    text-gray-500 hover:text-orange-500 transition-colors 
+                    focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-1
+                    rounded-md p-1
+                  "
                   onClick={onClose}
                   aria-label="Cerrar modal"
                 >
-                  <X className="h-6 w-6" />
+                  <X className="h-5 w-5" />
                 </button>
               </div>
 
               {/* Título */}
               {title && (
-                <HDialog.Title
-                  as="h3"
-                  className="text-lg font-semibold text-gray-900 pr-8" // pr-8 para que no se solape con el botón X
-                >
+                <HDialog.Title as="h2" className="text-lg font-semibold text-gray-800 pr-12">
                   {title}
                 </HDialog.Title>
               )}

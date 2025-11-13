@@ -15,7 +15,7 @@ const metodos: MetodoPago[] = [
   {
     titulo: '💵 Efectivo:',
     descripcion: 'USD y/o pesos argentinos',
-    nota: 'No recibimos billetes rotos, escritos ni de cara chica (anteriores a 1977)',
+    nota: 'No recibimos billetes rotos, escritos ni de cara chica (anteriores a 1996)',
   },
   {
     titulo: '💳 Cripto y billeteras:',
@@ -48,11 +48,11 @@ const logos = [
 export default function PagosContent() {
   return (
     <div>
-      <ul className="mb-4 list-inside space-y-2 text-sm">
+      <ul className="mb-4 list-inside space-y-2 text-sm md:text-base">
         {metodos.map((m) => (
           <li key={m.titulo}>
             <span className="font-semibold">{m.titulo}</span> {m.descripcion}
-            {m.nota && <span className="block text-xs text-gray-500 sm:ml-6">{m.nota}</span>}
+            {m.nota && <span className="block text-xs md:text-sm text-gray-600">{m.nota}</span>}
           </li>
         ))}
       </ul>

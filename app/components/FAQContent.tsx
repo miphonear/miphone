@@ -117,7 +117,7 @@ export default function FAQContent() {
         return (
           <div key={item.title} className="border-b last:border-b-0">
             <button
-              className={`flex w-full items-center justify-between py-3 text-left font-semibold text-gray-800 transition-colors hover:text-orange-600 focus:outline-none ${
+              className={`flex w-full items-center justify-between py-3 text-left font-semibold text-gray-800 transition-colors hover:text-orange-500 focus:outline-none ${
                 isOpen ? 'text-orange-600' : ''
               }`}
               onClick={() => setOpen(isOpen ? null : item.title)}
@@ -125,7 +125,7 @@ export default function FAQContent() {
               aria-controls={contentId}
             >
               <span>{item.title}</span>
-              <span className="text-lg" aria-hidden="true">
+              <span className="text-base" aria-hidden="true">
                 {isOpen ? '−' : '+'}
               </span>
             </button>

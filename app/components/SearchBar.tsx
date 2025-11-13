@@ -1,113 +1,183 @@
 'use client'
 import { Search, X, Tag, Sparkles } from 'lucide-react'
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect, useState, useCallback } from 'react'
 
-// SECCIÓN: INTERFACES Y TIPOS
+/**
+ * Props del buscador.
+ * - initialValue: valor inicial (p.ej. tomado de la URL)
+ * - onSearch: callback que se ejecuta luego del debounce o acciones rápidas (clear/shortcut)
+ * - placeholder: placeholder del input
+ * - autoFocus: enfoca el input al montar
+ * - disabled: desactiva la UI del buscador (estilos + eventos)
+ */
 interface Props {
   initialValue?: string
   onSearch: (value: string) => void
   placeholder?: string
   autoFocus?: boolean
+  disabled?: boolean
 }
 
-// SECCIÓN: COMPONENTE INTERNO PARA BOTONES SUGERIDOS
+/**
+ * Botones sugeridos fijos:
+ * - "Ofertas" dispara la búsqueda con "SALE"
+ * - "Nuevos" dispara la búsqueda con "NEW"
+ * Útiles para atajos de filtrado sin tipear.
+ */
 function SuggestionButtons({ onShortcut }: { onShortcut: (s: string) => void }) {
   return (
-    <div className="flex flex-wrap justify-start gap-2">
+    <div
+      className="flex flex-wrap justify-start gap-2"
+      role="group"
+      aria-label="Búsquedas sugeridas"
+    >
       <button
         type="button"
         onClick={() => onShortcut('SALE')}
         className="flex items-center gap-2 px-2.5 py-1.5 text-sm font-semibold rounded-xl
                    bg-orange-100 text-orange-700 hover:bg-orange-200 
+                   focus:outline-none focus:ring-2 focus:ring-orange-500
                    transition-colors duration-150"
+        aria-label="Buscar ofertas"
       >
-        <Tag className="w-4 h-4" />
+        <Tag className="w-4 h-4" aria-hidden="true" />
         Ofertas
       </button>
+
       <button
         type="button"
         onClick={() => onShortcut('NEW')}
         className="flex items-center gap-2 px-2.5 py-1.5 text-sm font-semibold rounded-xl
                    bg-violet-100 text-violet-700 hover:bg-violet-200 
+                   focus:outline-none focus:ring-2 focus:ring-violet-500
                    transition-colors duration-150"
+        aria-label="Buscar nuevos"
       >
-        <Sparkles className="w-4 h-4" />
+        <Sparkles className="w-4 h-4" aria-hidden="true" />
         Nuevos
       </button>
     </div>
   )
 }
 
-// SECCIÓN: COMPONENTE PRINCIPAL
+/**
+ * Componente principal de SearchBar con:
+ * - Debounce manual de 500ms (useEffect + setTimeout)
+ * - Sincronización de estado con initialValue proveniente de afuera (URL/router)
+ * - Accesibilidad: role="search", aria-labels, tecla Escape limpia
+ * - Acciones rápidas: limpiar búsqueda y shortcuts disparan onSearch de inmediato
+ */
 export default function SearchBar({
   initialValue = '',
   onSearch,
   placeholder = 'Buscar productos',
   autoFocus = false,
+  disabled = false,
 }: Props) {
+  // Estado controlado del input
   const [inputValue, setInputValue] = useState(initialValue)
+
+  // Ref para manejar foco (focus al montar, foco tras limpiar o usar shortcut)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  // Reemplazamos el hook useDebounce por un useEffect manual para tener control total.
+  // Memoizamos el callback para evitar recrearlo en cada render
+  const handleSearch = useCallback(
+    (value: string) => {
+      onSearch(value)
+    },
+    [onSearch],
+  )
+
+  /**
+   * Debounce manual:
+   * - Espera 500ms desde la última tecla antes de disparar onSearch
+   * - Evita bucles si el input ya coincide con initialValue
+   * - No dispara cuando está disabled
+   */
   useEffect(() => {
-    // Si el valor del input ya es el que está en la URL, no hacemos nada para evitar bucles.
-    if (inputValue === initialValue) {
-      return
-    }
+    if (inputValue === initialValue || disabled) return
 
-    // Creamos un temporizador que llamará a la búsqueda después de 500ms.
     const handler = setTimeout(() => {
-      onSearch(inputValue)
-    }, 500) // 500ms de debounce
+      handleSearch(inputValue)
+    }, 500)
 
-    // Esta función de limpieza es la clave: cancela el temporizador si el usuario
-    // sigue escribiendo o si el valor cambia desde afuera (ej: clic en un logo).
-    return () => {
-      clearTimeout(handler)
-    }
-  }, [inputValue, initialValue, onSearch])
+    // Cleanup: cancela el timeout si el usuario sigue escribiendo
+    return () => clearTimeout(handler)
+  }, [inputValue, initialValue, handleSearch, disabled])
 
-  // Este useEffect sincroniza el estado del input si el valor viene de afuera (URL).
+  /**
+   * Sync con initialValue:
+   * - Si el valor externo cambia (p.ej. navegación o reset), reflejarlo en el input.
+   */
   useEffect(() => {
     setInputValue(initialValue)
   }, [initialValue])
 
-  // Este useEffect es para el autoFocus.
+  /**
+   * AutoFocus:
+   * - Enfoca el input al montar si autoFocus es true y no está disabled.
+   */
   useEffect(() => {
-    if (autoFocus) {
+    if (autoFocus && !disabled) {
       inputRef.current?.focus()
     }
-  }, [autoFocus])
+  }, [autoFocus, disabled])
 
+  /**
+   * UX con teclado:
+   * - Escape limpia el input y dispara onSearch('') inmediatamente
+   */
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Escape' && inputValue) {
+      e.preventDefault()
       setInputValue('')
+      handleSearch('')
     }
   }
 
-  const handleShortcut = (shortcut: string) => {
-    setInputValue(shortcut)
-    inputRef.current?.focus()
-  }
+  /**
+   * Shortcuts:
+   * - Setean el valor, enfocan el input y disparan onSearch de inmediato
+   */
+  const handleShortcut = useCallback(
+    (shortcut: string) => {
+      setInputValue(shortcut)
+      inputRef.current?.focus()
+      handleSearch(shortcut)
+    },
+    [handleSearch],
+  )
 
-  const handleClear = () => {
+  /**
+   * Limpiar:
+   * - Vacía el input, devuelve foco y dispara onSearch('') de inmediato
+   */
+  const handleClear = useCallback(() => {
     setInputValue('')
     inputRef.current?.focus()
-  }
+    handleSearch('')
+  }, [handleSearch])
 
-  // SECCIÓN: RENDERIZADO
+  // Render
   return (
     <div className="w-full max-w-2xl mx-auto">
-      {/* Contenedor principal unificado */}
+      {/* Contenedor principal del buscador */}
       <div
-        className="flex flex-col rounded-3xl border-2 border-gray-200 bg-white/90
-                   transition-all duration-200
-                   focus-within:border-orange-500 focus-within:ring-2 focus-within:ring-orange-500/20"
+        className={`flex flex-col rounded-3xl border-2 border-gray-200 bg-white/90
+          transition-all duration-200 
+          ${
+            disabled
+              ? 'opacity-50 cursor-not-allowed'
+              : 'hover:border-orange-500 hover:ring-2 hover:ring-orange-500/20 focus-within:border-orange-500 focus-within:ring-2 focus-within:ring-orange-500/20'
+          }`}
+        role="search"
+        aria-label="Buscador de productos"
       >
-        {/* Área del input */}
+        {/* Input con ícono de búsqueda */}
         <div className="relative">
+          {/* Ícono Search (decorativo) */}
           <span
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+            className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"
             aria-hidden="true"
           >
             <Search className="w-5 h-5" />
@@ -117,31 +187,38 @@ export default function SearchBar({
             ref={inputRef}
             type="text"
             className="w-full pl-12 pr-10 py-2.5 bg-transparent 
-                       text-sm md:text-base text-gray-800 placeholder-gray-400 
-                       focus:outline-none"
+                       text-sm md:text-base text-gray-800 placeholder-gray-500 
+                       focus:outline-none disabled:cursor-not-allowed"
             placeholder={placeholder}
-            aria-label={placeholder}
+            aria-label={`${placeholder}. Usa Escape para limpiar`}
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={handleKeyDown}
+            disabled={disabled}
+            autoComplete="off" // Evita autocompletado del navegador
+            spellCheck="false" // Evita subrayado rojo en términos de marca/modelo
           />
 
-          {inputValue && (
+          {/* Botón para limpiar el texto (aparece solo cuando hay contenido) */}
+          {inputValue && !disabled && (
             <button
-              className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center w-6 h-6 rounded-full bg-gray-100 text-gray-500 hover:bg-orange-500 hover:text-white transition"
+              className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center w-6 h-6 rounded-full bg-gray-100 text-gray-500 hover:bg-orange-500 hover:text-white transition focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-1"
               onClick={handleClear}
               aria-label="Limpiar búsqueda"
               type="button"
+              title="Limpiar"
             >
               <X className="w-4 h-4" />
             </button>
           )}
         </div>
 
-        {/* Área de los botones sugeridos */}
-        <div className="p-3 pt-4">
-          <SuggestionButtons onShortcut={handleShortcut} />
-        </div>
+        {/* Shortcuts fijos (Ofertas / Nuevos) */}
+        {!disabled && (
+          <div className="p-3 pt-4">
+            <SuggestionButtons onShortcut={handleShortcut} />
+          </div>
+        )}
       </div>
     </div>
   )

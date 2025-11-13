@@ -1,6 +1,7 @@
 // app/components/BrandsCarousel.tsx
 'use client'
 import { useRef, useEffect, useCallback } from 'react'
+import Link from 'next/link'
 
 // Logos
 import AppleLogo from '@/public/images/brands/apple-logo.svg'
@@ -45,7 +46,7 @@ const MARCAS = [
   { name: 'DJI', Logo: DjiLogo, tag: 'Dji' },
 ]
 
-const SCROLL_SPEED = 0.35 // Velocidad
+const SCROLL_SPEED = 0.3 // Velocidad
 
 export default function BrandsCarousel({ onSearch }: BrandsCarouselProps) {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -93,7 +94,7 @@ export default function BrandsCarousel({ onSearch }: BrandsCarouselProps) {
   return (
     <div className="max-w-6xl mx-auto mt-6">
       <div className="flex flex-col items-center justify-center mb-6">
-        <span className="text-3xl mb-2">🏷️</span>
+        <span className="text-3xl mb-1">🏷️</span>
         <h2 className="relative inline-block text-xl md:text-2xl font-bold text-gray-800 pb-2 text-center">
           {/* Texto responsivo */}
           <span className="sm:hidden">Las mejores marcas</span>
@@ -114,9 +115,9 @@ export default function BrandsCarousel({ onSearch }: BrandsCarouselProps) {
         onMouseLeave={handleMouseLeave}
       >
         {marcasLoop.map((m, i) => (
-          <button
+          <Link
             key={`${m.name}-${i}`}
-            onClick={() => onSearch?.(m.tag)}
+            href={`/?q=${m.tag}`} // El Link apunta directamente a la URL de búsqueda.
             className="flex-shrink-0 focus:outline-none bg-transparent transition-transform duration-200 hover:scale-110"
             title={`Buscar productos de ${m.tag}`}
             role="listitem"
@@ -128,7 +129,7 @@ export default function BrandsCarousel({ onSearch }: BrandsCarouselProps) {
                 draggable={false}
               />
             </div>
-          </button>
+          </Link>
         ))}
       </div>
     </div>
