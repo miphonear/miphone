@@ -117,11 +117,13 @@ export default function BrandsCarousel() {
             className="flex-shrink-0 focus:outline-none bg-transparent transition-transform duration-200 hover:scale-110"
             title={`Buscar productos de ${m.tag}`}
             role="listitem"
+            aria-label={`Buscar productos de ${m.name}`} // nombre accesible del link
           >
             <div className="w-[90px] h-[45px] md:w-[120px] md:h-[60px] flex items-center justify-center p-1 sm:p-2">
               <m.Logo
                 className="max-h-full max-w-full filter grayscale opacity-70 transition duration-200 hover:filter-none hover:opacity-100"
-                aria-label={m.name}
+                aria-hidden="true" // decorativo: no anuncia el logo
+                focusable="false"
                 draggable={false}
               />
             </div>
