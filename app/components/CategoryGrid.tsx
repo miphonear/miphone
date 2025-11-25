@@ -43,6 +43,7 @@ export default function CategoryGrid({ categorias }: Props) {
       <div
         className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6"
         role="grid"
+        aria-label="Categorías de productos"
       >
         {categorias.map((c) => {
           const nombreSeguro = c?.nombre?.trim() || 'Categoría'
@@ -50,47 +51,50 @@ export default function CategoryGrid({ categorias }: Props) {
           const categoriaSlug = nombreSeguro.toLowerCase()
 
           return (
-            <Link
-              key={nombreSeguro}
-              href={`/${categoriaSlug}`}
-              // Accesibilidad: rol de celda y etiqueta descriptiva
-              role="gridcell"
-              aria-label={`Ver productos de ${nombreSeguro}`}
-              // Focus visible para navegación por teclado
-              className={`group relative flex flex-col items-center justify-center 
+            // role="row" requerido para que los hijos role="gridcell" sean válidos
+            // className="contents" evita introducir caja visual extra y mantiene el layout de CSS Grid
+            <div key={nombreSeguro} role="row" className="contents">
+              <Link
+                href={`/${categoriaSlug}`}
+                // Accesibilidad: rol de celda y etiqueta descriptiva
+                role="gridcell"
+                aria-label={`Ver productos de ${nombreSeguro}`}
+                // Focus visible para navegación por teclado
+                className={`group relative flex flex-col items-center justify-center 
                 w-full h-full aspect-square rounded-3xl border-2
                 transition-all duration-300 transform
                 bg-white text-gray-800 border-gray-200 
                 hover:border-orange-500 hover:ring-4 hover:ring-orange-500/20 hover:shadow-md md:hover:-translate-y-1
-                focus:outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20`}
-            >
-              {/* Icono SVG dinámico */}
-              <div className="w-1/2 h-1/2 mb-2 flex items-center justify-center">
-                <Icon
-                  className={`w-full h-full object-contain transition-transform duration-300
+                focus:outline-none focus-visible:border-orange-500 focus-visible:ring-4 focus-visible:ring-orange-500/20`}
+              >
+                {/* Icono SVG dinámico */}
+                <div className="w-1/2 h-1/2 mb-2 flex items-center justify-center">
+                  <Icon
+                    className={`w-full h-full object-contain transition-transform duration-300
                              text-gray-700 group-hover:scale-110`}
-                  aria-hidden="true"
-                />
-              </div>
+                    aria-hidden="true"
+                  />
+                </div>
 
-              {/* Texto con clamp para nombres largos */}
-              <div className="px-2 w-full flex items-center justify-center">
-                <span className="text-sm md:text-base font-bold text-center break-words leading-tight line-clamp-2">
-                  {nombreSeguro}
-                </span>
-              </div>
+                {/* Texto con clamp para nombres largos */}
+                <div className="px-2 w-full flex items-center justify-center">
+                  <span className="text-sm md:text-base font-bold text-center break-words leading-tight line-clamp-2">
+                    {nombreSeguro}
+                  </span>
+                </div>
 
-              {/* CTA decorativa sólo en hover (oculta a lectores de pantalla) */}
-              <div
-                className={`absolute bottom-3 items-center gap-1 text-xs font-bold 
+                {/* CTA decorativa sólo en hover (oculta a lectores de pantalla) */}
+                <div
+                  className={`absolute bottom-3 items-center gap-1 text-xs font-bold 
                            transition-opacity duration-300
                            opacity-0 group-hover:opacity-100 group-hover:text-orange-600
                            hidden md:flex`}
-                aria-hidden="true"
-              >
-                <span>Ver Productos</span>
-              </div>
-            </Link>
+                  aria-hidden="true"
+                >
+                  <span>Ver Productos</span>
+                </div>
+              </Link>
+            </div>
           )
         })}
       </div>
