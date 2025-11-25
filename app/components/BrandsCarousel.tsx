@@ -22,10 +22,6 @@ import SonyLogo from '@/public/images/brands/sony-logo.svg'
 import XboxLogo from '@/public/images/brands/xbox-logo.svg'
 import XiaomiLogo from '@/public/images/brands/xiaomi-logo.svg'
 
-interface BrandsCarouselProps {
-  onSearch?: (value: string) => void
-}
-
 const MARCAS = [
   { name: 'Apple', Logo: AppleLogo, tag: 'iPhone' },
   { name: 'Xiaomi', Logo: XiaomiLogo, tag: 'Xiaomi' },
@@ -48,7 +44,7 @@ const MARCAS = [
 
 const SCROLL_SPEED = 0.3 // Velocidad
 
-export default function BrandsCarousel({ onSearch }: BrandsCarouselProps) {
+export default function BrandsCarousel() {
   const containerRef = useRef<HTMLDivElement>(null)
   const animationFrameRef = useRef<number | null>(null)
   const isHoveringRef = useRef(false)

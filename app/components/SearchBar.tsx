@@ -12,7 +12,7 @@ import { useRef, useEffect, useState, useCallback } from 'react'
  */
 interface Props {
   initialValue?: string
-  onSearch: (value: string) => void
+  onSearch: (_value: string) => void // prefijo _ para silenciar ESLint si el tipo se analiza como uso
   placeholder?: string
   autoFocus?: boolean
   disabled?: boolean
@@ -24,7 +24,7 @@ interface Props {
  * - "Nuevos" dispara la búsqueda con "NEW"
  * Útiles para atajos de filtrado sin tipear.
  */
-function SuggestionButtons({ onShortcut }: { onShortcut: (s: string) => void }) {
+function SuggestionButtons({ onShortcut }: { onShortcut: (_s: string) => void }) {
   return (
     <div
       className="flex flex-wrap justify-start gap-2"
@@ -80,6 +80,9 @@ export default function SearchBar({
   // Ref para manejar foco (focus al montar, foco tras limpiar o usar shortcut)
   const inputRef = useRef<HTMLInputElement>(null)
 
+  // Guardamos el timer de debounce para poder cancelarlo en submit (Enter)
+  const debounceRef = useRef<NodeJS.Timeout | null>(null)
+
   // Memoizamos el callback para evitar recrearlo en cada render
   const handleSearch = useCallback(
     (value: string) => {
@@ -97,12 +100,18 @@ export default function SearchBar({
   useEffect(() => {
     if (inputValue === initialValue || disabled) return
 
+    // Cancela cualquier timer previo antes de crear uno nuevo
+    if (debounceRef.current) clearTimeout(debounceRef.current)
+
     const handler = setTimeout(() => {
       handleSearch(inputValue)
     }, 500)
+    debounceRef.current = handler
 
     // Cleanup: cancela el timeout si el usuario sigue escribiendo
-    return () => clearTimeout(handler)
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current)
+    }
   }, [inputValue, initialValue, handleSearch, disabled])
 
   /**
@@ -158,17 +167,31 @@ export default function SearchBar({
     handleSearch('')
   }, [handleSearch])
 
+  /**
+   * Submit (Enter):
+   * - Evita esperar el debounce, busca al instante y cierra el teclado en móviles
+   */
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (disabled) return
+    if (debounceRef.current) clearTimeout(debounceRef.current) // evita doble disparo
+    handleSearch(inputValue)
+    inputRef.current?.blur() // cierra teclado en mobile
+  }
+
   // Render
   return (
     <div className="w-full max-w-2xl mx-auto">
       {/* Contenedor principal del buscador */}
-      <div
+      {/* Mejora: envolver en form permite Enter inmediato y mejor UX móvil */}
+      <form
+        onSubmit={handleSubmit}
         className={`flex flex-col rounded-3xl border-2 border-gray-200 bg-white/90
           transition-all duration-200 
           ${
             disabled
               ? 'opacity-50 cursor-not-allowed'
-              : 'hover:border-orange-500 hover:ring-2 hover:ring-orange-500/20 focus-within:border-orange-500 focus-within:ring-2 focus-within:ring-orange-500/20'
+              : 'hover:border-orange-500 hover:ring-4 hover:ring-orange-500/20 focus-within:border-orange-500 focus-within:ring-4 focus-within:ring-orange-500/20'
           }`}
         role="search"
         aria-label="Buscador de productos"
@@ -185,12 +208,13 @@ export default function SearchBar({
 
           <input
             ref={inputRef}
-            type="text"
+            type="search" // Mejora: teclado móvil muestra botón "Buscar/Ir"
             className="w-full pl-12 pr-10 py-2.5 bg-transparent 
                        text-sm md:text-base text-gray-800 placeholder-gray-500 
-                       focus:outline-none disabled:cursor-not-allowed"
+                       focus:outline-none disabled:cursor-not-allowed
+                       [&::-webkit-search-cancel-button]:hidden" /* Oculta la 'X' nativa del input search */
             placeholder={placeholder}
-            aria-label={`${placeholder}. Usa Escape para limpiar`}
+            aria-label={`${placeholder}. Usa Enter para buscar, Escape para limpiar`}
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={handleKeyDown}
@@ -219,7 +243,7 @@ export default function SearchBar({
             <SuggestionButtons onShortcut={handleShortcut} />
           </div>
         )}
-      </div>
+      </form>
     </div>
   )
 }

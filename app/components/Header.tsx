@@ -13,7 +13,7 @@ const BADGES = [
 // SECCIÓN: INTERFACES Y TIPOS
 interface HeaderProps {
   initialValue: string
-  onSearch: (value: string) => void
+  onSearch: (_value: string) => void
 }
 
 // SECCIÓN: COMPONENTE PRINCIPAL

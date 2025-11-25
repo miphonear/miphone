@@ -12,18 +12,24 @@ export default {
     'removeUnknownsAndDefaults',
     'removeUnusedNS',
     'removeRasterImages',
+    // Mantiene escalado por CSS; asegurar que viewBox permanezca
     'removeDimensions',
+    // Si NO necesitás id/class en tus SVGs, mantenelo. Si sí, excluílos.
     {
       name: 'removeAttrs',
       params: {
-        attrs: ['id', 'class', 'style', 'xml:space'],
+        attrs: ['style', 'xml:space', 'data.*'], // conservá id/class si los usás
       },
     },
     {
       name: 'convertColors',
       params: {
-        currentColor: true,
+        currentColor: true, // intenta mapear fill/stroke a currentColor
       },
     },
+    // Opcionales de calidad de vida
+    'sortAttrs',
+    // 'removeTitle', // descomenta si no usás <title> en accesibilidad
+    // 'cleanupIDs', // solo si no referenciás IDs
   ],
 }

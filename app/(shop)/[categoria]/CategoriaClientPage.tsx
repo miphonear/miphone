@@ -70,7 +70,7 @@ export default function CategoriaClientPage({ params }: CategoriaClientPageProps
 
   // Agregar el skeleton al loading
   if (loading) {
-    return <CategorySkeleton categoriaNombre={categoriaNombreAmigable} />
+    return <CategorySkeleton />
   }
 
   // Render principal de la página de categoría:

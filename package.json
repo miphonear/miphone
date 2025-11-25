@@ -7,7 +7,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "svgo:categories": "svgo -f public/images/categories --config=svgo.config.mjs"
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write .",
+    "svgo": "svgo -f public/images --config=svgo.config.mjs",
+    "svgo:categories": "svgo -f public/images/categories --config=svgo.config.mjs",
+    "check": "npm run typecheck && npm run lint && npm run build"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.4",

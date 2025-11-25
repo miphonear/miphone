@@ -61,8 +61,8 @@ export default function CategoryGrid({ categorias }: Props) {
                 w-full h-full aspect-square rounded-3xl border-2
                 transition-all duration-300 transform
                 bg-white text-gray-800 border-gray-200 
-                hover:border-orange-500 hover:ring-2 hover:ring-orange-500/20 hover:shadow-md md:hover:-translate-y-1
-                focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20`}
+                hover:border-orange-500 hover:ring-4 hover:ring-orange-500/20 hover:shadow-md md:hover:-translate-y-1
+                focus:outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20`}
             >
               {/* Icono SVG dinámico */}
               <div className="w-1/2 h-1/2 mb-2 flex items-center justify-center">

@@ -26,6 +26,7 @@ export function useCSV(url: string) {
       download: true,
       header: true,
       skipEmptyLines: true,
+      worker: true, // usa web worker para no bloquear UI en CSVs grandes
       complete: ({ data, errors }: ParseResult<Record<string, string>>) => {
         if (errors.length > 0) {
           console.error('CSV Parse errors:', errors)

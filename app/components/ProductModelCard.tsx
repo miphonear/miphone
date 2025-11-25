@@ -1,5 +1,6 @@
 'use client'
 import { memo, useState, useEffect } from 'react'
+import Image from 'next/image' // Usamos next/image para optimización
 import type { Producto } from '@/app/types/Producto'
 import ProductLabel from '@ui/ProductLabel'
 import WhatsAppButton from './WhatsAppButton'
@@ -19,6 +20,7 @@ interface Props {
  * Presenta un layout responsivo:
  * - Desktop: Avatar a la izquierda, contenido a la derecha.
  * - Mobile: Avatar centrado entre el título y las variantes.
+ * Migrado a next/image para mejor LCP y optimización de imágenes.
  * Incluye un fallback a una imagen de stock si la URL del avatar está corrupta.
  */
 
@@ -51,8 +53,6 @@ const ProductModelCard = memo(function ProductModelCard({
   const hayVersiones = variantes.some((v) => v.version && v.version.trim() !== '')
 
   // --- SUBCOMPONENTES REUTILIZABLES ---
-  // Extraer lógica repetida a componentes internos mejora la legibilidad.
-
   // Componente para el título del modelo, incluyendo el label "NEW".
   const Title = () => (
     <span className="font-bold text-base text-gray-900 flex items-center gap-2">
@@ -61,16 +61,19 @@ const ProductModelCard = memo(function ProductModelCard({
     </span>
   )
 
-  // Componente para el avatar en vista móvil. Ahora usa el estado y el manejador de error.
-  const MobileAvatar = () =>
+  // Componente para el avatar (móvil y desktop).
+  // Avatar 128x128 con next/image (sin warnings y sin recortes)
+  const Avatar = () =>
     avatar ? (
-      <div className="mt-2 flex justify-center md:hidden">
-        <img
-          src={imageSrc}
+      <div className="relative w-32 h-32 shrink-0 mx-auto">
+        <Image
+          src={imageSrc || STOCK_AVATAR_URL}
           alt={`Avatar de ${modelo}`}
-          className="w-24 h-24 rounded-lg object-contain"
-          loading="lazy"
-          onError={handleError}
+          fill
+          className="rounded-lg object-contain"
+          sizes="128px"
+          onError={handleError} // Fallback a imagen de stock si falla
+          // Nota: Si la imagen es externa, asegurate de tener el dominio en next.config.js
         />
       </div>
     ) : null
@@ -78,22 +81,16 @@ const ProductModelCard = memo(function ProductModelCard({
   // --- RENDERIZADO PRINCIPAL ---
   return (
     <div
+      // Delay para la animación de entrada (slideDown)
       style={{ animationDelay }}
       className="border border-gray-200 rounded-lg p-4 bg-white/90 flex shadow-sm max-w-3xl w-full mx-auto opacity-0 animate-slideDown"
     >
       <div className="flex w-full items-start gap-4">
         {/* --- 1. AVATAR DESKTOP (IZQUIERDA) --- */}
-        {avatar && (
-          <div className="hidden md:flex w-16 flex-shrink-0 items-center sm:w-20">
-            <img
-              src={imageSrc}
-              alt={`Avatar de ${modelo}`}
-              className="w-full h-auto object-contain"
-              loading="lazy"
-              onError={handleError}
-            />
-          </div>
-        )}
+        <div className="hidden md:block">
+          {/* Visible solo en >= md */}
+          <Avatar />
+        </div>
 
         {/* --- 2. CONTENIDO (DERECHA) --- */}
         <div className="flex flex-col flex-grow">
@@ -115,7 +112,10 @@ const ProductModelCard = memo(function ProductModelCard({
                   )}
                 </div>
 
-                <MobileAvatar />
+                {/* Avatar centrado en móvil */}
+                <div className="md:hidden mt-2 flex justify-center">
+                  <Avatar />
+                </div>
 
                 {/* Contenedor de variantes */}
                 <div className="flex flex-col mt-2">
@@ -154,12 +154,15 @@ const ProductModelCard = memo(function ProductModelCard({
                   </span>
                 </div>
 
-                <MobileAvatar />
+                {/* Avatar centrado en móvil */}
+                <div className="md:hidden mt-2 flex justify-center">
+                  <Avatar />
+                </div>
               </>
             )}
           </div>
 
-          {/* Boton WhatsApp (Consultar) */}
+          {/* Botón WhatsApp (Consultar) */}
           <div className="flex justify-end mt-4">
             <WhatsAppButton mensaje={crearMensajeWhatsApp(variantes[0].subcategoria, modelo)} />
           </div>

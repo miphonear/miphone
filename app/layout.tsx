@@ -10,7 +10,7 @@ import PageWrapper from './components/PageWrapper'
 // CONSTANTES
 // =====================
 const SITE_CONFIG = {
-  name: 'miPhone™',
+  name: 'miPhone',
   url: 'https://miphone.ar',
   description:
     'Descubrí los mejores precios en tecnología: iPhone, Apple, Samsung, Xiaomi, Consolas, Gaming, Fotografía y más. ¡A un clic de distancia!',

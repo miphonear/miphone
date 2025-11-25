@@ -1,6 +1,4 @@
-// app/ui/CategoriaLoading.tsx
-
-export function CategorySkeleton({ categoriaNombre }: { categoriaNombre: string }) {
+export function CategorySkeleton() {
   return (
     <div className="max-w-6xl mx-auto px-4">
       {/* 1) Header: solo título (rectángulo centrado) */}

@@ -15,7 +15,7 @@ const BackgroundBlobs = memo(function BackgroundBlobs() {
         className={cn(
           'absolute top-2/3 left-1/2 -translate-x-1/2',
           'w-[1000px] h-[1000px]' /* Tamaño base (mobile) */,
-          'md:w-[3000px] md:h-[3000px]' /* Tamaño en desktop */,
+          'md:w-[5000px] md:h-[5000px]' /* Tamaño en desktop */,
           'opacity-15 blur-3xl',
         )}
         viewBox="0 0 800 800"
