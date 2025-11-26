@@ -1,6 +1,8 @@
+// svgo.config.mjs
 export default {
   multipass: true,
   plugins: [
+    // Limpieza segura que no toca colores
     'removeDoctype',
     'removeXMLProcInst',
     'removeComments',
@@ -9,27 +11,42 @@ export default {
     'cleanupAttrs',
     'removeUselessDefs',
     'cleanupNumericValues',
-    'removeUnknownsAndDefaults',
     'removeUnusedNS',
     'removeRasterImages',
-    // Mantiene escalado por CSS; asegurar que viewBox permanezca
+
+    // Mantener escalado por CSS: quita width/height y conserva viewBox
     'removeDimensions',
-    // Si NO necesitás id/class en tus SVGs, mantenelo. Si sí, excluílos.
+
+    // Remover solo atributos de accesibilidad y estilos inline problemáticos
     {
       name: 'removeAttrs',
       params: {
-        attrs: ['style', 'xml:space', 'data.*'], // conservá id/class si los usás
+        attrs: [
+          'aria-label',
+          'aria-labelledby',
+          'aria-describedby',
+          'role',
+          'focusable',
+          'tabindex',
+          'style',
+          'xml:space',
+          'data-*',
+        ],
       },
     },
-    {
-      name: 'convertColors',
-      params: {
-        currentColor: true, // intenta mapear fill/stroke a currentColor
-      },
-    },
-    // Opcionales de calidad de vida
+
+    // NO tocar colores
+    // No uses convertColors aquí
+
+    // Ordenar atributos (no cambia colores)
     'sortAttrs',
-    // 'removeTitle', // descomenta si no usás <title> en accesibilidad
-    // 'cleanupIDs', // solo si no referenciás IDs
+
+    // Opcional: remover <title>. Si querés mantenerlos para accesibilidad, comentá esta línea
+    'removeTitle',
+
+    // NO activar cleanupIDs si tenés gradientes/mascaras (url(#id))
+    // 'cleanupIDs',
   ],
 }
+
+// Para correr el archivo, en raiz:	npx svgo --config=svgo.config.mjs -f public/images/brands -o public/images/brands

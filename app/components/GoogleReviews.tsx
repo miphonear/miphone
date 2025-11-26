@@ -3,8 +3,8 @@
 
 export default function GoogleReviews() {
   return (
-    <section className="mt-12">
-      <div className="flex flex-col items-center justify-center mb-6">
+    <section className="mt-8">
+      <div className="flex flex-col items-center justify-center mb-8">
         <span className="text-3xl mb-1">🤝</span>
         <h2 className="relative inline-block text-xl md:text-2xl font-bold text-gray-800 pb-2 text-center">
           {/* Texto responsivo */}

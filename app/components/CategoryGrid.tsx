@@ -68,10 +68,10 @@ export default function CategoryGrid({ categorias }: Props) {
                 focus:outline-none focus-visible:border-orange-500 focus-visible:ring-4 focus-visible:ring-orange-500/20`}
               >
                 {/* Icono SVG dinámico */}
-                <div className="w-1/2 h-1/2 mb-2 flex items-center justify-center">
+                <div className="w-1/3 h-1/2 flex items-center justify-center">
                   <Icon
                     className={`w-full h-full object-contain transition-transform duration-300
-                             text-gray-700 group-hover:scale-110`}
+                             text-gray-800 group-hover:scale-110`}
                     aria-hidden="true"
                   />
                 </div>

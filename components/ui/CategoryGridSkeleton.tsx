@@ -6,7 +6,7 @@ function SkeletonCard() {
   return (
     <div className="w-full aspect-square rounded-2xl bg-gray-200 flex flex-col items-center justify-center gap-4 p-4">
       {/* Cuadrado para el ícono */}
-      <div className="w-1/2 aspect-square bg-gray-300 rounded-lg"></div>
+      <div className="w-1/2 h-1/2 aspect-square bg-gray-300 rounded-lg"></div>
       {/* Barra para el texto */}
       <div className="w-3/4 h-5 bg-gray-300 rounded"></div>
     </div>

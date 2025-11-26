@@ -3,7 +3,6 @@ import 'styles/globals.css'
 import { Inter } from 'next/font/google'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import type { Metadata, Viewport } from 'next'
-import { Suspense } from 'react'
 import PageWrapper from './components/PageWrapper'
 
 // =====================
@@ -160,20 +159,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Saltar al contenido principal
         </a>
 
-        <Suspense
-          fallback={
-            <div className="flex items-center justify-center min-h-screen">
-              <div className="text-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-                <p className="text-gray-600">Cargando...</p>
-              </div>
-            </div>
-          }
-        >
-          <PageWrapper>
-            <main id="main-content">{children}</main>
-          </PageWrapper>
-        </Suspense>
+        <PageWrapper>
+          <main id="main-content">{children}</main>
+        </PageWrapper>
 
         <SpeedInsights />
       </body>

@@ -55,17 +55,22 @@
 }
 
 /* ===========================
-   Animación: Slide Down
+   Animación: Slide Down 
    =========================== */
 /* 
-   Efecto de "caída suave hacia abajo".
-   - Útil para mostrar cards, dropdowns o paneles.
-   - Hace que el elemento aparezca desde arriba con opacidad.
+Efecto de "caída suave hacia abajo".
+- Útil para mostrar cards, dropdowns o paneles.
+- Hace que el elemento aparezca desde arriba con opacidad.
 */
+
 @keyframes slideDown {
   0% {
     opacity: 0;
-    transform: translateY(-10px);
+    transform: translateY(-12px);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(1px); /* micro overshoot */
   }
   100% {
     opacity: 1;
@@ -75,5 +80,11 @@
 
 /* Clase utilitaria para aplicar el efecto */
 .animate-slideDown {
-  animation: slideDown 0.4s ease-out forwards;
+  animation: slideDown 420ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  will-change: transform, opacity;
+}
+
+/* Si el wrapper tiene .no-slide, no animar las cards (se ve “directo”) */
+.no-slide .animate-slideDown {
+  animation: none !important;
 }

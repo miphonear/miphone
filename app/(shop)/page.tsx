@@ -55,7 +55,7 @@ export default function HomePage() {
   return (
     <div className="max-w-6xl mx-auto px-4">
       {/* Encabezado de la página con título destacado */}
-      <header className="flex flex-col items-center justify-center mt-6 mb-12">
+      <header className="flex flex-col items-center justify-center mt-6 mb-8">
         <span className="text-3xl mb-1">✨</span>
         <h2 className="relative inline-block text-xl md:text-2xl font-bold text-gray-800 pb-2">
           Explorá nuestro catálogo
@@ -68,7 +68,7 @@ export default function HomePage() {
          - Skeleton mientras carga
          - Grid cuando hay datos
          - Mensaje vacío cuando no hay categorías */}
-      <section className="mb-16">
+      <section>
         {loading ? (
           <CategoryGridSkeleton />
         ) : categorias.length > 0 ? (
@@ -81,12 +81,12 @@ export default function HomePage() {
       </section>
 
       {/* Reseñas de Google (sección independiente para facilitar reordenamiento futuro) */}
-      <section className="mb-16">
+      <section>
         <GoogleReviews />
       </section>
 
       {/* Carrusel de marcas (sección final del home) */}
-      <section className="mb-8">
+      <section>
         <BrandsCarousel />
       </section>
     </div>
