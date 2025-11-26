@@ -1,5 +1,6 @@
 // app/layout.tsx
 import 'styles/globals.css'
+import { Suspense } from 'react'
 import { Inter } from 'next/font/google'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import type { Metadata, Viewport } from 'next'
@@ -159,9 +160,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Saltar al contenido principal
         </a>
 
-        <PageWrapper>
-          <main id="main-content">{children}</main>
-        </PageWrapper>
+        {/* 
+           IMPORTANTE: Suspense es obligatorio aquí porque PageWrapper usa useSearchParams().
+           Sin esto, el build falla en páginas estáticas (404, etc).
+        */}
+        <Suspense
+          fallback={
+            // Podés dejar este div vacío o usar un spinner minimalista para que no moleste
+            <div className="flex items-center justify-center min-h-screen bg-white" />
+          }
+        >
+          <PageWrapper>
+            <main id="main-content">{children}</main>
+          </PageWrapper>
+        </Suspense>
 
         <SpeedInsights />
       </body>

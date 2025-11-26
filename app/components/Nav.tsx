@@ -41,10 +41,12 @@ const styles = {
   desktopContainer: 'hidden md:grid grid-cols-[1fr_auto_1fr] items-center',
   logoLink: 'block group',
   logoTransition: 'transition-transform duration-200 group-hover:scale-105',
-  faqButton: `inline-flex items-center justify-center gap-2 px-3.5 py-2.5 
-             text-base font-semibold text-white bg-orange-500 rounded-full 
-             transition-all duration-200 hover:bg-orange-600 hover:scale-105
-             focus:outline-none focus:ring-2 focus:ring-orange-500/60 focus:ring-offset-2`,
+  faqButton:
+    'inline-flex items-center justify-center gap-2 px-3.5 py-2.5 ' +
+    'text-base font-semibold text-gray-900 ' + // texto oscuro
+    'bg-violet-200 rounded-full ' + // fondo claro
+    'transition-all duration-200 hover:bg-violet-300 hover:scale-105 ' +
+    'focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-2',
   tabsContainer: 'flex gap-4 border-b border-gray-200 mb-4',
   tabButton: 'flex items-center gap-2 pb-2 text-base font-medium transition-colors duration-150',
   tabActive: 'text-orange-600 border-b-2 border-orange-600',
