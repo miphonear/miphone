@@ -55,13 +55,12 @@ export default function HomePage() {
   return (
     <div className="max-w-6xl mx-auto px-4">
       {/* Encabezado de la página con título destacado */}
-      <header className="flex flex-col items-center justify-center mt-6 mb-8">
-        <span className="text-3xl mb-1">✨</span>
-        <h2 className="relative inline-block text-xl md:text-2xl font-bold text-gray-800 pb-2">
+      <header className="mt-6 mb-8 text-center">
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">
           Explorá nuestro catálogo
-          {/* Subrayado decorativo centrado */}
-          <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-2/3 h-1 bg-gradient-to-r from-orange-400 to-violet-500 rounded-full"></span>
         </h2>
+        {/* Línea divisoria con gradiente */}
+        <div className="mx-auto mt-2 h-1 w-40 bg-gradient-to-r from-orange-500 to-violet-500 rounded-full" />
       </header>
 
       {/* Sección de categorías:

@@ -87,14 +87,14 @@ export default function AnnouncementBar() {
   if (!visible) return null
 
   return (
-    <div className="w-full bg-gray-100 text-gray-700 text-xs md:text-base font-semibold py-2 px-4 flex items-center justify-center select-none relative">
+    <div className="w-full bg-gray-100 text-gray-700 text-sm md:text-base font-semibold tracking-tight py-2 px-4 flex items-center justify-center select-none relative">
       <span aria-live="polite" className="flex items-center gap-2">
         {/* Ícono dólar */}
         <CircleDollarSign className="w-4 h-4 text-green-600" />
         <span>Dólar hoy:</span>
         {loading ? (
           // Skeleton loader mientras carga
-          <span className="inline-block w-12 h-4 bg-gray-300 rounded animate-pulse" />
+          <span className="inline-block w-14 h-5 bg-gray-300 rounded animate-pulse" />
         ) : (
           // Valor seguro o "N/A"
           <span className="font-bold">{cotizacion}</span>
