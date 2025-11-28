@@ -36,7 +36,7 @@ function NavButton({ active, onClick, children, count, ariaLabel }: NavButtonPro
         ${
           active
             ? 'bg-orange-500 text-white'
-            : 'bg-white text-gray-600 hover:text-gray-700 hover:bg-gray-100'
+            : 'bg-white text-gray-700 hover:text-gray-800 hover:bg-gray-100'
         }
       `}
       aria-label={ariaLabel}
@@ -198,7 +198,7 @@ export default function Contenido({
   // 4. No results
   if (categorias.length === 0 && query.trim()) {
     return (
-      <div className="flex flex-col items-center justify-center text-center text-gray-600 py-12">
+      <div className="flex flex-col items-center justify-center text-center text-gray-700 py-12">
         <span className="block text-6xl mb-4" role="img" aria-label="Pensando">
           🤔
         </span>
@@ -214,16 +214,13 @@ export default function Contenido({
   // 5. Semántica con nav y section
   return (
     <main className="max-w-6xl mx-auto" role="main">
-      {/* 2/5. Navegación por subcategorías con accesibilidad */}
+      {/* 2/5. Navegación por SUBCATEGORÍAS con accesibilidad */}
       {categoriaActual && (
         <nav
           aria-label="Subcategorías"
-          className={`mb-4 transition-all duration-500 ease-out
-            ${
-              showSubcategorias
-                ? 'opacity-100 translate-y-0'
-                : 'opacity-0 -translate-y-2 pointer-events-none'
-            }`}
+          className={`mb-4 transition-opacity duration-400 ${
+            showSubcategorias ? 'opacity-100' : 'opacity-0 pointer-events-none'
+          }`}
         >
           <div className="flex justify-start md:justify-center">
             <div
@@ -246,16 +243,13 @@ export default function Contenido({
         </nav>
       )}
 
-      {/* 2/5. Navegación por líneas con accesibilidad */}
+      {/* 2/5. Navegación por LÍNEAS con accesibilidad */}
       {subcategoriaActual?.lineas?.length ? (
         <nav
           aria-label="Líneas de productos"
-          className={`mb-4 transition-all duration-500 ease-out
-            ${
-              showLineas
-                ? 'opacity-100 translate-y-0'
-                : 'opacity-0 -translate-y-2 pointer-events-none'
-            }`}
+          className={`mb-4 transition-opacity duration-400 ${
+            showLineas ? 'opacity-100' : 'opacity-0 pointer-events-none'
+          }`}
         >
           <div className="flex justify-start md:justify-center">
             <div

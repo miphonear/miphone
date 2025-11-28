@@ -1,7 +1,7 @@
 'use client'
+import { useMemo } from 'react'
 import Alert from '@ui/Alert'
 import type { Producto } from '@/app/types/Producto'
-import { useMemo } from 'react'
 import ProductModelCard from './ProductModelCard'
 import AccesoriosAlertCard from './AccesoriosAlertCard'
 import { SUBCATEGORIAS_CON_ALERTA_ACCESORIOS } from '@/lib/constantes'
@@ -35,48 +35,45 @@ export default function ProductosGenericos({ productos, alerta }: Props) {
   // SECCIÓN: AGRUPACIÓN POR MODELO (PRESERVANDO EL ORDEN DEL CSV)
   const agrupadosPorModelo = useMemo(() => {
     // Usamos un array para mantener el orden de aparición de los modelos.
-    const agrupados: {
-      modelo: string
-      variantes: Producto[]
-      avatarUrl?: string
-    }[] = []
-    const modelosVistos = new Set<string>()
+    const ordenModelos: string[] = [] // Mantiene el orden de aparición
+    // Optimización O(N): Usamos un Map para agrupar en una sola pasada
+    const mapaModelos = new Map<string, { variantes: Producto[]; avatarUrl?: string }>()
 
     visibles.forEach((p) => {
       const modelo = p.modelo?.trim() || '-'
-      // Si es la primera vez que vemos este modelo, lo agregamos al array.
-      if (!modelosVistos.has(modelo)) {
-        modelosVistos.add(modelo)
-        // Agrupamos todas las variantes de este modelo de una sola vez.
-        const variantesParaEsteModelo = visibles.filter(
-          (prod) => (prod.modelo?.trim() || '-') === modelo,
-        )
-        // Buscamos la primera variante que tenga una URL en "AVATAR"
-        const avatarUrl = variantesParaEsteModelo.find(
-          (v) => v.avatar && v.avatar.trim() !== '',
-        )?.avatar
-        agrupados.push({
-          modelo,
-          variantes: variantesParaEsteModelo,
-          avatarUrl,
-        })
+
+      if (!mapaModelos.has(modelo)) {
+        ordenModelos.push(modelo) // Registramos orden
+        mapaModelos.set(modelo, { variantes: [], avatarUrl: undefined })
+      }
+
+      const entry = mapaModelos.get(modelo)!
+      entry.variantes.push(p)
+
+      // Guardar el primer avatar válido que aparezca
+      if (!entry.avatarUrl && p.avatar?.trim()) {
+        entry.avatarUrl = p.avatar.trim()
       }
     })
-    return agrupados
+
+    // Reconstruir array final en orden
+    return ordenModelos.map((modelo) => {
+      const { variantes, avatarUrl } = mapaModelos.get(modelo)!
+      return { modelo, variantes, avatarUrl }
+    })
   }, [visibles])
 
   // SECCIÓN: RENDERIZADO PRINCIPAL
   return (
-    <div className="space-y-4 mt-6">
+    <div className="w-full flex flex-col gap-4 mt-6">
       {/* Alerta contextual si existe */}
       {alerta && (
-        <div className="max-w-3xl w-full mx-auto">
+        <div className="w-full max-w-3xl mx-auto">
           <Alert>{alerta}</Alert>
         </div>
       )}
-
-      {/* Render de productos a través del nuevo componente */}
-      <div className="space-y-4">
+      {/* Listado de tarjetas agrupadas */}{' '}
+      <div className="w-full flex flex-col gap-4">
         {agrupadosPorModelo.map(({ modelo, variantes, avatarUrl }, i) => (
           <ProductModelCard
             key={modelo}
@@ -87,8 +84,7 @@ export default function ProductosGenericos({ productos, alerta }: Props) {
           />
         ))}
       </div>
-
-      {/* Render condicional de la tarjeta CTA de Accesorios */}
+      {/* Alerta CTA Accesorios */}
       {shouldShowAccesoriosAlert && <AccesoriosAlertCard />}
     </div>
   )

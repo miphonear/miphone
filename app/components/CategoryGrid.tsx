@@ -63,7 +63,7 @@ export default function CategoryGrid({ categorias }: Props) {
                 className={`group relative flex flex-col items-center justify-center 
                 w-full h-full aspect-square rounded-3xl border-2
                 transition-all duration-300 transform
-                bg-white text-gray-800 border-gray-200 
+                bg-white text-gray-900 border-gray-200 
                 hover:border-orange-500 hover:ring-4 hover:ring-orange-500/20 hover:shadow-md md:hover:-translate-y-1
                 focus:outline-none focus-visible:border-orange-500 focus-visible:ring-4 focus-visible:ring-orange-500/20`}
               >
@@ -71,7 +71,7 @@ export default function CategoryGrid({ categorias }: Props) {
                 <div className="w-1/3 h-1/2 flex items-center justify-center">
                   <Icon
                     className={`w-full h-full object-contain transition-transform duration-300
-                             text-gray-800 group-hover:scale-110`}
+                             text-gray-900 group-hover:scale-110`}
                     aria-hidden="true"
                   />
                 </div>

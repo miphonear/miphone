@@ -15,94 +15,77 @@ export default function PageWrapper({ children }: { children: React.ReactNode })
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
-  // 1/5. Sanitización y validación del query
+  // Query de búsqueda (?q=) sanitizada
   const query = useMemo(() => {
-    const rawQuery = searchParams.get('q')
-    if (!rawQuery) return ''
-
-    // Sanitización básica: elimina caracteres peligrosos y limita longitud
-    return rawQuery
-      .trim()
-      .substring(0, 100) // Límite de 100 caracteres
-      .replace(/[<>]/g, '') // Elimina caracteres HTML básicos
+    const raw = searchParams.get('q')
+    if (!raw) return ''
+    return raw.trim().substring(0, 100).replace(/[<>]/g, '')
   }, [searchParams])
 
-  // 8. Validación de pathname
+  // Path válido (para evitar pushes raros)
   const isValidPath = useMemo(() => {
     if (!pathname) return false
     return pathname.startsWith('/') && pathname.length > 0
   }, [pathname])
 
-  // 5/10. Manejo optimizado de búsqueda con error handling
+  // Handler de búsqueda (actualiza ?q= con transición suave)
   const handleSearch = useCallback(
     (newQuery: string) => {
       try {
-        // Validación del input
-        if (newQuery.length > 100) {
-          console.warn('Query demasiado largo, truncando')
-          newQuery = newQuery.substring(0, 100)
-        }
-
-        // Sanitización
-        const sanitizedQuery = newQuery.trim().replace(/[<>]/g, '')
-
+        const trimmed = newQuery.trim().substring(0, 100).replace(/[<>]/g, '')
         const params = new URLSearchParams(searchParams.toString())
 
-        if (sanitizedQuery) {
-          params.set('q', sanitizedQuery)
-        } else {
-          params.delete('q')
-        }
+        if (trimmed) params.set('q', trimmed)
+        else params.delete('q')
 
         if (!isValidPath) {
-          console.error('Pathname inválido:', pathname)
           router.push('/')
           return
         }
 
-        // 7. Transición suave usando React 18
         startTransition(() => {
-          const newUrl = `${pathname}?${params.toString()}`
-          router.push(newUrl)
+          const next = `${pathname}?${params.toString()}`
+          router.push(next)
         })
       } catch (error) {
         console.error('Error durante la búsqueda:', error)
-        // Fallback: navegar sin query
         router.push(pathname)
       }
     },
     [router, pathname, searchParams, isValidPath],
   )
 
-  // 4/6. Estructura semántica y meta mejorada
   return (
-    <div className="flex flex-col min-h-screen relative">
-      {/* 6. Metadatos estructurales para SEO */}
+    <div className="flex flex-col min-h-screen relative overflow-x-hidden">
+      {/* Título para lectores de pantalla (SEO/Accesibilidad) */}
       <div className="sr-only">
-        <h1>{`miPhone™ - Descubrí los mejores precios en tecnología. ¡A un clic de distancia!`}</h1>
+        <h1>miPhone™ - Descubrí los mejores precios en tecnología. ¡A un clic de distancia!</h1>
       </div>
 
-      {/* Elementos de fondo y UI flotante */}
+      {/* Fondo decorativo */}
       <BackgroundBlobs />
 
-      {/* 4. Header con estructura semántica */}
+      {/* Encabezado del sitio */}
       <header className="relative z-20">
         <AnnouncementBar />
         <Nav />
-        <Header initialValue={query} onSearch={handleSearch} />
+        {/* Barra de búsqueda (alineada a 6xl y centrada) */}
+        <div className="w-full max-w-6xl mx-auto px-4">
+          <Header initialValue={query} onSearch={handleSearch} />
+        </div>
       </header>
 
-      {/* 4. Main content con semántica apropiada */}
-      <main className="flex-grow px-2 relative z-10" role="main" aria-label="Contenido principal">
+      {/* Contenido principal (las páginas controlan su propio ancho/padding) */}
+      <main className="flex-grow relative z-10 w-full" role="main">
         {children}
       </main>
 
-      {/* 4. Footer semántico */}
+      {/* Pie de página */}
       <footer className="relative z-20">
         <Footer />
       </footer>
 
-      {/* Elementos flotantes/accesorios */}
+      {/* Utilidades flotantes */}
       <ScrollToTopButton />
       <WhatsAppFloat />
     </div>

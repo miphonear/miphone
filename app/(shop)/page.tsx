@@ -31,15 +31,15 @@ export default function HomePage() {
   // Vista de resultados cuando existe una búsqueda (?q=...)
   if (query) {
     return (
-      <div className="max-w-6xl mx-auto px-4">
+      // Wrapper consistente: w-full max-w-6xl mx-auto px-4 py-6
+      <div className="w-full max-w-6xl mx-auto px-4 py-6">
         <div className="my-6">
-          <h1 className="text-xl md:text-2xl font-bold text-gray-800 text-center">
+          <h1 className="text-xl md:text-2xl font-bold text-gray-900 text-center">
             {`Resultados para: "${query}"`}
           </h1>
         </div>
 
-        {/* Muestra la grilla de productos filtrada por query.
-           - Pasamos loading y error para que Contenido maneje estados. */}
+        {/* Muestra la grilla de productos filtrada por query. */}
         <Contenido
           productos={productos}
           loading={loading}
@@ -53,7 +53,8 @@ export default function HomePage() {
 
   // Vista principal (sin búsqueda): muestra catálogo, reseñas y marcas
   return (
-    <div className="max-w-6xl mx-auto px-4">
+    // Wrapper consistente: w-full max-w-6xl mx-auto px-4 py-6
+    <div className="w-full max-w-6xl mx-auto px-4 py-6">
       {/* Encabezado de la página con título destacado */}
       <header className="mt-6 mb-8 text-center">
         <h2 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">
@@ -63,10 +64,7 @@ export default function HomePage() {
         <div className="mx-auto mt-2 h-1 w-40 bg-gradient-to-r from-orange-500 to-violet-500 rounded-full" />
       </header>
 
-      {/* Sección de categorías:
-         - Skeleton mientras carga
-         - Grid cuando hay datos
-         - Mensaje vacío cuando no hay categorías */}
+      {/* Sección de categorías */}
       <section>
         {loading ? (
           <CategoryGridSkeleton />
@@ -74,17 +72,17 @@ export default function HomePage() {
           <CategoryGrid categorias={categorias} />
         ) : (
           <div className="text-center py-12">
-            <p className="text-gray-600">No hay categorías disponibles en este momento.</p>
+            <p className="text-gray-700">No hay categorías disponibles en este momento.</p>
           </div>
         )}
       </section>
 
-      {/* Reseñas de Google (sección independiente para facilitar reordenamiento futuro) */}
+      {/* Reseñas de Google */}
       <section>
         <GoogleReviews />
       </section>
 
-      {/* Carrusel de marcas (sección final del home) */}
+      {/* Carrusel de marcas */}
       <section>
         <BrandsCarousel />
       </section>

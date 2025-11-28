@@ -54,10 +54,10 @@ export default function ProductosSeminuevos({ productos, alerta }: Props) {
 
   // SECCIÓN: RENDERIZADO PRINCIPAL
   return (
-    <div className="space-y-6 mt-6">
+    <div className="w-full flex flex-col gap-6 mt-6">
       {/* Alerta */}
       {alerta && (
-        <div className="max-w-3xl w-full mx-auto">
+        <div className="w-full max-w-3xl mx-auto">
           <Alert type="success">{alerta}</Alert>
         </div>
       )}
@@ -67,8 +67,8 @@ export default function ProductosSeminuevos({ productos, alerta }: Props) {
         <div
           key={i}
           style={{ animationDelay: `${i * 150}ms` }} // Delay en cascada
-          className="border border-gray-200 rounded-lg bg-white/95 shadow-sm p-4 flex flex-col gap-2 
-                     max-w-3xl w-full mx-auto opacity-0 animate-slideDown"
+          // Card centrada: max-w-3xl + mx-auto
+          className="w-full max-w-3xl mx-auto border border-gray-200 rounded-lg bg-white/90 shadow-sm p-4 flex flex-col gap-2 opacity-0 animate-slideDown"
         >
           {/* Cabecera */}
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
