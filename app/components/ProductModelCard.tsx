@@ -35,7 +35,8 @@ const ProductModelCard = memo(function ProductModelCard({
   }
 
   // --- CÁLCULOS DERIVADOS ---
-  const hasNew = variantes.some((v) => v.label?.trim().toUpperCase() === 'NEW')
+  // Usamos .includes() en lugar de === para ser más flexibles con el CSV
+  const hasNew = variantes.some((v) => v.label?.trim().toUpperCase().includes('NEW'))
   const specs = variantes[0].specs || null
   const hayVersiones = variantes.some((v) => v.version && v.version.trim() !== '')
 
@@ -102,7 +103,10 @@ const ProductModelCard = memo(function ProductModelCard({
                     >
                       <span className="text-gray-800">{v.version || ''}</span>
                       <span className="text-gray-800 font-semibold flex items-center gap-1">
-                        {v.label?.trim().toUpperCase() === 'SALE' && <ProductLabel value="SALE" />}
+                        {/* Usamos .includes() para SALE */}
+                        {v.label?.trim().toUpperCase().includes('SALE') && (
+                          <ProductLabel value="SALE" />
+                        )}
                         {v.precio || (
                           <span className="text-gray-500 font-semibold text-xs sm:text-sm">
                             Consultanos
@@ -119,7 +123,8 @@ const ProductModelCard = memo(function ProductModelCard({
                 <div className="flex justify-between items-center">
                   {titleContent}
                   <span className="pl-4 text-gray-700 font-semibold text-sm flex items-center gap-1">
-                    {variantes[0].label?.trim().toUpperCase() === 'SALE' && (
+                    {/* CORRECCIÓN: Usamos .includes() para SALE */}
+                    {variantes[0].label?.trim().toUpperCase().includes('SALE') && (
                       <ProductLabel value="SALE" />
                     )}
                     {variantes[0].precio || (

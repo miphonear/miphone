@@ -8,15 +8,29 @@ import { ALERTAS } from '@/lib/constantes'
 import { filtrarCategorias } from '@/lib/filtrarCategorias'
 import ErrorMessage from '@ui/ErrorMessage'
 
+// --- TIPOS Y PROPS ---
+
 interface ContenidoProps {
   productos: Producto[]
   loading: boolean
   error: string | null
   query: string
   categoriaActiva?: string
+  disableAnimation?: boolean
 }
 
-// Componente reutilizable para botones de navegación (subcategorias y lineas)
+interface CategoriaVista {
+  nombre: string
+  totalProductos: number
+  subcategorias: {
+    nombre: string
+    productos: Producto[]
+    lineas: string[]
+  }[]
+}
+
+// --- COMPONENTES AUXILIARES ---
+
 interface NavButtonProps {
   active: boolean
   onClick: () => void
@@ -48,35 +62,51 @@ function NavButton({ active, onClick, children, count, ariaLabel }: NavButtonPro
   )
 }
 
+// --- COMPONENTE PRINCIPAL ---
+
 export default function Contenido({
   productos,
   loading,
   error,
   query,
   categoriaActiva = '',
+  disableAnimation = false,
 }: ContenidoProps) {
-  // 3. Optimización: memoizar cálculos pesados
+  // --- 1. PROCESAMIENTO Y FILTRADO DE DATOS ---
+
   const categorias = useMemo(() => {
-    if (!productos?.length) return [] // 8. Validación robusta
+    if (!productos?.length) return []
 
-    const categoriasAgrupadas: {
-      nombre: string
-      subcategorias: {
-        nombre: string
-        productos: Producto[]
-        lineas: string[]
-      }[]
-    }[] = []
+    const queryUpper = query.trim().toUpperCase()
+    const esFiltroEtiqueta = queryUpper === 'NEW' || queryUpper === 'SALE'
 
-    productos.forEach((p) => {
-      // 8. Validaciones más robustas
+    let productosAProcesar = productos
+
+    // Lógica especial para filtros NEW/SALE: Buscar modelos que cumplan y traer todas sus variantes
+    if (esFiltroEtiqueta) {
+      const modelosQueCumplen = new Set<string>()
+      productos.forEach((p) => {
+        const labelNormalizado = p.label?.trim().toUpperCase() || ''
+        if (labelNormalizado.includes(queryUpper)) {
+          modelosQueCumplen.add(p.modelo)
+        }
+      })
+      productosAProcesar = productos.filter((p) => modelosQueCumplen.has(p.modelo))
+    }
+
+    // Agrupación de datos
+    const categoriasAgrupadas: CategoriaVista[] = []
+
+    productosAProcesar.forEach((p) => {
       if (!p?.categoria?.trim()) return
 
       let cat = categoriasAgrupadas.find((c) => c.nombre === p.categoria)
       if (!cat) {
-        cat = { nombre: p.categoria, subcategorias: [] }
+        cat = { nombre: p.categoria, totalProductos: 0, subcategorias: [] }
         categoriasAgrupadas.push(cat)
       }
+
+      cat.totalProductos++
 
       const subcategoriaNombre = p.subcategoria?.trim() || 'General'
       let sub = cat.subcategorias.find((s) => s.nombre === subcategoriaNombre)
@@ -91,19 +121,26 @@ export default function Contenido({
       }
     })
 
-    return filtrarCategorias(categoriasAgrupadas, query)
+    if (esFiltroEtiqueta) return categoriasAgrupadas
+
+    // Transformación final usando la librería de filtrado (casteo para compatibilidad de tipos)
+    return filtrarCategorias(
+      categoriasAgrupadas as unknown as Parameters<typeof filtrarCategorias>[0],
+      query,
+    ) as unknown as CategoriaVista[]
   }, [productos, query])
 
-  // Estados de navegación
+  // --- 2. ESTADOS DE NAVEGACIÓN Y ANIMACIÓN ---
+
   const [cat, setCat] = useState(categoriaActiva)
   const [sub, setSub] = useState('')
   const [linea, setLinea] = useState<string>('')
 
-  // Estados de animación
   const [showSubcategorias, setShowSubcategorias] = useState(false)
   const [showLineas, setShowLineas] = useState(false)
 
-  // 3. Memoizar cálculos que se usan múltiples veces
+  // --- 3. SELECCIÓN ACTUAL (Memoized) ---
+
   const categoriaActual = useMemo(() => categorias.find((c) => c.nombre === cat), [categorias, cat])
 
   const subcategoriaActual = useMemo(
@@ -118,7 +155,14 @@ export default function Contenido({
       : subcategoriaActual.productos
   }, [subcategoriaActual, linea])
 
-  // 9. Handlers con useCallback
+  // --- 4. MANEJADORES DE EVENTOS ---
+
+  const handleCategoryClick = useCallback((nombreCat: string) => {
+    setCat(nombreCat)
+    setSub('')
+    setLinea('')
+  }, [])
+
   const handleSubcategoriaClick = useCallback((nombreSub: string) => {
     setSub(nombreSub)
     setLinea('')
@@ -128,23 +172,22 @@ export default function Contenido({
     setLinea(nombreLinea)
   }, [])
 
-  // Efectos con cleanup (6. Memory leaks)
+  // --- 5. EFECTOS (Sincronización y Animación) ---
+
+  // Sincronizar categoría inicial o fallback
   useEffect(() => {
     if (categorias.length === 0) {
       setCat('')
       return
     }
-
     const categoriaExiste = categorias.some((c) => c.nombre === cat)
     if (!categoriaExiste) {
-      if (query.trim() || categorias.length > 0) {
-        setCat(categorias[0].nombre)
-      } else {
-        setCat('')
-      }
+      // Si hay query o datos, seleccionamos la primera categoría disponible
+      setCat(query.trim() || categorias.length > 0 ? categorias[0].nombre : '')
     }
   }, [categorias, cat, query])
 
+  // Seleccionar primera subcategoría automáticamente
   useEffect(() => {
     if (categoriaActual?.subcategorias?.length) {
       setSub(categoriaActual.subcategorias[0].nombre)
@@ -155,6 +198,7 @@ export default function Contenido({
     }
   }, [categoriaActual])
 
+  // Seleccionar primera línea automáticamente
   useEffect(() => {
     if (subcategoriaActual?.lineas?.length) {
       setLinea(subcategoriaActual.lineas[0])
@@ -163,13 +207,12 @@ export default function Contenido({
     }
   }, [subcategoriaActual])
 
-  // 6. Efectos de animación con cleanup
+  // Control de animación de entrada para barras de navegación
   useEffect(() => {
     if (!categoriaActual) {
       setShowSubcategorias(false)
       return
     }
-
     setShowSubcategorias(false)
     const timer = setTimeout(() => setShowSubcategorias(true), 50)
     return () => clearTimeout(timer)
@@ -180,22 +223,16 @@ export default function Contenido({
       setShowLineas(false)
       return
     }
-
     setShowLineas(false)
     const timer = setTimeout(() => setShowLineas(true), 50)
     return () => clearTimeout(timer)
   }, [subcategoriaActual])
 
-  // Estados especiales
-  if (loading) {
-    return null
-  }
+  // --- 6. RENDERIZADO ---
 
-  if (error) {
-    return <ErrorMessage>{error}</ErrorMessage>
-  }
+  if (loading) return null
+  if (error) return <ErrorMessage>{error}</ErrorMessage>
 
-  // 4. No results
   if (categorias.length === 0 && query.trim()) {
     return (
       <div className="flex flex-col items-center justify-center text-center text-gray-700 py-12">
@@ -211,10 +248,36 @@ export default function Contenido({
     )
   }
 
-  // 5. Semántica con nav y section
+  const showCategoryTabs = categorias.length > 1
+
   return (
-    <main className="max-w-6xl mx-auto" role="main">
-      {/* 2/5. Navegación por SUBCATEGORÍAS con accesibilidad */}
+    <main className={`max-w-6xl mx-auto ${disableAnimation ? 'no-slide' : ''}`} role="main">
+      {/* A. NAVEGACIÓN: CATEGORÍAS (Visible solo si hay múltiples resultados) */}
+      {showCategoryTabs && (
+        <nav aria-label="Categorías" className="mb-4">
+          <div className="flex justify-start md:justify-center">
+            {/* Diseño unificado: border-gray-300 para coincidir con subcategorías */}
+            <div
+              className="flex overflow-x-auto no-scrollbar rounded-md border border-gray-300 divide-x divide-gray-300 max-w-full snap-x snap-mandatory scroll-smooth"
+              role="tablist"
+            >
+              {categorias.map((c) => (
+                <NavButton
+                  key={c.nombre}
+                  active={cat === c.nombre}
+                  onClick={() => handleCategoryClick(c.nombre)}
+                  count={c.totalProductos}
+                  ariaLabel={`Ver ${c.totalProductos} productos de ${c.nombre}`}
+                >
+                  {c.nombre}
+                </NavButton>
+              ))}
+            </div>
+          </div>
+        </nav>
+      )}
+
+      {/* B. NAVEGACIÓN: SUBCATEGORÍAS */}
       {categoriaActual && (
         <nav
           aria-label="Subcategorías"
@@ -243,7 +306,7 @@ export default function Contenido({
         </nav>
       )}
 
-      {/* 2/5. Navegación por LÍNEAS con accesibilidad */}
+      {/* C. NAVEGACIÓN: LÍNEAS */}
       {subcategoriaActual?.lineas?.length ? (
         <nav
           aria-label="Líneas de productos"
@@ -275,7 +338,7 @@ export default function Contenido({
         </nav>
       ) : null}
 
-      {/* 5. Sección de productos con semántica */}
+      {/* D. LISTADO DE PRODUCTOS */}
       <section aria-label="Lista de productos">
         {subcategoriaActual &&
           (() => {
