@@ -36,13 +36,6 @@ export default function GoogleReviews() {
 
       {/* Contenedor con placeholder para evitar layout shift */}
       <div className="w-full h-[630px] rounded-lg overflow-hidden relative">
-        {!showWidget && (
-          // Placeholder visual mientras carga (opcional, mejora UX)
-          <div className="absolute inset-0 flex items-center justify-center text-gray-700">
-            <p>Cargando reseñas</p>
-          </div>
-        )}
-
         {showWidget && (
           <iframe
             loading="lazy"

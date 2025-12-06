@@ -10,49 +10,56 @@ const BADGES = [
   { emoji: '📦', text: 'Envíos a todo el país' },
 ]
 
-// SECCIÓN: INTERFACES Y TIPOS
 interface HeaderProps {
   initialValue: string
   onSearch: (_value: string) => void
 }
 
-// SECCIÓN: COMPONENTE PRINCIPAL
 export default function Header({ initialValue, onSearch }: HeaderProps) {
   const [anim, setAnim] = useState(true)
 
   useEffect(() => {
+    // Reducimos el timeout para que la animación termine justo cuando el usuario termina de leer
     const timeout = setTimeout(() => setAnim(false), 1300)
     return () => clearTimeout(timeout)
   }, [])
 
   return (
     <header className="bg-transparent">
-      <div className="container mx-auto px-4 pt-12 pb-4 flex flex-col items-center">
-        {/* Slogan */}
-        <div className="w-full flex justify-center mb-6">
-          <h1 className="text-5xl md:text-6xl font-extrabold text-center leading-tight tracking-tight max-w-3xl">
-            Lo bueno se{' '}
-            <span
-              className={`bg-gradient-to-r from-[#FF6D0C] to-[#C051FF] text-transparent bg-clip-text ${
-                anim ? 'bounce-up-once' : ''
-              }`}
-            >
-              recomienda.
-            </span>
-          </h1>
-        </div>
+      {/* Ajuste: pt-8 en móvil para ganar espacio, pt-12 en desktop */}
+      <div className="container mx-auto px-4 pt-8 md:pt-12 pb-4 flex flex-col items-center">
+        {/* SLOGAN
+            - Eliminado el div wrapper innecesario.
+            - mb-4: Menos separación con los badges.
+            - cursor-default select-none: Sensación de UI nativa/Premium.
+        */}
+        <h1 className="mb-4 max-w-3xl cursor-default select-none text-center text-5xl font-extrabold leading-tight tracking-tight text-gray-900 md:text-6xl">
+          Lo bueno se{' '}
+          <span
+            className={`bg-gradient-to-r from-[#FF6D0C] to-[#C051FF] bg-clip-text text-transparent ${
+              anim ? 'bounce-up-once' : ''
+            }`}
+          >
+            recomienda.
+          </span>
+        </h1>
 
-        {/* Badges */}
-        <div className="flex flex-wrap justify-center gap-2 mb-6 md:mb-12">
+        {/* BADGES
+            - mb-8: Separación justa con el buscador (antes era mb-12).
+            - Semántica: Usamos <ul/> para accesibilidad (screen readers saben que es una lista).
+        */}
+        <ul className="mb-8 flex flex-wrap justify-center gap-2">
           {BADGES.map((badge, i) => (
-            <Badge key={i} emoji={badge.emoji}>
-              {badge.text}
-            </Badge>
+            <li key={i}>
+              <Badge emoji={badge.emoji}>{badge.text}</Badge>
+            </li>
           ))}
-        </div>
+        </ul>
 
         {/* Search bar */}
-        <SearchBar initialValue={initialValue} onSearch={onSearch} />
+        <div className="w-full max-w-2xl">
+          <SearchBar initialValue={initialValue} onSearch={onSearch} />
+        </div>
       </div>
     </header>
   )

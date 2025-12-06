@@ -1,5 +1,5 @@
 'use client'
-import { useMemo, useState, useEffect, useCallback } from 'react'
+import React, { useMemo, useState, useEffect, useCallback } from 'react'
 import type { Producto } from '@/app/types/Producto'
 import ProductosGenericos from './ProductosGenericos'
 import ProductosSeminuevos from './ProductosSeminuevos'
@@ -39,14 +39,21 @@ interface NavButtonProps {
   ariaLabel?: string
 }
 
-function NavButton({ active, onClick, children, count, ariaLabel }: NavButtonProps) {
+// Memoizar NavButton para evitar re-renders innecesarios
+const NavButton = React.memo(function NavButton({
+  active,
+  onClick,
+  children,
+  count,
+  ariaLabel,
+}: NavButtonProps) {
   return (
     <button
       onClick={onClick}
       className={`
         relative px-3 py-1.5 text-sm font-semibold whitespace-nowrap snap-center transition
         focus:outline-none 
-        focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-inset
+        focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-inset select-none cursor-pointer
         ${
           active
             ? 'bg-orange-500 text-white'
@@ -60,7 +67,7 @@ function NavButton({ active, onClick, children, count, ariaLabel }: NavButtonPro
       {count !== undefined && <span className="text-sm font-medium ml-1">({count})</span>}
     </button>
   )
-}
+})
 
 // --- COMPONENTE PRINCIPAL ---
 
@@ -73,31 +80,15 @@ export default function Contenido({
   disableAnimation = false,
 }: ContenidoProps) {
   // --- 1. PROCESAMIENTO Y FILTRADO DE DATOS ---
+  // OPTIMIZACIÓN: Separar agrupación base (solo depende de productos) de filtrado (depende de query)
 
-  const categorias = useMemo(() => {
+  // Agrupación base: se recalcula solo cuando cambian los productos
+  const categoriasBase = useMemo(() => {
     if (!productos?.length) return []
 
-    const queryUpper = query.trim().toUpperCase()
-    const esFiltroEtiqueta = queryUpper === 'NEW' || queryUpper === 'SALE'
-
-    let productosAProcesar = productos
-
-    // Lógica especial para filtros NEW/SALE: Buscar modelos que cumplan y traer todas sus variantes
-    if (esFiltroEtiqueta) {
-      const modelosQueCumplen = new Set<string>()
-      productos.forEach((p) => {
-        const labelNormalizado = p.label?.trim().toUpperCase() || ''
-        if (labelNormalizado.includes(queryUpper)) {
-          modelosQueCumplen.add(p.modelo)
-        }
-      })
-      productosAProcesar = productos.filter((p) => modelosQueCumplen.has(p.modelo))
-    }
-
-    // Agrupación de datos
     const categoriasAgrupadas: CategoriaVista[] = []
 
-    productosAProcesar.forEach((p) => {
+    productos.forEach((p) => {
       if (!p?.categoria?.trim()) return
 
       let cat = categoriasAgrupadas.find((c) => c.nombre === p.categoria)
@@ -121,14 +112,67 @@ export default function Contenido({
       }
     })
 
-    if (esFiltroEtiqueta) return categoriasAgrupadas
+    return categoriasAgrupadas
+  }, [productos])
+
+  // Aplicar filtrado sobre la agrupación base (solo se recalcula cuando cambia query)
+  const categorias = useMemo(() => {
+    if (!categoriasBase.length) return []
+
+    const queryTrimmed = query.trim()
+    if (!queryTrimmed) return categoriasBase
+
+    const queryUpper = queryTrimmed.toUpperCase()
+    const esFiltroEtiqueta = queryUpper === 'NEW' || queryUpper === 'SALE'
+
+    // Lógica especial para filtros NEW/SALE: Buscar modelos que cumplan y traer todas sus variantes
+    if (esFiltroEtiqueta) {
+      const modelosQueCumplen = new Set<string>()
+      productos.forEach((p) => {
+        const labelNormalizado = p.label?.trim().toUpperCase() || ''
+        if (labelNormalizado.includes(queryUpper)) {
+          modelosQueCumplen.add(p.modelo)
+        }
+      })
+
+      // Filtrar categorías base por modelos que cumplen
+      const categoriasFiltradas = categoriasBase.map((cat) => {
+        const subcategoriasFiltradas = cat.subcategorias
+          .map((sub) => {
+            const productosFiltrados = sub.productos.filter((p) => modelosQueCumplen.has(p.modelo))
+            if (productosFiltrados.length > 0) {
+              return {
+                ...sub,
+                productos: productosFiltrados,
+                lineas: Array.from(new Set(productosFiltrados.map((p) => p.linea))).filter(Boolean),
+              }
+            }
+            return null
+          })
+          .filter((sub): sub is NonNullable<typeof sub> => sub !== null)
+
+        if (subcategoriasFiltradas.length > 0) {
+          return {
+            ...cat,
+            subcategorias: subcategoriasFiltradas,
+            totalProductos: subcategoriasFiltradas.reduce(
+              (sum, sub) => sum + sub.productos.length,
+              0,
+            ),
+          }
+        }
+        return null
+      })
+
+      return categoriasFiltradas.filter((cat): cat is CategoriaVista => cat !== null)
+    }
 
     // Transformación final usando la librería de filtrado (casteo para compatibilidad de tipos)
     return filtrarCategorias(
-      categoriasAgrupadas as unknown as Parameters<typeof filtrarCategorias>[0],
-      query,
+      categoriasBase as unknown as Parameters<typeof filtrarCategorias>[0],
+      queryTrimmed,
     ) as unknown as CategoriaVista[]
-  }, [productos, query])
+  }, [categoriasBase, query, productos])
 
   // --- 2. ESTADOS DE NAVEGACIÓN Y ANIMACIÓN ---
 
@@ -345,12 +389,18 @@ export default function Contenido({
             const alerta =
               ALERTAS[subcategoriaActual.nombre.toUpperCase() as keyof typeof ALERTAS] || null
 
-            if (subcategoriaActual.nombre.toLowerCase().includes('seminuevo')) {
+            // LOGICA CORREGIDA:
+            // Verificamos si la Categoría O la Subcategoría contienen "Seminuevo".
+            const esSeminuevo =
+              categoriaActual?.nombre.toLowerCase().includes('seminuevo') ||
+              subcategoriaActual.nombre.toLowerCase().includes('seminuevo')
+
+            if (esSeminuevo) {
               return (
                 <ProductosSeminuevos
                   key={subcategoriaActual.nombre}
                   productos={productosFiltradosLinea}
-                  alerta={alerta}
+                  alerta={ALERTAS['SEMINUEVOS']}
                 />
               )
             }

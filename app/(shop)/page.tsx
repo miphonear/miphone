@@ -1,13 +1,22 @@
 'use client'
 import { useMemo } from 'react'
+import dynamic from 'next/dynamic'
 import { useSearchParams } from 'next/navigation'
 import { useProducts } from '@/app/context/ProductContext'
 
 import CategoryGrid from '@/app/components/CategoryGrid'
 import CategoryGridSkeleton from '@ui/CategoryGridSkeleton'
 import Contenido from '@/app/components/Contenido'
-import GoogleReviews from '@/app/components/GoogleReviews'
-import BrandsCarousel from '@/app/components/BrandsCarousel'
+
+// Lazy loading de componentes pesados que no son críticos para el render inicial
+// Solo se cargan cuando son necesarios (cuando el usuario hace scroll o cuando no hay búsqueda)
+const GoogleReviews = dynamic(() => import('@/app/components/GoogleReviews'), {
+  ssr: false, // No necesita SSR, es un widget de terceros
+})
+
+const BrandsCarousel = dynamic(() => import('@/app/components/BrandsCarousel'), {
+  ssr: true, // Puede renderizarse en el servidor
+})
 
 export default function HomePage() {
   // Lee el parámetro de búsqueda ?q= y elimina espacios laterales

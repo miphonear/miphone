@@ -1,5 +1,5 @@
 'use client'
-import { useMemo } from 'react'
+import React, { useMemo } from 'react'
 import Alert from '@ui/Alert'
 import type { Producto } from '@/app/types/Producto'
 import ProductModelCard from './ProductModelCard'
@@ -13,7 +13,7 @@ interface Props {
 }
 
 // SECCIÓN: COMPONENTE PRINCIPAL
-export default function ProductosGenericos({ productos, alerta }: Props) {
+function ProductosGenericos({ productos, alerta }: Props) {
   // SECCIÓN: FILTRADO
   const visibles = useMemo(
     () => productos.filter((p) => p.ocultar?.toLowerCase() !== 'x'),
@@ -89,3 +89,18 @@ export default function ProductosGenericos({ productos, alerta }: Props) {
     </div>
   )
 }
+
+// Memoizar componente para evitar re-renders cuando las props no cambian
+// IMPORTANTE: Si el array cambió (nueva referencia), siempre re-renderizar
+// porque puede ser un filtrado diferente aunque contenga los mismos objetos
+export default React.memo(ProductosGenericos, (prevProps, nextProps) => {
+  // Si cambió la alerta, re-renderizar
+  if (prevProps.alerta !== nextProps.alerta) return false
+
+  // Si es el mismo array (misma referencia), no re-renderizar
+  if (prevProps.productos === nextProps.productos) return true
+
+  // Si el array cambió (nueva referencia), siempre re-renderizar
+  // Esto asegura que los filtrados se muestren correctamente
+  return false // false = re-renderizar
+})

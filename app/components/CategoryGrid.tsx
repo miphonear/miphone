@@ -1,4 +1,5 @@
 'use client'
+import React from 'react'
 import Link from 'next/link'
 
 // --- 1. IMPORTAMOS LOS ÍCONOS ---
@@ -34,8 +35,9 @@ interface Props {
 /**
  * CategoryGrid: Muestra un directorio visual de categorías en una grilla responsive,
  * utilizando el diseño de alta calidad del componente de tabs original.
+ * OPTIMIZADO: Memoizado para evitar re-renders innecesarios.
  */
-export default function CategoryGrid({ categorias }: Props) {
+function CategoryGrid({ categorias }: Props) {
   // --- RENDERIZAMOS LA GRILLA con mejoras de accesibilidad, semántica,
   // focus states, manejo de overflow y fallbacks de datos/íconos.
   return (
@@ -101,3 +103,6 @@ export default function CategoryGrid({ categorias }: Props) {
     </section>
   )
 }
+
+// Memoizar componente para evitar re-renders cuando las props no cambian
+export default React.memo(CategoryGrid)

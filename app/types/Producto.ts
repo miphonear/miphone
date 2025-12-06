@@ -23,4 +23,14 @@ export interface Producto {
   color?: string // Color (opcional, ej: 'Negro')
   bateria?: string // Estado de batería (opcional, ej: '85%')
   fotos?: string // Enlaces a fotos (opcional, ej: 'url1,url2')
+
+  // Campos pre-computados para optimización (se calculan al parsear CSV)
+  _categoriaNormalizada?: string // categoria.toUpperCase().trim()
+  _modeloLimpio?: string // clean(modelo)
+  _lineaLimpia?: string // clean(linea || '')
+  _versionLimpia?: string // clean(version || '')
+  _labelLimpio?: string // clean(label || '')
+  _capacidadLimpia?: string // clean(capacidad || '')
+  _colorLimpio?: string // clean(color || '')
+  _subcategoriaLimpia?: string // clean(subcategoria)
 }

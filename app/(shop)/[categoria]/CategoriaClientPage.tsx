@@ -63,7 +63,9 @@ export default function CategoriaClientPage({ params }: CategoriaClientPageProps
     }
 
     return productos.filter((producto) => {
-      const categoriaProducto = producto.categoria?.toUpperCase()?.trim()
+      // OPTIMIZACIÓN: Usar campo pre-computado si está disponible, sino calcular
+      const categoriaProducto =
+        producto._categoriaNormalizada ?? producto.categoria?.toUpperCase()?.trim()
       return categoriaProducto === categoriaDeURL
     })
   }, [productos, categoriaDeURL, loading])

@@ -1,5 +1,5 @@
 'use client'
-import { useState, useMemo } from 'react'
+import React, { useState, useMemo } from 'react'
 import ProductLabel from '@ui/ProductLabel'
 import Alert from '@ui/Alert'
 import { Image as ImageIcon } from 'lucide-react'
@@ -15,7 +15,7 @@ interface Props {
 }
 
 // SECCIÓN: COMPONENTE PRINCIPAL
-export default function ProductosAccesorios({ productos, alerta }: Props) {
+function ProductosAccesorios({ productos, alerta }: Props) {
   // SECCIÓN: ESTADOS
   const [modalFotosOpen, setModalFotosOpen] = useState(false)
   const [fotos, setFotos] = useState<string[]>([])
@@ -130,3 +130,18 @@ export default function ProductosAccesorios({ productos, alerta }: Props) {
     </div>
   )
 }
+
+// Memoizar componente para evitar re-renders cuando las props no cambian
+// IMPORTANTE: Si el array cambió (nueva referencia), siempre re-renderizar
+// porque puede ser un filtrado diferente aunque contenga los mismos objetos
+export default React.memo(ProductosAccesorios, (prevProps, nextProps) => {
+  // Si cambió la alerta, re-renderizar
+  if (prevProps.alerta !== nextProps.alerta) return false
+
+  // Si es el mismo array (misma referencia), no re-renderizar
+  if (prevProps.productos === nextProps.productos) return true
+
+  // Si el array cambió (nueva referencia), siempre re-renderizar
+  // Esto asegura que los filtrados se muestren correctamente
+  return false // false = re-renderizar
+})

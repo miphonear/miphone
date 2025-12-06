@@ -54,7 +54,7 @@ function SuggestionButtons({ onShortcut }: { onShortcut: (_s: string) => void })
         aria-label="Buscar nuevos"
       >
         <Sparkles className="w-4 h-4" aria-hidden="true" />
-        Nuevos
+        Ingresos
       </button>
     </div>
   )
@@ -62,7 +62,6 @@ function SuggestionButtons({ onShortcut }: { onShortcut: (_s: string) => void })
 
 /**
  * Componente principal de SearchBar con:
- * - Debounce manual de 500ms (useEffect + setTimeout)
  * - Sincronización de estado con initialValue proveniente de afuera (URL/router)
  * - Accesibilidad: role="search", aria-labels, tecla Escape limpia
  * - Acciones rápidas: limpiar búsqueda y shortcuts disparan onSearch de inmediato
@@ -92,10 +91,11 @@ export default function SearchBar({
   )
 
   /**
-   * Debounce manual:
-   * - Espera 500ms desde la última tecla antes de disparar onSearch
+   * Debounce mejorado:
+   * - Espera 300ms desde la última tecla antes de disparar onSearch (reducido de 500ms)
    * - Evita bucles si el input ya coincide con initialValue
    * - No dispara cuando está disabled
+   * - Mejor UX: respuesta más rápida sin sacrificar rendimiento
    */
   useEffect(() => {
     if (inputValue === initialValue || disabled) return
@@ -105,7 +105,7 @@ export default function SearchBar({
 
     const handler = setTimeout(() => {
       handleSearch(inputValue)
-    }, 500)
+    }, 300) // Reducido de 500ms a 300ms para mejor UX
     debounceRef.current = handler
 
     // Cleanup: cancela el timeout si el usuario sigue escribiendo
