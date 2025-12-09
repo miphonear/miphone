@@ -1,6 +1,7 @@
 'use client'
 import React from 'react'
 import Link from 'next/link'
+import { ArrowUpRight } from 'lucide-react'
 
 // --- 1. IMPORTAMOS LOS ÍCONOS ---
 import AppleIcon from '@/public/images/categories/apple.svg'
@@ -12,7 +13,7 @@ import AccesoriosIcon from '@/public/images/categories/accesorios.svg'
 import DroneIcon from '@/public/images/categories/drone.svg'
 import DefaultIcon from '@/public/images/categories/default.svg'
 
-// --- 2. MAPEAMOS LOS ÍCONOS A LAS CATEGORÍAS ---
+// --- 2. MAPEAMOS LOS ÍCONOS ---
 const ICONOS_CATEGORIAS: Record<string, React.ElementType> = {
   APPLE: AppleIcon,
   ANDROID: AndroidIcon,
@@ -23,7 +24,7 @@ const ICONOS_CATEGORIAS: Record<string, React.ElementType> = {
   ACCESORIOS: AccesoriosIcon,
 }
 
-// --- 3. DEFINIMOS LAS PROPS QUE NECESITA EL COMPONENTE ---
+// --- 3. TYPES ---
 interface Categoria {
   nombre: string
 }
@@ -33,19 +34,17 @@ interface Props {
 }
 
 /**
- * CategoryGrid: Muestra un directorio visual de categorías en una grilla responsive,
- * utilizando el diseño de alta calidad del componente de tabs original.
- * OPTIMIZADO: Memoizado para evitar re-renders innecesarios.
+ * CategoryGrid
+ * Tarjetas amplias, alineación izquierda, micro-interacción con flecha diagonal.
  */
 function CategoryGrid({ categorias }: Props) {
-  // --- RENDERIZAMOS LA GRILLA con mejoras de accesibilidad, semántica,
-  // focus states, manejo de overflow y fallbacks de datos/íconos.
   return (
-    <section aria-label="Categorías de productos" className="my-6">
+    // w-full y my-8 para alinear con el resto
+    <section aria-label="Categorías de productos" className="w-full my-8">
       <div
-        className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6"
+        // grid-cols-2 en móvil para que no sea infinita. 4 en desktop.
+        className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
         role="grid"
-        aria-label="Categorías de productos"
       >
         {categorias.map((c) => {
           const nombreSeguro = c?.nombre?.trim() || 'Categoría'
@@ -53,47 +52,68 @@ function CategoryGrid({ categorias }: Props) {
           const categoriaSlug = nombreSeguro.toLowerCase()
 
           return (
-            // role="row" requerido para que los hijos role="gridcell" sean válidos
-            // className="contents" evita introducir caja visual extra y mantiene el layout de CSS Grid
             <div key={nombreSeguro} role="row" className="contents">
               <Link
                 href={`/${categoriaSlug}`}
-                // Accesibilidad: rol de celda y etiqueta descriptiva
                 role="gridcell"
-                aria-label={`Ver productos de ${nombreSeguro}`}
-                // Focus visible para navegación por teclado
-                className={`group relative flex flex-col items-center justify-center 
-                w-full h-full aspect-square rounded-3xl border-2
-                transition-all duration-300 transform
-                bg-white text-gray-900 border-gray-200 
-                hover:border-orange-500 hover:ring-4 hover:ring-orange-500/20 hover:shadow-md md:hover:-translate-y-1
-                focus:outline-none focus-visible:border-orange-500 focus-visible:ring-4 focus-visible:ring-orange-500/20`}
+                aria-label={`Explorar ${nombreSeguro}`}
+                // Mata el borde azul nativo (Chrome/Safari)
+                style={{ WebkitTapHighlightColor: 'transparent', outline: 'none' }}
+                className="
+                  group relative flex flex-col justify-between
+                  /* Altura con presencia (h-36 móvil, h-44 desktop) */
+                  h-36 sm:h-44 w-full p-6 
+                  bg-white rounded-3xl
+                  
+                  /* Borde base de 2px sólido */
+                  border-2 border-gray-200
+                  
+                  transition-all duration-300 ease-out
+                  overflow-hidden
+                  
+                  /* Eliminar outline azul y activar Ring Naranja en Hover */
+                  outline-none focus:outline-none active:outline-none
+                  hover:border-transparent hover:ring-2 hover:ring-orange-500 hover:shadow-xl hover:shadow-orange-500/5 hover:-translate-y-1
+                  focus:border-transparent focus:ring-2 focus:ring-orange-500
+                "
               >
-                {/* Icono SVG dinámico */}
-                <div className="w-1/3 h-1/2 flex items-center justify-center">
-                  <Icon
-                    className={`w-full h-full object-contain transition-transform duration-300
-                             text-gray-900 group-hover:scale-110`}
-                    aria-hidden="true"
-                  />
-                </div>
-
-                {/* Texto con clamp para nombres largos */}
-                <div className="px-2 w-full flex items-center justify-center">
-                  <span className="text-sm md:text-base font-bold text-center break-words leading-tight line-clamp-2">
-                    {nombreSeguro}
-                  </span>
-                </div>
-
-                {/* CTA decorativa sólo en hover (oculta a lectores de pantalla) */}
+                {/* 
+                   FONDO DECORATIVO: 
+                   Un degradado muy sutil que aparece en hover para dar "luz" 
+                */}
                 <div
-                  className={`absolute bottom-3 items-center gap-1 text-xs font-bold 
-                           transition-opacity duration-300
-                           opacity-0 group-hover:opacity-100 group-hover:text-orange-600
-                           hidden md:flex`}
+                  className="absolute inset-0 bg-gradient-to-br from-transparent to-orange-50/70 opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none"
                   aria-hidden="true"
-                >
-                  <span>Ver Productos</span>
+                />
+
+                {/* HEADER: Icono + Flecha */}
+                <div className="relative z-10 flex w-full items-start justify-between">
+                  {/* Icono de la categoría */}
+                  <div className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-2xl bg-gray-50 text-gray-700 transition-colors duration-500 group-hover:bg-orange-50 group-hover:text-orange-600">
+                    <Icon className="h-6 w-6 sm:h-8 sm:w-8 object-contain" aria-hidden="true" />
+                  </div>
+
+                  {/* 
+                     MICRO-INTERACCIÓN DE FLECHA
+                  */}
+                  <ArrowUpRight className="h-6 w-6 text-gray-300 transition-all duration-500 group-hover:text-orange-500 group-hover:translate-x-1 group-hover:-translate-y-1" />
+                </div>
+
+                {/* FOOTER: Texto y Animación Hover */}
+                <div className="relative z-10 mt-auto pt-2">
+                  <div className="flex flex-col transition-transform duration-500 ease-out group-hover:-translate-y-1">
+                    <h3 className="text-base sm:text-lg font-bold text-gray-900 leading-tight">
+                      {nombreSeguro}
+                    </h3>
+
+                    {/* AJUSTE: "Ver productos" aparece suavemente desde abajo */}
+                    <div
+                      className="h-0 opacity-0 overflow-hidden transition-all duration-500 ease-in-out group-hover:h-5 group-hover:opacity-100 group-hover:mt-1"
+                      aria-hidden="true"
+                    >
+                      <span className="text-xs font-semibold text-orange-600">Ver productos</span>
+                    </div>
+                  </div>
                 </div>
               </Link>
             </div>
