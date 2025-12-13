@@ -108,7 +108,11 @@ function CategoryGrid({ categorias }: Props) {
 
                     {/* AJUSTE: "Ver productos" aparece suavemente desde abajo */}
                     <div
-                      className="h-0 opacity-0 overflow-hidden transition-all duration-500 ease-in-out group-hover:h-5 group-hover:opacity-100 group-hover:mt-1"
+                      className="
+    h-0 opacity-0 overflow-hidden
+    transition-all duration-500 ease-in-out
+    md:group-hover:h-5 md:group-hover:opacity-100 md:group-hover:mt-1
+  "
                       aria-hidden="true"
                     >
                       <span className="text-xs font-semibold text-orange-600">Ver productos</span>

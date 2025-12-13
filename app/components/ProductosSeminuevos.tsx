@@ -2,7 +2,14 @@
 import React, { useState, useMemo } from 'react'
 import ProductLabel from '@ui/ProductLabel'
 import Alert from '@ui/Alert'
-import { BatteryCharging, Droplet, Image as ImageIcon, MemoryStick, Star } from 'lucide-react'
+import {
+  BatteryCharging,
+  Droplet,
+  Image as ImageIcon,
+  MemoryStick,
+  Star,
+  ArrowUpRight,
+} from 'lucide-react'
 import WhatsAppButton from './WhatsAppButton'
 import { crearMensajeWhatsApp } from '@/lib/whatsappMessages'
 import ModalFotos from './ModalFotos'
@@ -83,9 +90,15 @@ function ProductosSeminuevos({ productos, alerta }: Props) {
             href={linkWa}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-orange-500 hover:underline font-semibold cursor-pointer ml-1"
+            // CLASES CLAVE:
+            // - inline-flex / items-center: Para alinear el ícono con el texto
+            // - gap-0.5: Separación mínima
+            // - hover:text-orange-600: Feedback de color
+            className="group inline-flex items-center gap-0.5 font-semibold text-orange-500 hover:text-orange-600 transition-colors ml-1"
           >
-            Consultanos por WhatsApp
+            <span>Consultanos por WhatsApp</span>
+            {/* El ícono se mueve un poquito al hacer hover para invitar al click */}
+            <ArrowUpRight className="w-4 h-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
           </a>{' '}
           para saber cuándo ingresan.
         </p>

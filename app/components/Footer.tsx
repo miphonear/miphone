@@ -31,8 +31,8 @@ export default function Footer() {
       <div className="container mx-auto px-4 text-center space-y-4">
         {/* Logo textual */}
         <p className="text-xl">
-          <span className="font-medium text-gray-700">mi</span>
-          <span className="font-bold text-gray-700">Phone™</span>
+          <span className="font-medium text-gray-800">mi</span>
+          <span className="font-bold text-gray-800">Phone™</span>
         </p>
 
         {/* Redes sociales */}

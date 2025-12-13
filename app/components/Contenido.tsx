@@ -80,7 +80,6 @@ export default function Contenido({
   disableAnimation = false,
 }: ContenidoProps) {
   // --- 1. PROCESAMIENTO Y FILTRADO DE DATOS ---
-  // OPTIMIZACIÓN: Separar agrupación base (solo depende de productos) de filtrado (depende de query)
 
   // Agrupación base: se recalcula solo cuando cambian los productos
   const categoriasBase = useMemo(() => {
@@ -123,23 +122,23 @@ export default function Contenido({
     if (!queryTrimmed) return categoriasBase
 
     const queryUpper = queryTrimmed.toUpperCase()
-    const esFiltroEtiqueta = queryUpper === 'NEW' || queryUpper === 'SALE'
 
-    // Lógica especial para filtros NEW/SALE: Buscar modelos que cumplan y traer todas sus variantes
-    if (esFiltroEtiqueta) {
-      const modelosQueCumplen = new Set<string>()
+    // --- LÓGICA 1: FILTRO "NEW" (Agrupa por Modelo) ---
+    // Si un modelo tiene etiqueta NEW, mostramos TODAS sus variantes.
+    if (queryUpper === 'NEW') {
+      const modelosConNew = new Set<string>()
       productos.forEach((p) => {
-        const labelNormalizado = p.label?.trim().toUpperCase() || ''
-        if (labelNormalizado.includes(queryUpper)) {
-          modelosQueCumplen.add(p.modelo)
+        if (p.label?.trim().toUpperCase().includes('NEW')) {
+          modelosConNew.add(p.modelo)
         }
       })
 
-      // Filtrar categorías base por modelos que cumplen
       const categoriasFiltradas = categoriasBase.map((cat) => {
         const subcategoriasFiltradas = cat.subcategorias
           .map((sub) => {
-            const productosFiltrados = sub.productos.filter((p) => modelosQueCumplen.has(p.modelo))
+            // Filtramos si el modelo está en la lista "modelosConNew"
+            const productosFiltrados = sub.productos.filter((p) => modelosConNew.has(p.modelo))
+
             if (productosFiltrados.length > 0) {
               return {
                 ...sub,
@@ -167,7 +166,46 @@ export default function Contenido({
       return categoriasFiltradas.filter((cat): cat is CategoriaVista => cat !== null)
     }
 
-    // Transformación final usando la librería de filtrado (casteo para compatibilidad de tipos)
+    // --- LÓGICA 2: FILTRO "SALE" (Filtra por Variante exacta) ---
+    // Solo mostramos la variante específica que tiene la etiqueta SALE.
+    if (queryUpper === 'SALE') {
+      const categoriasFiltradas = categoriasBase.map((cat) => {
+        const subcategoriasFiltradas = cat.subcategorias
+          .map((sub) => {
+            // Filtramos directo el producto: tiene que tener el label SALE
+            const productosFiltrados = sub.productos.filter((p) =>
+              p.label?.trim().toUpperCase().includes('SALE'),
+            )
+
+            if (productosFiltrados.length > 0) {
+              return {
+                ...sub,
+                productos: productosFiltrados,
+                lineas: Array.from(new Set(productosFiltrados.map((p) => p.linea))).filter(Boolean),
+              }
+            }
+            return null
+          })
+          .filter((sub): sub is NonNullable<typeof sub> => sub !== null)
+
+        if (subcategoriasFiltradas.length > 0) {
+          return {
+            ...cat,
+            subcategorias: subcategoriasFiltradas,
+            totalProductos: subcategoriasFiltradas.reduce(
+              (sum, sub) => sum + sub.productos.length,
+              0,
+            ),
+          }
+        }
+        return null
+      })
+
+      return categoriasFiltradas.filter((cat): cat is CategoriaVista => cat !== null)
+    }
+
+    // --- LÓGICA 3: FILTRO GENÉRICO DE BÚSQUEDA ---
+    // (Por nombre, marca, modelo, etc.)
     return filtrarCategorias(
       categoriasBase as unknown as Parameters<typeof filtrarCategorias>[0],
       queryTrimmed,
@@ -296,11 +334,10 @@ export default function Contenido({
 
   return (
     <main className={`max-w-6xl mx-auto ${disableAnimation ? 'no-slide' : ''}`} role="main">
-      {/* A. NAVEGACIÓN: CATEGORÍAS (Visible solo si hay múltiples resultados) */}
+      {/* A. NAVEGACIÓN: CATEGORÍAS */}
       {showCategoryTabs && (
         <nav aria-label="Categorías" className="mb-4">
           <div className="flex justify-start md:justify-center">
-            {/* Diseño unificado: border-gray-300 para coincidir con subcategorías */}
             <div
               className="flex overflow-x-auto no-scrollbar rounded-md border border-gray-300 divide-x divide-gray-300 max-w-full snap-x snap-mandatory scroll-smooth"
               role="tablist"
@@ -389,8 +426,7 @@ export default function Contenido({
             const alerta =
               ALERTAS[subcategoriaActual.nombre.toUpperCase() as keyof typeof ALERTAS] || null
 
-            // LOGICA CORREGIDA:
-            // Verificamos si la Categoría O la Subcategoría contienen "Seminuevo".
+            // Detectamos Seminuevos por Categoría o Subcategoría
             const esSeminuevo =
               categoriaActual?.nombre.toLowerCase().includes('seminuevo') ||
               subcategoriaActual.nombre.toLowerCase().includes('seminuevo')
