@@ -1,6 +1,7 @@
 'use client'
 import { useState, useCallback } from 'react'
 import Link from 'next/link'
+import Image from 'next/image' // Import necesario para el PNG
 import { ScrollText, CreditCard, HelpCircle } from 'lucide-react'
 import Dialog from '@ui/Dialog'
 import GarantiasContent from './GarantiasContent'
@@ -8,6 +9,10 @@ import PagosContent from './PagosContent'
 import FAQContent from './FAQContent'
 import Imagotipo from '@/public/images/imagotipo-miphone.svg'
 import Isotipo from '@/public/images/isotipo-miphone.svg'
+
+// --- CONFIGURACIÓN ---
+// Cambia esto a false para volver al logo original
+const USE_SEASONAL_LOGO = true
 
 // --- CONSTANTES ---
 const TABS = [
@@ -43,8 +48,8 @@ const styles = {
   logoTransition: 'transition-transform duration-200 group-hover:scale-105',
   faqButton:
     'inline-flex items-center justify-center gap-2 px-3.5 py-2.5 ' +
-    'text-base font-semibold text-gray-900 ' + // texto oscuro
-    'bg-violet-200 rounded-full ' + // fondo claro
+    'text-base font-semibold text-gray-900 ' +
+    'bg-violet-200 rounded-full ' +
     'transition-all duration-200 hover:bg-violet-300 hover:scale-105 ' +
     'focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-2',
   tabsContainer: 'flex gap-4 border-b border-gray-200 mb-4',
@@ -113,7 +118,7 @@ export default function Nav() {
 
   const handleOpenModal = useCallback(() => {
     setOpen(true)
-    setActiveTab('pagos') // Reset al tab por defecto al abrir
+    setActiveTab('pagos')
   }, [])
 
   const handleCloseModal = useCallback(() => {
@@ -149,11 +154,25 @@ export default function Nav() {
         {/* Logo centrado */}
         <div className="flex justify-center">
           <Link href="/" className={styles.logoLink} aria-label="Ir a la página de inicio">
-            <Imagotipo
-              className={`w-[280px] lg:w-[340px] h-auto ${styles.logoTransition}`}
-              draggable={false}
-              alt="miPhone"
-            />
+            {USE_SEASONAL_LOGO ? (
+              /* LOGO SEASONAL (PNG) */
+              <Image
+                src="/images/imagotipo-navidad.png"
+                alt="miPhone Navidad"
+                width={340} // Define ancho base para mantener proporción
+                height={85} // Altura estimada para el aspect ratio
+                className={`w-[280px] lg:w-[340px] h-auto ${styles.logoTransition}`}
+                draggable={false}
+                priority // Carga prioritaria por ser el header
+              />
+            ) : (
+              /* LOGO ORIGINAL (SVG Component) */
+              <Imagotipo
+                className={`w-[280px] lg:w-[340px] h-auto ${styles.logoTransition}`}
+                draggable={false}
+                alt="miPhone"
+              />
+            )}
           </Link>
         </div>
 
