@@ -7,7 +7,7 @@ function SkeletonCard() {
     <div
       className="
         flex flex-col justify-between
-        h-36 sm:h-44 w-full p-6
+        h-44 w-full p-6
         bg-gray-200 rounded-3xl
       "
     >

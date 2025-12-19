@@ -41,12 +41,10 @@ type TabId = (typeof TABS)[number]['id']
 
 // --- ESTILOS ---
 const styles = {
-  // AJUSTE: overflow-visible para permitir que la mascota “se asome” por fuera del nav
-  nav: 'w-full bg-white shadow-sm sticky top-0 z-50 overflow-visible',
+  nav: 'w-full bg-white shadow-sm sticky top-0 z-50',
   container: 'container mx-auto px-4 py-2',
   mobileContainer: 'flex items-center justify-between md:hidden',
-  // AJUSTE: relative para posicionar la mascota en absoluto dentro del bloque desktop
-  desktopContainer: 'hidden md:grid relative grid-cols-[1fr_auto_1fr] items-center',
+  desktopContainer: 'hidden md:grid grid-cols-[1fr_auto_1fr] items-center',
   logoLink: 'block group',
   logoTransition: 'transition-transform duration-200 group-hover:scale-105',
   faqButton:
@@ -154,21 +152,20 @@ export default function Nav() {
         {/* Columna izquierda vacía para balance */}
         <div />
 
-        {/* Logo centrado + mascota “asomando” (solo desktop) */}
+        {/* Logo centrado + personaje (solo desktop) */}
         <div className="flex justify-center">
-          {/* Contenedor relativo: permite posicionar la mascota sin afectar el layout */}
-          <div className="relative flex items-center">
+          <div className="flex items-center gap-3">
             <Link href="/" className={styles.logoLink} aria-label="Ir a la página de inicio">
               {USE_SEASONAL_LOGO ? (
                 /* LOGO SEASONAL (PNG) */
                 <Image
                   src="/images/imagotipo-navidad.png"
                   alt="miPhone Navidad"
-                  width={340} // Define ancho base para mantener proporción
-                  height={85} // Altura estimada para el aspect ratio
+                  width={340}
+                  height={85}
                   className={`w-[280px] lg:w-[340px] h-auto ${styles.logoTransition}`}
                   draggable={false}
-                  priority // Carga prioritaria por ser el header
+                  priority
                 />
               ) : (
                 /* LOGO ORIGINAL (SVG Component) */
@@ -180,24 +177,20 @@ export default function Nav() {
               )}
             </Link>
 
-            {/* Mascota: queda al borde inferior del nav para dar efecto “aparece” */}
+            {/* Personaje (solo desktop) */}
             <Image
               src={Mascota}
               alt="Mifonito"
-              width={160}
-              height={160}
+              width={120}
+              height={120}
               draggable={false}
-              priority
               className="
-                hidden md:block
-                absolute
-                -right-14
-                -bottom-2
-                h-24 w-24 lg:h-32 lg:w-32
-                object-contain
-                select-none
-                pointer-events-none
-              "
+  hidden md:block
+  h-20 w-20 lg:h-24 lg:w-2
+  object-contain
+  select-none
+  "
+              priority
             />
           </div>
         </div>
