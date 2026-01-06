@@ -8,7 +8,7 @@ import GarantiasContent from './GarantiasContent'
 import PagosContent from './PagosContent'
 import FAQContent from './FAQContent'
 import Imagotipo from '@/public/images/imagotipo-miphone.svg'
-import Mascota from '@/public/images/mifonito/mifonito_nvd.png'
+import Mascota from '@/public/images/mifonito/mifonito_a.png' // Import Mifonito
 import Isotipo from '@/public/images/isotipo-miphone.svg'
 
 // --- CONFIGURACIÓN ---
