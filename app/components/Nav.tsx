@@ -180,25 +180,58 @@ export default function Nav() {
               )}
             </Link>
 
-            {/* Mascota: queda al borde inferior del nav para dar efecto “aparece” */}
-            <Image
-              src={Mascota}
-              alt="Mifonito"
-              width={160}
-              height={160}
-              draggable={false}
-              priority
-              className="
-                hidden md:block
-                absolute
-                -right-14
-                -bottom-2
-                h-24 w-24 lg:h-32 lg:w-32
-                object-contain
-                select-none
-                pointer-events-none
-              "
-            />
+            {/* Mascota + bubble */}
+            <div className="group">
+              {/* Speech bubble */}
+              <div
+                className="
+    absolute
+    -right-60
+    max-w-xs
+    rounded-2xl
+    bg-violet-100
+    px-4
+    py-2
+    text-sm
+    font-medium
+    text-violet-900
+    opacity-0
+    -translate-x-3
+    transition-all
+    duration-200
+    group-hover:opacity-100
+    group-hover:translate-x-0
+    pointer-events-none
+    z-50
+    hidden md:block
+  "
+              >
+                ¡Hola, soy Mifonito!
+              </div>
+
+              {/* Mascota */}
+              <Image
+                src={Mascota}
+                alt="Mifonito"
+                width={160}
+                height={160}
+                draggable={false}
+                priority
+                className="
+      hidden md:block
+      absolute
+      -right-24
+      -bottom-2
+      h-24
+      w-24
+      lg:h-32
+      lg:w-32
+      object-contain
+      select-none
+      z-30
+    "
+              />
+            </div>
           </div>
         </div>
 
