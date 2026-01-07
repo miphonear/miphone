@@ -186,7 +186,8 @@ export default function Nav() {
               <div
                 className="
     absolute
-    -right-60
+   bottom-0
+    -right-64
     max-w-xs
     rounded-2xl
     bg-violet-100
