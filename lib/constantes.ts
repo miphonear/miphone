@@ -2,6 +2,7 @@
 export type SubcategoriaConAlerta =
   | 'MACBOOK'
   | 'IPHONE'
+  | 'WATCH'
   | 'SAMSUNG GALAXY'
   | 'SEMINUEVOS'
   | 'CABLES'
@@ -11,6 +12,7 @@ export const ALERTAS: Record<SubcategoriaConAlerta, string> = {
   MACBOOK:
     'Consultanos por versiones custom (Chip MAX, +RAM, etc). También traemos iMac, Mac mini, Mac Studio',
   IPHONE: '¡Con la compra de un iPhone + U$30, llevate un cargador 20W Apple ORIGINAL!',
+  WATCH: 'Consultar por correas y colores. Las imágenes son a modo ilustrativo',
   'SAMSUNG GALAXY':
     'Por otros productos de la marca Samsung (Buds, Tabs, etc) consultanos por WhatsApp',
   SEMINUEVOS:
