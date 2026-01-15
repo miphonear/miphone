@@ -23,6 +23,7 @@ const nextConfig = {
       'm.media-amazon.com', // Amazon
       'fdn2.gsmarena.com', // GSMarena
       'ibb.co', // ImgBB
+      'apple.com', // Apple
     ],
     // Configuración adicional
     minimumCacheTTL: 60, // Cache mínimo de 60 segundos
