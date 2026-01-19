@@ -3,6 +3,7 @@ import PaypalLogo from '@/public/images/payments/paypal-logo.svg'
 import WiseLogo from '@/public/images/payments/wise-logo.svg'
 import GrabrfiLogo from '@/public/images/payments/grabrfi-logo.svg'
 import WallbitLogo from '@/public/images/payments/wallbit-logo.svg'
+import DolarAppLogo from '@/public/images/payments/dolarapp-logo.svg'
 
 interface MetodoPago {
   icon?: string
@@ -19,7 +20,7 @@ const metodos: MetodoPago[] = [
   },
   {
     titulo: '💳 Cripto y billeteras:',
-    descripcion: 'USDT, Wise, PayPal, Wallbit, GrabrFi',
+    descripcion: 'USDT, Wise, PayPal, Wallbit, GrabrFi, DolarApp',
     nota: 'Consultar comisiones',
   },
   {
@@ -43,6 +44,7 @@ const logos = [
   { Component: WallbitLogo, alt: 'Wallbit', className: 'h-4 w-auto' },
   { Component: GrabrfiLogo, alt: 'GrabrFi', className: 'h-4 w-auto' },
   { Component: WiseLogo, alt: 'Wise', className: 'h-3 w-auto' }, // 👈 más chico
+  { Component: DolarAppLogo, alt: 'DolarApp', className: 'h-4 w-auto' },
 ]
 
 export default function PagosContent() {
