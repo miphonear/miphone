@@ -16,6 +16,7 @@ interface Props {
   placeholder?: string
   autoFocus?: boolean
   disabled?: boolean
+  hideSuggestions?: boolean
 }
 
 /**
@@ -69,9 +70,10 @@ function SuggestionButtons({ onShortcut }: { onShortcut: (_s: string) => void })
 export default function SearchBar({
   initialValue = '',
   onSearch,
-  placeholder = 'Buscar productos',
+  placeholder = '¿Qué producto estás buscando?',
   autoFocus = false,
   disabled = false,
+  hideSuggestions = false,
 }: Props) {
   // Estado controlado del input
   const [inputValue, setInputValue] = useState(initialValue)
@@ -238,7 +240,7 @@ export default function SearchBar({
         </div>
 
         {/* Shortcuts fijos (Ofertas / Nuevos) */}
-        {!disabled && (
+        {!disabled && !hideSuggestions && (
           <div className="p-3 pt-4">
             <SuggestionButtons onShortcut={handleShortcut} />
           </div>

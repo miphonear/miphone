@@ -87,7 +87,7 @@ export default function AnnouncementBar() {
   if (!visible) return null
 
   return (
-    <div className="w-full bg-gray-100 text-gray-700 text-sm md:text-base font-semibold tracking-tight py-2 px-4 flex items-center justify-center select-none relative">
+    <div className="w-full bg-gray-100 text-gray-800 text-sm md:text-base font-semibold tracking-tight py-2 px-4 flex items-center justify-center select-none relative">
       <span aria-live="polite" className="flex items-center gap-2">
         {/* Ícono dólar */}
         <CircleDollarSign className="w-4 h-4 text-green-600" />

@@ -1,6 +1,6 @@
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-  siteUrl: 'https://www.miphone.ar',
+  siteUrl: 'https://miphone.ar',
   generateRobotsTxt: true,
   generateIndexSitemap: false,
   // exclude: ['/admin/*', '/api/*'],

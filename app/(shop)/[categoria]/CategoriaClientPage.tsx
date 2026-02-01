@@ -1,11 +1,12 @@
 'use client'
-import { useMemo } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useMemo, useCallback } from 'react'
+import { useSearchParams, useRouter, notFound } from 'next/navigation'
 import { useProducts } from '@/app/context/ProductContext'
 import Contenido from '@/app/components/Contenido'
 import Link from 'next/link'
-import { ArrowLeft } from 'lucide-react'
+import { ChevronLeft } from 'lucide-react'
 import { CategorySkeleton } from '@ui/CategorySkeleton'
+import SearchBar from '@/app/components/SearchBar'
 
 interface CategoriaClientPageProps {
   params: {
@@ -14,6 +15,8 @@ interface CategoriaClientPageProps {
 }
 
 export default function CategoriaClientPage({ params }: CategoriaClientPageProps) {
+  const router = useRouter() // Hook para actualizar la URL al buscar
+
   // Lee el parámetro de búsqueda (?q=) desde la URL.
   // Nota: no se filtra aquí; Contenido decide cómo usarlo.
   const searchParams = useSearchParams()
@@ -70,9 +73,26 @@ export default function CategoriaClientPage({ params }: CategoriaClientPageProps
     })
   }, [productos, categoriaDeURL, loading])
 
-  // Agregar el skeleton al loading
+  // Handler para el SearchBar local (estable para evitar re-renders en SearchBar)
+  const handleSearch = useCallback(
+    (val: string) => {
+      if (val.trim()) {
+        router.push(`/${params.categoria}?q=${encodeURIComponent(val)}`)
+      } else {
+        router.push(`/${params.categoria}`)
+      }
+    },
+    [router, params.categoria],
+  )
+
+  // Skeleton mientras cargan los datos
   if (loading) {
     return <CategorySkeleton />
+  }
+
+  // 404 cuando la categoría no existe (ej. /asadasd)
+  if (categoriaDeURL && productosDeLaCategoria.length === 0) {
+    notFound()
   }
 
   // Render principal de la página de categoría:
@@ -80,25 +100,57 @@ export default function CategoriaClientPage({ params }: CategoriaClientPageProps
   // - Listado de contenido filtrado por categoría
   // - Wrapper raíz idéntico al de Home para evitar “baile”: w-full max-w-6xl mx-auto px-4 py-6
   return (
-    <div className="w-full max-w-6xl mx-auto px-4 py-6">
-      {/* Header alineado al ancho de las cards (6xl), con título centrado “editorial” */}
-      <div className="relative mb-8">
-        {/* Título centrado en una columna más angosta (editorial) */}
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 text-center mx-auto max-w-3xl">
+    <div className="w-full max-w-6xl mx-auto px-4 py-2 md:py-6">
+      {/* Línea separadora sutil con el header global:
+          MEJORA: La línea divisora ahora solo se muestra en Desktop (md:block).
+          En móvil la quitamos para que el contenido suba.
+      */}
+      <div className="hidden md:block w-full border-t border-gray-100 mb-8" />
+
+      {/* Header */}
+      <div className="relative mb-6 mt-4 md:mt-0 w-full max-w-3xl mx-auto flex items-center justify-center">
+        {/* Título centrado */}
+        <h1 className="text-3xl md:text-5xl font-bold text-gray-900 text-center tracking-tight px-12 md:px-0">
           {categoriaNombreAmigable}
         </h1>
 
-        {/* Botón a la derecha, alineado al borde del contenedor 6xl */}
-        <div className="absolute inset-y-0 right-0 flex items-center">
+        {/* Botón Volver */}
+        <div className="absolute right-0 top-1/2 -translate-y-1/2">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-base text-orange-500 hover:text-orange-600 font-semibold transition-colors p-2 rounded-md"
+            title="Volver al inicio"
+            className="
+                group flex items-center justify-center gap-1.5
+                /* Mobile: Cuadrado/Redondo solo icono */
+                w-10 h-10 
+                /* Desktop: Ancho automático para texto */
+                sm:w-auto sm:h-auto sm:px-4 sm:py-2
+                
+                bg-white border border-gray-200 
+                rounded-full 
+                text-sm font-semibold text-gray-600 
+                hover:text-orange-600 hover:border-orange-200 hover:bg-orange-50 
+                transition-all duration-200
+              "
           >
-            <ArrowLeft size={16} />
-            <span className="sm:hidden">Volver</span>
-            <span className="hidden sm:inline">Ver todas las categorías</span>
+            <ChevronLeft
+              size={20}
+              className="transition-transform duration-200 sm:group-hover:-translate-x-1"
+            />
+            {/* Texto: Oculto en mobile (hidden), visible en desktop (sm:inline) */}
+            <span className="hidden sm:inline">Regresar</span>
           </Link>
         </div>
+      </div>
+
+      {/* Search Bar Local */}
+      <div className="mb-6 md:mb-8 w-full max-w-xl animate-in fade-in slide-in-from-bottom-4 duration-500 mx-auto">
+        <SearchBar
+          initialValue={query}
+          onSearch={handleSearch}
+          placeholder={`Buscar en ${categoriaNombreAmigable}`}
+          hideSuggestions={true}
+        />
       </div>
 
       {/* Listado */}

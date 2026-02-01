@@ -7,6 +7,7 @@ import ProductosAccesorios from './ProductosAccesorios'
 import { ALERTAS } from '@/lib/constantes'
 import { filtrarCategorias } from '@/lib/filtrarCategorias'
 import ErrorMessage from '@ui/ErrorMessage'
+import NavigationTabs from './NavigationTabs'
 
 // --- TIPOS Y PROPS ---
 
@@ -29,45 +30,63 @@ interface CategoriaVista {
   }[]
 }
 
-// --- COMPONENTES AUXILIARES ---
+/** Filtra categorías por label (NEW, SALE, etc.). porModelo = todo el modelo si alguna variante tiene el label; porProducto = solo productos con el label. */
+function filtrarCategoriasPorLabel(
+  categoriasBase: CategoriaVista[],
+  productos: Producto[],
+  label: string,
+  modo: 'porModelo' | 'porProducto',
+): CategoriaVista[] {
+  const labelUpper = label.toUpperCase().trim()
 
-interface NavButtonProps {
-  active: boolean
-  onClick: () => void
-  children: React.ReactNode
-  count?: number
-  ariaLabel?: string
-}
+  const modelosConLabel =
+    modo === 'porModelo'
+      ? (() => {
+          const set = new Set<string>()
+          productos.forEach((p) => {
+            if (p.label?.trim().toUpperCase().includes(labelUpper)) set.add(p.modelo)
+          })
+          return set
+        })()
+      : null
 
-// Memoizar NavButton para evitar re-renders innecesarios
-const NavButton = React.memo(function NavButton({
-  active,
-  onClick,
-  children,
-  count,
-  ariaLabel,
-}: NavButtonProps) {
-  return (
-    <button
-      onClick={onClick}
-      className={`
-        relative px-3 py-1.5 text-sm font-semibold whitespace-nowrap snap-center transition
-        focus:outline-none 
-        focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-inset select-none cursor-pointer
-        ${
-          active
-            ? 'bg-orange-500 text-white'
-            : 'bg-white text-gray-700 hover:text-gray-800 hover:bg-gray-100'
+  const categoriasFiltradas = categoriasBase.map((cat) => {
+    const subcategoriasFiltradas = cat.subcategorias
+      .map((sub) => {
+        const productosFiltrados =
+          modo === 'porModelo'
+            ? sub.productos.filter((p) => modelosConLabel!.has(p.modelo))
+            : sub.productos.filter((p) =>
+                p.label?.trim().toUpperCase().includes(labelUpper),
+              )
+        if (productosFiltrados.length > 0) {
+          return {
+            ...sub,
+            productos: productosFiltrados,
+            lineas: Array.from(
+              new Set(productosFiltrados.map((p) => p.linea).filter(Boolean)),
+            ) as string[],
+          }
         }
-      `}
-      aria-label={ariaLabel}
-      aria-pressed={active}
-    >
-      {children}
-      {count !== undefined && <span className="text-sm font-medium ml-1">({count})</span>}
-    </button>
-  )
-})
+        return null
+      })
+      .filter((sub): sub is NonNullable<typeof sub> => sub !== null)
+
+    if (subcategoriasFiltradas.length > 0) {
+      return {
+        ...cat,
+        subcategorias: subcategoriasFiltradas,
+        totalProductos: subcategoriasFiltradas.reduce(
+          (sum, sub) => sum + sub.productos.length,
+          0,
+        ),
+      }
+    }
+    return null
+  })
+
+  return categoriasFiltradas.filter((cat): cat is CategoriaVista => cat !== null)
+}
 
 // --- COMPONENTE PRINCIPAL ---
 
@@ -80,6 +99,16 @@ export default function Contenido({
   disableAnimation = false,
 }: ContenidoProps) {
   // --- 1. PROCESAMIENTO Y FILTRADO DE DATOS ---
+
+  // Avatar por modelo desde la lista completa (para que la búsqueda muestre avatar aunque la variante filtrada no lo tenga)
+  const avatarByModel = useMemo(() => {
+    const map: Record<string, string> = {}
+    productos.forEach((p) => {
+      const m = p.modelo?.trim()
+      if (m && p.avatar?.trim() && !map[m]) map[m] = p.avatar.trim()
+    })
+    return map
+  }, [productos])
 
   // Agrupación base: se recalcula solo cuando cambian los productos
   const categoriasBase = useMemo(() => {
@@ -123,91 +152,17 @@ export default function Contenido({
 
     const queryUpper = queryTrimmed.toUpperCase()
 
-    // --- LÓGICA 1: FILTRO "NEW" (Agrupa por Modelo) ---
-    // Si un modelo tiene etiqueta NEW, mostramos TODAS sus variantes.
+    // --- FILTRO POR LABEL (NEW, SALE, etc.) ---
     if (queryUpper === 'NEW') {
-      const modelosConNew = new Set<string>()
-      productos.forEach((p) => {
-        if (p.label?.trim().toUpperCase().includes('NEW')) {
-          modelosConNew.add(p.modelo)
-        }
-      })
-
-      const categoriasFiltradas = categoriasBase.map((cat) => {
-        const subcategoriasFiltradas = cat.subcategorias
-          .map((sub) => {
-            // Filtramos si el modelo está en la lista "modelosConNew"
-            const productosFiltrados = sub.productos.filter((p) => modelosConNew.has(p.modelo))
-
-            if (productosFiltrados.length > 0) {
-              return {
-                ...sub,
-                productos: productosFiltrados,
-                lineas: Array.from(new Set(productosFiltrados.map((p) => p.linea))).filter(Boolean),
-              }
-            }
-            return null
-          })
-          .filter((sub): sub is NonNullable<typeof sub> => sub !== null)
-
-        if (subcategoriasFiltradas.length > 0) {
-          return {
-            ...cat,
-            subcategorias: subcategoriasFiltradas,
-            totalProductos: subcategoriasFiltradas.reduce(
-              (sum, sub) => sum + sub.productos.length,
-              0,
-            ),
-          }
-        }
-        return null
-      })
-
-      return categoriasFiltradas.filter((cat): cat is CategoriaVista => cat !== null)
+      return filtrarCategoriasPorLabel(categoriasBase, productos, 'NEW', 'porModelo')
     }
-
-    // --- LÓGICA 2: FILTRO "SALE" (Filtra por Variante exacta) ---
-    // Solo mostramos la variante específica que tiene la etiqueta SALE.
     if (queryUpper === 'SALE') {
-      const categoriasFiltradas = categoriasBase.map((cat) => {
-        const subcategoriasFiltradas = cat.subcategorias
-          .map((sub) => {
-            // Filtramos directo el producto: tiene que tener el label SALE
-            const productosFiltrados = sub.productos.filter((p) =>
-              p.label?.trim().toUpperCase().includes('SALE'),
-            )
-
-            if (productosFiltrados.length > 0) {
-              return {
-                ...sub,
-                productos: productosFiltrados,
-                lineas: Array.from(new Set(productosFiltrados.map((p) => p.linea))).filter(Boolean),
-              }
-            }
-            return null
-          })
-          .filter((sub): sub is NonNullable<typeof sub> => sub !== null)
-
-        if (subcategoriasFiltradas.length > 0) {
-          return {
-            ...cat,
-            subcategorias: subcategoriasFiltradas,
-            totalProductos: subcategoriasFiltradas.reduce(
-              (sum, sub) => sum + sub.productos.length,
-              0,
-            ),
-          }
-        }
-        return null
-      })
-
-      return categoriasFiltradas.filter((cat): cat is CategoriaVista => cat !== null)
+      return filtrarCategoriasPorLabel(categoriasBase, productos, 'SALE', 'porProducto')
     }
 
-    // --- LÓGICA 3: FILTRO GENÉRICO DE BÚSQUEDA ---
-    // (Por nombre, marca, modelo, etc.)
+    // --- FILTRO GENÉRICO DE BÚSQUEDA ---
     return filtrarCategorias(
-      categoriasBase as unknown as Parameters<typeof filtrarCategorias>[0],
+      categoriasBase as unknown as CategoriaVista[],
       queryTrimmed,
     ) as unknown as CategoriaVista[]
   }, [categoriasBase, query, productos])
@@ -217,9 +172,6 @@ export default function Contenido({
   const [cat, setCat] = useState(categoriaActiva)
   const [sub, setSub] = useState('')
   const [linea, setLinea] = useState<string>('')
-
-  const [showSubcategorias, setShowSubcategorias] = useState(false)
-  const [showLineas, setShowLineas] = useState(false)
 
   // --- 3. SELECCIÓN ACTUAL (Memoized) ---
 
@@ -256,7 +208,6 @@ export default function Contenido({
 
   // --- 5. EFECTOS (Sincronización y Animación) ---
 
-  // Sincronizar categoría inicial o fallback
   useEffect(() => {
     if (categorias.length === 0) {
       setCat('')
@@ -264,12 +215,10 @@ export default function Contenido({
     }
     const categoriaExiste = categorias.some((c) => c.nombre === cat)
     if (!categoriaExiste) {
-      // Si hay query o datos, seleccionamos la primera categoría disponible
       setCat(query.trim() || categorias.length > 0 ? categorias[0].nombre : '')
     }
   }, [categorias, cat, query])
 
-  // Seleccionar primera subcategoría automáticamente
   useEffect(() => {
     if (categoriaActual?.subcategorias?.length) {
       setSub(categoriaActual.subcategorias[0].nombre)
@@ -280,34 +229,12 @@ export default function Contenido({
     }
   }, [categoriaActual])
 
-  // Seleccionar primera línea automáticamente
   useEffect(() => {
     if (subcategoriaActual?.lineas?.length) {
       setLinea(subcategoriaActual.lineas[0])
     } else {
       setLinea('')
     }
-  }, [subcategoriaActual])
-
-  // Control de animación de entrada para barras de navegación
-  useEffect(() => {
-    if (!categoriaActual) {
-      setShowSubcategorias(false)
-      return
-    }
-    setShowSubcategorias(false)
-    const timer = setTimeout(() => setShowSubcategorias(true), 50)
-    return () => clearTimeout(timer)
-  }, [categoriaActual])
-
-  useEffect(() => {
-    if (!subcategoriaActual?.lineas?.length) {
-      setShowLineas(false)
-      return
-    }
-    setShowLineas(false)
-    const timer = setTimeout(() => setShowLineas(true), 50)
-    return () => clearTimeout(timer)
   }, [subcategoriaActual])
 
   // --- 6. RENDERIZADO ---
@@ -322,102 +249,24 @@ export default function Contenido({
           🤔
         </span>
         <p className="text-md mb-2">
-          No se encontraron productos para &ldquo;<span className="text-orange-500">{query}</span>
-          &rdquo; <br />
-          Intentá con otra búsqueda o consultanos por WhatsApp.
+          No se encontraron productos para &ldquo;
+          <span className="text-orange-500 font-bold">{query}</span>&rdquo;
+          <br /> Intentá con otra búsqueda o consultanos por WhatsApp.
         </p>
       </div>
     )
   }
 
-  const showCategoryTabs = categorias.length > 1
-
   return (
     <main className={`max-w-6xl mx-auto ${disableAnimation ? 'no-slide' : ''}`} role="main">
-      {/* A. NAVEGACIÓN: CATEGORÍAS */}
-      {showCategoryTabs && (
-        <nav aria-label="Categorías" className="mb-4">
-          <div className="flex justify-start md:justify-center">
-            <div
-              className="flex overflow-x-auto no-scrollbar rounded-md border border-gray-300 divide-x divide-gray-300 max-w-full snap-x snap-mandatory scroll-smooth"
-              role="tablist"
-            >
-              {categorias.map((c) => (
-                <NavButton
-                  key={c.nombre}
-                  active={cat === c.nombre}
-                  onClick={() => handleCategoryClick(c.nombre)}
-                  count={c.totalProductos}
-                  ariaLabel={`Ver ${c.totalProductos} productos de ${c.nombre}`}
-                >
-                  {c.nombre}
-                </NavButton>
-              ))}
-            </div>
-          </div>
-        </nav>
-      )}
-
-      {/* B. NAVEGACIÓN: SUBCATEGORÍAS */}
-      {categoriaActual && (
-        <nav
-          aria-label="Subcategorías"
-          className={`mb-4 transition-opacity duration-400 ${
-            showSubcategorias ? 'opacity-100' : 'opacity-0 pointer-events-none'
-          }`}
-        >
-          <div className="flex justify-start md:justify-center">
-            <div
-              className="flex overflow-x-auto no-scrollbar rounded-md border border-gray-300 divide-x divide-gray-300 max-w-full snap-x snap-mandatory scroll-smooth"
-              role="tablist"
-            >
-              {categoriaActual.subcategorias.map((s) => (
-                <NavButton
-                  key={s.nombre}
-                  active={sub === s.nombre}
-                  onClick={() => handleSubcategoriaClick(s.nombre)}
-                  count={s.productos.length}
-                  ariaLabel={`Ver ${s.productos.length} productos de ${s.nombre}`}
-                >
-                  {s.nombre}
-                </NavButton>
-              ))}
-            </div>
-          </div>
-        </nav>
-      )}
-
-      {/* C. NAVEGACIÓN: LÍNEAS */}
-      {subcategoriaActual?.lineas?.length ? (
-        <nav
-          aria-label="Líneas de productos"
-          className={`mb-4 transition-opacity duration-400 ${
-            showLineas ? 'opacity-100' : 'opacity-0 pointer-events-none'
-          }`}
-        >
-          <div className="flex justify-start md:justify-center">
-            <div
-              className="flex overflow-x-auto no-scrollbar rounded-md border border-gray-200 divide-x divide-gray-300 max-w-full snap-x snap-mandatory scroll-smooth"
-              role="tablist"
-            >
-              {subcategoriaActual.lineas.map((ln) => {
-                const count = subcategoriaActual.productos.filter((p) => p.linea === ln).length
-                return (
-                  <NavButton
-                    key={ln}
-                    active={linea === ln}
-                    onClick={() => handleLineaClick(ln)}
-                    count={count}
-                    ariaLabel={`Filtrar por línea ${ln}, ${count} productos`}
-                  >
-                    {ln}
-                  </NavButton>
-                )
-              })}
-            </div>
-          </div>
-        </nav>
-      ) : null}
+      {/* SECCIÓN DE NAVEGACIÓN EXTRAÍDA */}
+      <NavigationTabs
+        categorias={categorias}
+        categoriaActual={categoriaActual}
+        subcategoriaActual={subcategoriaActual}
+        seleccion={{ cat, sub, linea }}
+        actions={{ handleCategoryClick, handleSubcategoriaClick, handleLineaClick }}
+      />
 
       {/* D. LISTADO DE PRODUCTOS */}
       <section aria-label="Lista de productos">
@@ -425,8 +274,6 @@ export default function Contenido({
           (() => {
             const alerta =
               ALERTAS[subcategoriaActual.nombre.toUpperCase() as keyof typeof ALERTAS] || null
-
-            // Detectamos Seminuevos por Categoría o Subcategoría
             const esSeminuevo =
               categoriaActual?.nombre.toLowerCase().includes('seminuevo') ||
               subcategoriaActual.nombre.toLowerCase().includes('seminuevo')
@@ -440,7 +287,6 @@ export default function Contenido({
                 />
               )
             }
-
             if (categoriaActual?.nombre.toLowerCase().includes('accesorio')) {
               return (
                 <ProductosAccesorios
@@ -450,12 +296,12 @@ export default function Contenido({
                 />
               )
             }
-
             return (
               <ProductosGenericos
                 key={subcategoriaActual.nombre}
                 productos={productosFiltradosLinea}
                 alerta={alerta}
+                avatarByModel={avatarByModel}
               />
             )
           })()}

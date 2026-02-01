@@ -3,7 +3,6 @@ import PaypalLogo from '@/public/images/payments/paypal-logo.svg'
 import WiseLogo from '@/public/images/payments/wise-logo.svg'
 import GrabrfiLogo from '@/public/images/payments/grabrfi-logo.svg'
 import WallbitLogo from '@/public/images/payments/wallbit-logo.svg'
-import DolarAppLogo from '@/public/images/payments/dolarapp-logo.svg'
 
 interface MetodoPago {
   icon?: string
@@ -20,21 +19,22 @@ const metodos: MetodoPago[] = [
   },
   {
     titulo: '💳 Cripto y billeteras:',
-    descripcion: 'USDT, Wise, PayPal, Wallbit, GrabrFi, DolarApp',
+    descripcion: 'USDT, Wise, PayPal, Wallbit, GrabrFi',
     nota: 'Consultar comisiones',
   },
   {
-    titulo: '🏦 Transferencias internacionales:',
-    descripcion: 'ACH-USA',
-    nota: 'Consultar comisión',
+    titulo: '🏦 Transferencia bancaria en pesos',
+    nota: 'Comisión = 4,5%',
   },
   {
-    titulo: '❌ No financiamos',
-    descripcion: 'ni aceptamos transferencias bancarias nacionales',
+    titulo: '🏦 Transferencia internacional ACH-USA',
+    nota: 'Comisión = 3%',
   },
   {
-    titulo: 'ℹ️',
-    descripcion: 'Los precios publicados no incluyen IVA',
+    titulo: '❌ No financiamos ni aceptamos tarjetas',
+  },
+  {
+    titulo: 'ℹ️ Los precios publicados no incluyen IVA',
   },
 ]
 
@@ -44,7 +44,6 @@ const logos = [
   { Component: WallbitLogo, alt: 'Wallbit', className: 'h-4 w-auto' },
   { Component: GrabrfiLogo, alt: 'GrabrFi', className: 'h-4 w-auto' },
   { Component: WiseLogo, alt: 'Wise', className: 'h-3 w-auto' }, // 👈 más chico
-  { Component: DolarAppLogo, alt: 'DolarApp', className: 'h-4 w-auto' },
 ]
 
 export default function PagosContent() {

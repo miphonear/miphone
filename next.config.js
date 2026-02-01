@@ -1,7 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  eslint: {
-    ignoreDuringBuilds: true,
+  // Redirigir www -> sin www para consistencia con metadata (miphone.ar)
+  async redirects() {
+    return [
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'www.miphone.ar' }],
+        destination: 'https://miphone.ar/:path*',
+        permanent: true,
+      },
+    ]
   },
   webpack(config) {
     config.module.rules.push({
@@ -17,14 +25,16 @@ const nextConfig = {
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     // Tamaños de imágenes (para srcset)
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    // Dominios permitidos
-    domains: [
-      'lh3.googleusercontent.com', // Google
-      'm.media-amazon.com', // Amazon
-      'fdn2.gsmarena.com', // GSMarena
-      'ibb.co', // ImgBB
-      'www.apple.com', // Apple
+
+    // Dominios permitidos (Actualizado a remotePatterns por seguridad y compatibilidad)
+    remotePatterns: [
+      { protocol: 'https', hostname: 'lh3.googleusercontent.com' }, // Google
+      { protocol: 'https', hostname: 'm.media-amazon.com' }, // Amazon
+      { protocol: 'https', hostname: 'fdn2.gsmarena.com' }, // GSMarena
+      { protocol: 'https', hostname: 'ibb.co' }, // ImgBB
+      { protocol: 'https', hostname: 'www.apple.com' }, // Apple
     ],
+
     // Configuración adicional
     minimumCacheTTL: 60, // Cache mínimo de 60 segundos
   },

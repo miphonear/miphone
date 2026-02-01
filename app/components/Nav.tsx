@@ -1,13 +1,34 @@
 'use client'
 import { useState, useCallback } from 'react'
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import Image from 'next/image' // Import necesario para el PNG
 import { ScrollText, CreditCard, HelpCircle } from 'lucide-react'
 import Dialog from '@ui/Dialog'
-import GarantiasContent from './GarantiasContent'
-import PagosContent from './PagosContent'
-import FAQContent from './FAQContent'
 import Imagotipo from '@/public/images/imagotipo-miphone.svg'
+
+// Carga diferida: solo se descargan cuando el usuario abre el modal y elige cada tab
+const tabLoadingFallback = () => (
+  <div
+    className="py-8 flex justify-center"
+    role="status"
+    aria-label="Cargando"
+  >
+    <span className="h-8 w-8 block rounded-full border-2 border-gray-200 border-t-orange-500 animate-spin" />
+  </div>
+)
+const GarantiasContent = dynamic(() => import('./GarantiasContent'), {
+  ssr: false,
+  loading: tabLoadingFallback,
+})
+const PagosContent = dynamic(() => import('./PagosContent'), {
+  ssr: false,
+  loading: tabLoadingFallback,
+})
+const FAQContent = dynamic(() => import('./FAQContent'), {
+  ssr: false,
+  loading: tabLoadingFallback,
+})
 import Mascota from '@/public/images/mifonito/mifonito_a.png' // Import Mifonito
 import Isotipo from '@/public/images/isotipo-miphone.svg'
 
@@ -230,6 +251,7 @@ export default function Nav() {
       object-contain
       select-none
       z-30
+      cursor-help
     "
               />
             </div>

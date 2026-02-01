@@ -2,31 +2,45 @@
 import { memo } from 'react'
 import { cn } from '@/lib/utils'
 
-// Usamos React.memo para evitar re-renders innecesarios, ya que este
-// componente es puramente decorativo y no necesita actualizarse.
 const BackgroundBlobs = memo(function BackgroundBlobs() {
   return (
     <div
-      className="fixed inset-0 -z-10 overflow-hidden pointer-events-none"
-      aria-hidden="true" // Es decorativo, lo ocultamos a lectores de pantalla
+      className="fixed inset-0 -z-10 overflow-hidden pointer-events-none select-none bg-white"
+      aria-hidden="true"
     >
-      {/* Blob único, posicionado en la parte inferior */}
-      <svg
+      {/* 
+          BLOB 1: VIOLETA (Superior Derecha)
+      */}
+      <div
         className={cn(
-          'absolute top-2/3 left-1/2 -translate-x-1/2',
-          'w-[1000px] h-[1000px]' /* Tamaño base (mobile) */,
-          'md:w-[5000px] md:h-[5000px]' /* Tamaño en desktop */,
-          'opacity-15 blur-3xl',
+          'absolute top-[-10%] right-[-10%]',
+          'w-[400px] h-[400px] md:w-[900px] md:h-[900px]',
+          'bg-violet-500/[0.06] blur-[100px] md:blur-[140px]',
+          'rounded-full',
         )}
-        viewBox="0 0 800 800"
-        preserveAspectRatio="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          className="fill-violet-500" // Corresponde a tu color #8B5CF6
-          d="M400,0C500,0,600,100,600,200C600,300,500,400,400,400C300,400,200,300,200,200C200,100,300,0,400,0Z"
-        />
-      </svg>
+      />
+
+      {/* 
+          BLOB 2: NARANJA (Inferior Izquierda)
+      */}
+      <div
+        className={cn(
+          'absolute bottom-[-10%] left-[-10%]',
+          'w-[350px] h-[350px] md:w-[800px] md:h-[800px]',
+          'bg-orange-500/[0.06] blur-[100px] md:blur-[140px]',
+          'rounded-full',
+        )}
+      />
+
+      {/* 
+          OVERLAY DE GRANO (Noise): 
+          Es fundamental que la opacidad sea baja (0.02 - 0.04) para que 
+          no parezca "sucio" sino una textura de papel de alta gama.
+      */}
+      <div
+        className="absolute inset-0 opacity-[0.03] mix-blend-overlay pointer-events-none"
+        style={{ backgroundImage: `url('https://grainy-gradients.vercel.app/noise.svg')` }}
+      />
     </div>
   )
 })

@@ -1,10 +1,14 @@
 // app/layout.tsx
 import 'styles/globals.css'
 import { Suspense } from 'react'
+import Script from 'next/script'
 import { Inter } from 'next/font/google'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import type { Metadata, Viewport } from 'next'
 import PageWrapper from './components/PageWrapper'
+
+const GA_MEASUREMENT_ID =
+  process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ?? 'G-VTHYM5J1V2'
 
 // =====================
 // CONSTANTES
@@ -35,6 +39,7 @@ export const metadata: Metadata = {
     'playstation',
     'nintendo',
     'fotografía',
+    'insta360',
     'ofertas online',
     'capital federal',
     'buenos aires',
@@ -176,6 +181,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </Suspense>
 
         <SpeedInsights />
+
+        {/* Google Analytics 4 */}
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="ga-config" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_MEASUREMENT_ID}');
+          `}
+        </Script>
       </body>
     </html>
   )

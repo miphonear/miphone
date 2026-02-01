@@ -39,7 +39,7 @@ const LABEL_CONFIG: Record<
 }
 
 const BASE_CLASS =
-  'inline-flex items-center justify-center rounded-md font-semibold px-1 h-5 min-w-[32px] text-[10px] leading-none gap-0.5 sm:px-1.5 sm:h-5 sm:min-w-[38px] sm:text-[11px]'
+  'inline-flex items-center justify-center rounded-md font-semibold px-1 h-5 min-w-[32px] text-xs leading-none gap-0.5 sm:px-1.5 sm:h-5 sm:min-w-[38px]'
 
 export default function ProductLabel({ value }: ProductLabelProps) {
   const upper = normalizeLabel(value)

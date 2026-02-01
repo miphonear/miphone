@@ -14,9 +14,10 @@ export default function WhatsAppButton({ mensaje, className }: Props) {
       rel="noopener noreferrer"
       aria-label={label}
       title={label}
-      className={`inline-flex items-center gap-1.5 rounded-xl border border-emerald-200 bg-emerald-50 px-2 py-1.5 text-xs font-medium text-emerald-800 transition hover:bg-emerald-100 ${
-        className || ''
-      }`}
+      className={`inline-flex items-center gap-1.5 rounded-xl border border-emerald-200 bg-emerald-50 px-2 py-1.5 text-xs font-medium 
+        text-emerald-800 transition hover:bg-emerald-100 focus:outline-none focus-visible:ring-1 focus:ring-emerald-200 ${
+          className || ''
+        }`}
     >
       {/* Icono oficial de WhatsApp (SVG inline) */}
       <svg

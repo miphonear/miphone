@@ -40,9 +40,9 @@ export default function HomePage() {
   // Vista de resultados cuando existe una búsqueda (?q=...)
   if (query) {
     return (
-      // Wrapper consistente: w-full max-w-6xl mx-auto px-4 py-6
-      <div className="w-full max-w-6xl mx-auto px-4 py-6">
-        <div className="my-6">
+      // Wrapper consistente
+      <div className="w-full max-w-6xl mx-auto px-4 py-2 md:py-6">
+        <div className="my-4">
           <h1 className="text-xl md:text-2xl font-bold text-gray-900 text-center">
             {`Resultados para: "${query}"`}
           </h1>
@@ -65,7 +65,7 @@ export default function HomePage() {
     // Wrapper consistente: w-full max-w-6xl mx-auto px-4 py-6
     <div className="w-full max-w-6xl mx-auto px-4 py-6">
       {/* Encabezado de la página con título destacado */}
-      <header className="mt-6 mb-8 text-center">
+      <header className="mt-4 mb-8 text-center">
         <h2 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">
           Explorá nuestro catálogo
         </h2>

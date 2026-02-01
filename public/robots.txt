@@ -2,8 +2,8 @@
 User-agent: *
 Allow: /
 
-# Host
-Host: https://www.miphone.ar
+# Host (canonical sin www)
+Host: https://miphone.ar
 
 # Sitemaps
-Sitemap: https://www.miphone.ar/sitemap.xml
+Sitemap: https://miphone.ar/sitemap.xml

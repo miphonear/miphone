@@ -9,7 +9,7 @@ interface AlertProps {
 
 const ALERT_CONFIG = {
   info: {
-    style: 'border-purple-400 bg-purple-100 text-purple-900',
+    style: 'border-violet-400 bg-violet-100 text-violet-900',
     icon: '📣',
     label: 'Información',
   },
@@ -31,7 +31,7 @@ const ALERT_CONFIG = {
 } as const
 
 const BASE_CLASS =
-  'mb-4 rounded-lg border-l-4 px-3 py-1.5 text-[11px] font-medium flex items-center gap-2 shadow-sm sm:text-sm'
+  'rounded-xl border-l-4 px-3 py-1.5 text-xs font-medium flex items-center gap-2 shadow-sm sm:text-sm'
 
 // Animación CSS
 const WORD_FADE = `

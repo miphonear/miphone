@@ -10,10 +10,12 @@ import { SUBCATEGORIAS_CON_ALERTA_ACCESORIOS } from '@/lib/constantes'
 interface Props {
   productos: Producto[]
   alerta?: string
+  /** Avatar por modelo (desde lista completa) para mostrar imagen aunque la variante filtrada no la tenga */
+  avatarByModel?: Record<string, string>
 }
 
 // SECCIÓN: COMPONENTE PRINCIPAL
-function ProductosGenericos({ productos, alerta }: Props) {
+function ProductosGenericos({ productos, alerta, avatarByModel }: Props) {
   // SECCIÓN: FILTRADO
   const visibles = useMemo(
     () => productos.filter((p) => p.ocultar?.toLowerCase() !== 'x'),
@@ -50,18 +52,22 @@ function ProductosGenericos({ productos, alerta }: Props) {
       const entry = mapaModelos.get(modelo)!
       entry.variantes.push(p)
 
-      // Guardar el primer avatar válido que aparezca
+      // Guardar el primer avatar válido que aparezca en las variantes
       if (!entry.avatarUrl && p.avatar?.trim()) {
         entry.avatarUrl = p.avatar.trim()
       }
     })
 
-    // Reconstruir array final en orden
+    // Reconstruir array final en orden; priorizar avatar de la lista completa (avatarByModel) para búsquedas
     return ordenModelos.map((modelo) => {
       const { variantes, avatarUrl } = mapaModelos.get(modelo)!
-      return { modelo, variantes, avatarUrl }
+      return {
+        modelo,
+        variantes,
+        avatarUrl: avatarByModel?.[modelo] ?? avatarUrl,
+      }
     })
-  }, [visibles])
+  }, [visibles, avatarByModel])
 
   // SECCIÓN: RENDERIZADO PRINCIPAL
   return (

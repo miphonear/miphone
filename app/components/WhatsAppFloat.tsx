@@ -10,7 +10,7 @@ export default function WhatsAppFloat() {
       <span
         className="
           hidden md:inline-flex pointer-events-none select-none
-          mr-4 px-4 py-2 rounded-full bg-white text-[#25d366] font-semibold text-sm
+          mr-4 px-4 py-2 rounded-full bg-white text-whatsapp font-semibold text-sm
           shadow-lg
           opacity-0 scale-95 translate-x-4
           group-hover:opacity-100 group-hover:scale-100 group-hover:translate-x-0
@@ -31,10 +31,10 @@ export default function WhatsAppFloat() {
         title="Contactar por WhatsApp"
         className="
           flex items-center justify-center
-          bg-[#25d366] text-white rounded-full shadow-lg
+          bg-whatsapp text-white rounded-full shadow-lg
           w-14 h-14
           transition-transform duration-200 hover:scale-110
-          focus:outline-none focus-visible:ring-4 focus-visible:ring-[#25d366]/40
+          focus:outline-none focus-visible:ring-4 focus-visible:ring-whatsapp/40
         "
       >
         {/* SVG inline (decorativo) */}

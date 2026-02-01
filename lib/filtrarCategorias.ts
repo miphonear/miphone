@@ -21,14 +21,22 @@ function pruneSearchCache() {
   }
 }
 
+// Coincidencia por palabra completa: "12" no debe coincidir con "128"
+function campoContienePalabraCompleta(campo: string, word: string): boolean {
+  if (!campo || !word) return false
+  const escaped = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  const regex = new RegExp(`\\b${escaped}\\b`)
+  return regex.test(campo)
+}
+
 // SECCIÓN: FUNCIÓN PRINCIPAL
 // Filtra categorías basadas en una query, buscando en múltiples campos de Producto (categoria, subcategoria, linea, modelo, version, label, etc.).
-// OPTIMIZADO: Usa campos pre-computados cuando están disponibles y cachea resultados.
+// OPTIMIZADO: Usa campos pre-computados, coincidencia por palabra completa (evita "12" en "128") y cachea resultados.
 export function filtrarCategorias(categorias: Categoria[], query: string): Categoria[] {
   if (!query.trim()) return categorias
 
-  // Verificar caché de búsqueda
-  const cacheKey = `${query.trim().toLowerCase()}_${categorias.length}`
+  // Verificar caché de búsqueda (v2 = coincidencia por palabra completa)
+  const cacheKey = `v2_${query.trim().toLowerCase()}_${categorias.length}`
   if (searchCache.has(cacheKey)) {
     return searchCache.get(cacheKey)!
   }
@@ -59,7 +67,9 @@ export function filtrarCategorias(categorias: Categoria[], query: string): Categ
               p._colorLimpio ?? clean(p.color || ''),
               // Agrega más campos si es necesario (ej: clean(p.marca || ''), clean(p.tipo || ''))
             ]
-            return words.every((word) => campos.some((campo) => campo.includes(word)))
+            return words.every((word) =>
+              campos.some((campo) => campoContienePalabraCompleta(campo, word)),
+            )
           })
 
           if (productosFiltrados.length > 0) {

@@ -9,6 +9,14 @@ module.exports = {
   ],
   theme: {
     extend: {
+      // Tokens de marca (Header, gradientes, CTAs)
+      colors: {
+        brand: {
+          orange: '#FF6D0C',
+          violet: '#C051FF',
+        },
+        whatsapp: '#25d366',
+      },
       // Keyframes + animación de scroll del carrusel
       keyframes: {
         'accordion-down': {

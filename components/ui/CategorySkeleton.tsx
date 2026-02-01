@@ -1,28 +1,32 @@
 export function CategorySkeleton() {
   return (
-    <div className="max-w-6xl mx-auto px-4">
-      {/* 1) Header: solo título (rectángulo centrado) */}
-      <div className="max-w-3xl w-full mx-auto my-6 mb-8">
-        <div className="h-9 bg-gray-200 rounded mx-auto w-48 animate-pulse" />
+    <div className="w-full max-w-6xl mx-auto px-4 py-2 md:py-6">
+      {/* Línea divisora sutil (solo desktop) */}
+      <div className="hidden md:block w-full border-t border-gray-100 mb-8" />
+
+      {/* 1) Título */}
+      <div className="w-full max-w-3xl mx-auto mb-6 mt-4 md:mt-0 flex justify-center">
+        <div className="h-10 md:h-12 bg-gray-200 rounded-lg w-48 md:w-64 animate-pulse" />
       </div>
 
-      {/* 2) Subcategorías: chips rectangulares centrados */}
-      <div className="max-w-3xl w-full mx-auto mb-8">
-        <div className="flex justify-center gap-1">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="h-8 w-20 rounded bg-gray-200 animate-pulse" />
-          ))}
+      {/* 3) Navigation Tabs (Sintetizado) */}
+      <div className="mb-4 flex justify-center">
+        <div className="w-full max-w-md h-9 bg-gray-100 rounded-xl flex animate-pulse overflow-hidden">
+          <div className="flex-1 border-r border-gray-200" />
+          <div className="flex-1 border-r border-gray-200" />
+          <div className="flex-1 border-r border-gray-200" />
+          <div className="flex-1" />
         </div>
       </div>
 
-      {/* 3) Cards: rectángulos dentro de contenedor de card */}
+      {/* 4) Cards */}
       <div className="space-y-3">
-        {Array.from({ length: 6 }).map((_, i) => (
+        {Array.from({ length: 5 }).map((_, i) => (
           <div
             key={i}
-            className="border border-gray-200 rounded-lg bg-gray-200 max-w-3xl w-full mx-auto p-4 animate-pulse"
+            className="w-full max-w-3xl mx-auto p-4 border border-gray-200 rounded-xl bg-gray-50/50 animate-pulse"
           >
-            <div className="h-28 bg-gray-300 rounded" />
+            <div className="h-24 bg-gray-200 rounded-lg" />
           </div>
         ))}
       </div>

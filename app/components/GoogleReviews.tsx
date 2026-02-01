@@ -25,7 +25,7 @@ export default function GoogleReviews() {
   }, [])
 
   return (
-    <section className="mt-12" ref={containerRef}>
+    <section className="mt-16" ref={containerRef}>
       <div className="flex flex-col items-center justify-center mb-8 text-center">
         <h2 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">
           <span className="sm:hidden">Nuestros clientes</span>

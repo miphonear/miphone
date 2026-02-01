@@ -56,7 +56,7 @@ function ProductosAccesorios({ productos, alerta }: Props) {
 
   // SECCIÓN: RENDERIZADO PRINCIPAL
   return (
-    <div className="w-full flex flex-col gap-6 mt-6">
+    <div className="w-full flex flex-col gap-4 mt-6">
       {/* Alerta */}
       {alerta && (
         <div className="w-full max-w-3xl mx-auto">
@@ -70,12 +70,12 @@ function ProductosAccesorios({ productos, alerta }: Props) {
           key={i}
           style={{ animationDelay: `${i * 150}ms` }} // Delay en cascada
           // Card centrada: max-w-3xl + mx-auto
-          className="w-full max-w-3xl mx-auto border border-gray-200 rounded-lg bg-white/90 shadow-sm p-4 flex flex-col gap-2 opacity-0 animate-slideDown"
+          className="w-full max-w-3xl mx-auto border border-gray-200 rounded-xl bg-white/90 shadow-sm p-4 flex flex-col gap-2 opacity-0 animate-slideDown"
         >
           {/* Cabecera */}
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
             <div className="flex items-center gap-2">
-              <span className="font-bold text-base text-gray-900">{p.modelo}</span>
+              <span className="font-bold text-base md:text-lg text-gray-900">{p.modelo}</span>
               {p.label && <ProductLabel value={p.label} />}
             </div>
             {p.fotos && (
@@ -106,7 +106,7 @@ function ProductosAccesorios({ productos, alerta }: Props) {
 
             {/* Precio + botón WhatsApp */}
             <div className="flex flex-col items-end justify-between min-w-[110px] text-sm gap-2 mt-2 sm:mt-6">
-              <span className="text-gray-700 font-semibold">
+              <span className="text-gray-800 font-semibold">
                 {p.precio ? (
                   p.precio
                 ) : (

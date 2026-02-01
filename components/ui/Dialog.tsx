@@ -65,7 +65,7 @@ export default function Dialog({
             <HDialog.Panel
               className={`
                 relative w-full ${PANEL_SIZES[size]} 
-                rounded-lg bg-white p-6 shadow-xl ring-1 ring-black/5
+                rounded-xl bg-white p-6 shadow-xl ring-1 ring-black/5
                 max-h-[90vh] overflow-y-auto
               `}
             >
@@ -88,7 +88,7 @@ export default function Dialog({
 
               {/* Título */}
               {title && (
-                <HDialog.Title as="h2" className="text-lg font-semibold text-gray-800 pr-12">
+                <HDialog.Title as="h2" className="text-lg font-semibold text-gray-900 pr-12">
                   {title}
                 </HDialog.Title>
               )}

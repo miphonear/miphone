@@ -9,6 +9,7 @@ import {
   MemoryStick,
   Star,
   ArrowUpRight,
+  Banknote,
 } from 'lucide-react'
 import WhatsAppButton from './WhatsAppButton'
 import { crearMensajeWhatsApp } from '@/lib/whatsappMessages'
@@ -77,7 +78,7 @@ function ProductosSeminuevos({ productos, alerta }: Props) {
     const linkWa = `https://wa.me/${NUMERO_TELEFONO}?text=${encodeURIComponent(mensajeEmpty)}`
 
     return (
-      <div className="flex flex-col items-center justify-center text-center py-12 mt-4">
+      <div className="min-h-[40vh] flex flex-col items-center justify-center px-4 py-12 text-center">
         {/* Emoj */}
         <span className="block text-6xl mb-4" role="img" aria-label="Sin stock">
           📦
@@ -108,7 +109,7 @@ function ProductosSeminuevos({ productos, alerta }: Props) {
 
   // SECCIÓN: RENDERIZADO PRINCIPAL
   return (
-    <div className="w-full flex flex-col gap-4 mt-4">
+    <div className="w-full flex flex-col gap-4 mt-6">
       {/* Alerta */}
       {alerta && (
         <div className="w-full max-w-3xl mx-auto">
@@ -121,12 +122,12 @@ function ProductosSeminuevos({ productos, alerta }: Props) {
         <div
           key={i}
           style={{ animationDelay: `${i * 150}ms` }}
-          className="w-full max-w-3xl mx-auto border border-gray-200 rounded-lg bg-white/90 shadow-sm p-4 flex flex-col gap-2 opacity-0 animate-slideDown"
+          className="w-full max-w-3xl mx-auto border border-gray-200 rounded-xl bg-white/90 shadow-sm p-4 flex flex-col gap-2 opacity-0 animate-slideDown"
         >
           {/* Cabecera */}
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
             <div className="flex items-center gap-2">
-              <span className="font-bold text-base text-gray-900">{p.modelo}</span>
+              <span className="font-bold text-base md:text-lg text-gray-900">{p.modelo}</span>
               {/* Labels adicionales */}
               {p.label && <ProductLabel value={p.label} />}
             </div>
@@ -175,19 +176,18 @@ function ProductosSeminuevos({ productos, alerta }: Props) {
                   <b>Condición:</b> {p.condicion || 'No especificada'}
                 </span>
               </div>
+
+              {/* ITEM 5: PRECIO */}
+              <div className="flex items-center gap-1">
+                <Banknote className="w-4 h-4 text-orange-500 shrink-0" />
+                <span>
+                  <b> {p.precio || 'Consultar precio'}</b>
+                </span>
+              </div>
             </div>
 
-            {/* Precio + botón WhatsApp */}
-            <div className="flex flex-col items-end justify-between min-w-[110px] text-sm gap-2 mt-2 sm:mt-0">
-              <span className="text-gray-700 font-semibold">
-                {p.precio ? (
-                  p.precio
-                ) : (
-                  <span className="text-gray-500 font-semibold text-xs sm:text-sm">
-                    Consultanos
-                  </span>
-                )}
-              </span>
+            {/* DERECHA: Solo Botón WhatsApp */}
+            <div className="flex flex-col items-end justify-end min-w-[110px] text-sm gap-2 mt-2 sm:mt-0">
               <WhatsAppButton
                 mensaje={crearMensajeWhatsApp(p.subcategoria, `${p.modelo} (seminuevo)`)}
               />

@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
+import { usePathname } from 'next/navigation'
 import { Badge } from '@/components/ui/Badge'
 import SearchBar from './SearchBar'
 
@@ -17,6 +18,10 @@ interface HeaderProps {
 
 export default function Header({ initialValue, onSearch }: HeaderProps) {
   const [anim, setAnim] = useState(true)
+  const pathname = usePathname()
+
+  // Detectamos si estamos en la raíz (Home)
+  const isHome = pathname === '/'
 
   useEffect(() => {
     // Reducimos el timeout para que la animación termine justo cuando el usuario termina de leer
@@ -25,18 +30,16 @@ export default function Header({ initialValue, onSearch }: HeaderProps) {
   }, [])
 
   return (
-    <header className="bg-transparent">
-      {/* Ajuste: pt-8 en móvil para ganar espacio, pt-12 en desktop */}
-      <div className="container mx-auto px-4 pt-8 md:pt-12 pb-4 flex flex-col items-center">
-        {/* SLOGAN
-            - Eliminado el div wrapper innecesario.
-            - mb-4: Menos separación con los badges.
-            - cursor-default select-none: Sensación de UI nativa/Premium.
-        */}
+    // MEJORA: Ocultamos todo el header en mobile si no es el Home
+    // Usamos 'hidden md:block' condicionado por isHome para que en categorías
+    // el espacio blanco desaparezca totalmente en pantallas pequeñas.
+    <header className={`bg-transparent ${!isHome ? 'hidden md:block' : 'block'}`}>
+      <div className="container mx-auto px-4 pt-8 md:pt-12 pb-2 flex flex-col items-center">
+        {/* SLOGAN */}
         <h1 className="mb-4 max-w-3xl cursor-default select-none text-center text-5xl font-extrabold leading-tight tracking-tight text-gray-900 md:text-6xl">
           Lo bueno se{' '}
           <span
-            className={`bg-gradient-to-r from-[#FF6D0C] to-[#C051FF] bg-clip-text text-transparent ${
+            className={`bg-gradient-to-r from-brand-orange to-brand-violet bg-clip-text text-transparent ${
               anim ? 'bounce-up-once' : ''
             }`}
           >
@@ -44,11 +47,8 @@ export default function Header({ initialValue, onSearch }: HeaderProps) {
           </span>
         </h1>
 
-        {/* BADGES
-            - mb-8: Separación justa con el buscador (antes era mb-12).
-            - Semántica: Usamos <ul/> para accesibilidad (screen readers saben que es una lista).
-        */}
-        <ul className="mb-8 flex flex-wrap justify-center gap-2">
+        {/* BADGES */}
+        <ul className="mb-4 flex flex-wrap justify-center gap-2">
           {BADGES.map((badge, i) => (
             <li key={i}>
               <Badge emoji={badge.emoji}>{badge.text}</Badge>
@@ -56,10 +56,17 @@ export default function Header({ initialValue, onSearch }: HeaderProps) {
           ))}
         </ul>
 
-        {/* Search bar */}
-        <div className="w-full max-w-2xl">
-          <SearchBar initialValue={initialValue} onSearch={onSearch} />
-        </div>
+        {/* 
+            Search bar: 
+            CONDICIÓN VISUAL
+            Solo se renderiza si isHome es true.
+            Esto evita que aparezca duplicado cuando entras a una categoría.
+        */}
+        {isHome && (
+          <div className="w-full max-w-2xl mt-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <SearchBar initialValue={initialValue} onSearch={onSearch} />
+          </div>
+        )}
       </div>
     </header>
   )

@@ -42,7 +42,7 @@ const ProductModelCard = memo(function ProductModelCard({
 
   // --- FRAGMENTOS DE UI (Render Props) ---
   const titleContent = (
-    <span className="font-bold text-base text-gray-900 flex items-center gap-2">
+    <span className="font-bold text-base md:text-lg text-gray-900 flex items-center gap-2">
       {modelo}
       {hasNew && <ProductLabel value="NEW" />}
     </span>
@@ -65,7 +65,7 @@ const ProductModelCard = memo(function ProductModelCard({
   return (
     <div
       style={{ animationDelay }}
-      className="border border-gray-200 rounded-lg p-4 bg-white/90 flex shadow-sm max-w-3xl w-full mx-auto opacity-0 animate-slideDown"
+      className="border border-gray-200 rounded-xl p-4 bg-white/90 flex shadow-sm max-w-3xl w-full mx-auto opacity-0 animate-slideDown"
     >
       <div className="flex w-full items-start gap-4">
         {/* --- 1. AVATAR DESKTOP (IZQUIERDA) --- */}
@@ -99,7 +99,7 @@ const ProductModelCard = memo(function ProductModelCard({
                   {variantes.map((v, j) => (
                     <div
                       key={`${modelo}-${j}`}
-                      className="flex justify-between items-center border-t border-gray-200 first:border-t-0 py-1 px-1.5 text-sm hover:bg-purple-50"
+                      className="flex justify-between items-center border-t border-gray-200 first:border-t-0 py-1 px-1.5 text-sm hover:bg-violet-50"
                     >
                       <span className="text-gray-800">{v.version || ''}</span>
                       <span className="text-gray-800 font-semibold flex items-center gap-1">
@@ -122,7 +122,7 @@ const ProductModelCard = memo(function ProductModelCard({
                 {/* Fila única (sin versiones) */}
                 <div className="flex justify-between items-center">
                   {titleContent}
-                  <span className="pl-4 text-gray-700 font-semibold text-sm flex items-center gap-1">
+                  <span className="pl-4 text-gray-800 font-semibold text-sm flex items-center gap-1">
                     {/* CORRECCIÓN: Usamos .includes() para SALE */}
                     {variantes[0].label?.trim().toUpperCase().includes('SALE') && (
                       <ProductLabel value="SALE" />
