@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/Badge'
 import SearchBar from './SearchBar'
 
 const BADGES = [
-  { emoji: '🛒', text: 'Tienda Online' },
+  { emoji: '💻', text: 'Tienda Online' },
   { emoji: '✅', text: 'Productos originales' },
   { emoji: '🚗', text: 'Entregas en CABA y GBA' },
   { emoji: '📦', text: 'Envíos a todo el país' },

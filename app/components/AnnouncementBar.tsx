@@ -1,5 +1,5 @@
 'use client'
-import { X, CircleDollarSign } from 'lucide-react'
+import { X } from 'lucide-react'
 import { useEffect, useState, useCallback } from 'react'
 
 // Configuración
@@ -87,11 +87,16 @@ export default function AnnouncementBar() {
   if (!visible) return null
 
   return (
-    <div className="w-full bg-gray-100 text-gray-800 text-sm md:text-base font-semibold tracking-tight py-2 px-4 flex items-center justify-center select-none relative">
-      <span aria-live="polite" className="flex items-center gap-2">
-        {/* Ícono dólar */}
-        <CircleDollarSign className="w-4 h-4 text-green-600" />
+    <div className="w-full bg-white border-b border-gray-100 text-gray-800 text-sm md:text-base font-semibold tracking-tight py-2 px-4 flex items-center justify-center select-none relative">
+      <span aria-live="polite" className="flex items-center gap-3">
+        {/* --- Indicador "en vivo" --- */}
+        <div className="flex items-center justify-center relative w-2.5 h-2.5">
+          <div className="h-full w-full animate-ping rounded-full bg-green-500/80"></div>
+          <div className="absolute h-full w-full rounded-full bg-green-500/90"></div>
+        </div>
+
         <span>Dólar hoy:</span>
+
         {loading ? (
           // Skeleton loader mientras carga
           <span className="inline-block w-14 h-5 bg-gray-300 rounded animate-pulse" />
