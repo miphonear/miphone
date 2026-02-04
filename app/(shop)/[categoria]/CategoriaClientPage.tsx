@@ -131,6 +131,11 @@ export default function CategoriaClientPage({ params }: CategoriaClientPageProps
                 text-sm font-semibold text-gray-600 
                 hover:text-orange-600 hover:border-orange-200 hover:bg-orange-50 
                 transition-all duration-200
+
+                /* --- FOCUS --- */
+                focus:outline-none 
+                focus-visible:ring-2 
+                focus-visible:ring-orange-400
               "
           >
             <ChevronLeft

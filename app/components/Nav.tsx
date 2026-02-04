@@ -9,11 +9,7 @@ import Imagotipo from '@/public/images/imagotipo-miphone.svg'
 
 // Carga diferida: solo se descargan cuando el usuario abre el modal y elige cada tab
 const tabLoadingFallback = () => (
-  <div
-    className="py-8 flex justify-center"
-    role="status"
-    aria-label="Cargando"
-  >
+  <div className="py-8 flex justify-center" role="status" aria-label="Cargando">
     <span className="h-8 w-8 block rounded-full border-2 border-gray-200 border-t-orange-500 animate-spin" />
   </div>
 )

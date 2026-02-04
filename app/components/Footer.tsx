@@ -83,8 +83,8 @@ export default function Footer() {
                 ¡Estoy para ayudarte!
               </div>
 
-              {/* Mifonito con tu diseño solicitado */}
-              <div className="flex items-center justify-center p-2 rounded-2xl bg-gray-50 border-2 border-transparent hover:bg-orange-50 hover:border-orange-100 transition-all duration-300 cursor-help">
+              {/* Mifonito */}
+              <div className="flex items-center justify-center p-3 rounded-2xl bg-gray-50 hover:bg-orange-50 transition-all duration-300 cursor-help">
                 <Image
                   src="/images/mifonito/mifonito_f.png"
                   alt="Mifonito"
@@ -114,12 +114,14 @@ export default function Footer() {
                     rel="noopener noreferrer"
                     aria-label={label}
                     className="
-                      flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-2xl 
-                      bg-gray-50 text-gray-700 
-                      hover:bg-orange-50 hover:text-orange-600 
-                      border border-transparent hover:border-orange-100
-                      transition-all duration-300 active:scale-95
-                    "
+  flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-2xl 
+  bg-gray-50 text-gray-700 
+  hover:bg-orange-50 hover:text-orange-600 
+  transition-all duration-200 active:scale-95
+  focus:outline-none 
+  focus-visible:ring-2 
+  focus-visible:ring-orange-400 
+"
                   >
                     <Icon size={16} />
                   </a>
@@ -141,11 +143,13 @@ export default function Footer() {
                     rel="noopener noreferrer"
                     aria-label={label}
                     className="
-                      flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-2xl 
-                      bg-gray-50 text-gray-700 
-                      hover:bg-orange-50 hover:text-orange-600 
-                      border border-transparent hover:border-orange-100
-                      transition-all duration-300 active:scale-95
+  flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-2xl 
+  bg-gray-50 text-gray-700 
+  hover:bg-orange-50 hover:text-orange-600 
+  transition-all duration-200 active:scale-95
+  focus:outline-none 
+  focus-visible:ring-2 
+  focus-visible:ring-orange-400 
                     "
                   >
                     <Icon size={16} />

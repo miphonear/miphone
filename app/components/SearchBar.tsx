@@ -37,8 +37,8 @@ function SuggestionButtons({ onShortcut }: { onShortcut: (_s: string) => void })
         onClick={() => onShortcut('SALE')}
         className="flex items-center gap-2 px-2.5 py-1.5 text-sm font-semibold rounded-xl
                    bg-orange-100 text-orange-700 hover:bg-orange-200 
-                   focus:outline-none focus:ring-2 focus:ring-orange-500
-                   transition-colors duration-150"
+                   focus:outline-none focus:ring-2 focus:ring-orange-400
+                   transition-colors duration-200"
         aria-label="Buscar ofertas"
       >
         <Tag className="w-4 h-4" aria-hidden="true" />
@@ -50,8 +50,8 @@ function SuggestionButtons({ onShortcut }: { onShortcut: (_s: string) => void })
         onClick={() => onShortcut('NEW')}
         className="flex items-center gap-2 px-2.5 py-1.5 text-sm font-semibold rounded-xl
                    bg-violet-100 text-violet-700 hover:bg-violet-200 
-                   focus:outline-none focus:ring-2 focus:ring-violet-500
-                   transition-colors duration-150"
+                   focus:outline-none focus:ring-2 focus:ring-violet-400
+                   transition-colors duration-200"
         aria-label="Buscar nuevos"
       >
         <Sparkles className="w-4 h-4" aria-hidden="true" />
@@ -228,7 +228,7 @@ export default function SearchBar({
           {/* Botón para limpiar el texto (aparece solo cuando hay contenido) */}
           {inputValue && !disabled && (
             <button
-              className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center w-6 h-6 rounded-full bg-gray-100 text-gray-500 hover:bg-orange-500 hover:text-white transition focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-1"
+              className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center w-6 h-6 rounded-full bg-gray-100 text-gray-500 hover:bg-orange-500 hover:text-white transition focus:outline-none focus:ring-2 focus:ring-orange-400"
               onClick={handleClear}
               aria-label="Limpiar búsqueda"
               type="button"

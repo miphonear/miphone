@@ -21,25 +21,27 @@ const LABEL_CONFIG: Record<
   }
 > = {
   SALE: {
-    bg: 'bg-red-100 text-red-800',
+    bg: 'bg-red-100 text-red-700 border-red-200',
     text: 'Oferta',
     icon: '🔥',
     aria: 'Oferta',
-    long: '¡OFERTA!',
-    short: 'SALE!',
+    long: 'OFERTA',
+    short: 'SALE',
   },
   NEW: {
-    bg: 'bg-blue-100 text-blue-700',
+    bg: 'bg-blue-100 text-blue-700 border-blue-200',
     text: 'Nuevo',
     icon: '✈️',
-    aria: 'Nuevo',
-    long: '¡NUEVO!',
-    short: 'NEW!',
+    aria: 'Nuevo ingreso',
+    long: 'NUEVO',
+    short: 'NEW',
   },
 }
 
+// Ajustado: px-1.5 para ser más compacto y text-[10px] para mayor elegancia responsiva
 const BASE_CLASS =
-  'inline-flex items-center justify-center rounded-md font-semibold px-1 h-5 min-w-[32px] text-xs leading-none gap-0.5 sm:px-1.5 sm:h-5 sm:min-w-[38px]'
+  'inline-flex items-center justify-center rounded-md font-bold border ' +
+  'px-1.5 h-5 text-[10px] leading-none gap-1 transition-all select-none'
 
 export default function ProductLabel({ value }: ProductLabelProps) {
   const upper = normalizeLabel(value)
@@ -49,21 +51,30 @@ export default function ProductLabel({ value }: ProductLabelProps) {
 
   if (config) {
     return (
-      <span className={`${BASE_CLASS} ${config.bg}`} title={config.text}>
+      <span
+        className={`${BASE_CLASS} ${config.bg}`}
+        title={config.text}
+        role="status"
+        aria-label={config.aria}
+      >
         {config.icon && (
-          <span aria-hidden="true" className="select-none">
+          <span aria-hidden="true" className="text-[11px]">
             {config.icon}
           </span>
         )}
+        {/* LÓGICA RESPONSIVA: Oculta texto largo en mobile, muestra corto */}
         <span className="hidden sm:inline">{config.long}</span>
         <span className="inline sm:hidden">{config.short}</span>
       </span>
     )
   }
 
-  // Fallback para etiquetas no configuradas
+  // Fallback para etiquetas no configuradas (ej. OUT OF STOCK)
   return (
-    <span className={`${BASE_CLASS} bg-gray-100 text-gray-800`} title={upper}>
+    <span
+      className={`${BASE_CLASS} bg-gray-50 text-gray-500 border-gray-200 uppercase`}
+      title={upper}
+    >
       {upper}
     </span>
   )

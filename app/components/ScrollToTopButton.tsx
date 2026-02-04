@@ -9,9 +9,7 @@ export default function ScrollToTopButton() {
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
-    // Evita renders innecesarios comparando con un valor local
     let last = visible
-
     const update = () => {
       const next = window.scrollY > THRESHOLD
       if (next !== last) {
@@ -20,20 +18,15 @@ export default function ScrollToTopButton() {
       }
     }
 
-    // Estado correcto al montar
     update()
 
-    // Listener passive + barato
     const onScroll = () => {
-      // Si querés, podés cambiar a rAF si tenés contenido muy pesado
-      // requestAnimationFrame(update)
       update()
     }
 
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [visible])
 
   const handleClick = () => {
     const prefersReduced =
@@ -49,11 +42,16 @@ export default function ScrollToTopButton() {
       title="Subir al inicio"
       onClick={handleClick}
       className={cn(
-        'fixed right-4 bottom-20 sm:bottom-20 z-[60]',
+        /* 
+           CLAVE: z-40 para que quede por debajo del modal (que es z-50).
+           Así el fondo oscuro del modal lo tapará naturalmente sin que desaparezca.
+        */
+        'fixed right-4 bottom-20 sm:bottom-20 z-40',
         'flex items-center justify-center h-14 w-14',
         'rounded-full shadow-md border',
         'bg-orange-500 text-white hover:bg-orange-600',
         'transition-all duration-300 ease-out focus:outline-none focus-visible:ring-4 focus-visible:ring-orange-500/40',
+        /* Solo manejamos la visibilidad por scroll, no por modal */
         visible
           ? 'opacity-100 translate-x-0 pointer-events-auto'
           : 'opacity-0 translate-x-8 pointer-events-none',

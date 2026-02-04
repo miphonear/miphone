@@ -75,10 +75,15 @@ export default function Dialog({
                   ref={closeButtonRef}
                   type="button"
                   className="
-                    text-gray-500 hover:text-orange-500 transition-colors 
-                    focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-1
-                    rounded-md p-1
-                  "
+      text-gray-400 hover:text-red-500 hover:bg-red-50 
+      transition-all duration-200 
+      rounded-full p-1.5
+      
+      /* Accesibilidad: Anillo visible solo con teclado */
+      focus:outline-none 
+      focus-visible:ring-2 
+      focus-visible:ring-red-400 
+    "
                   onClick={onClose}
                   aria-label="Cerrar modal"
                 >

@@ -14,13 +14,12 @@ export default function ModalFotos({ open, fotos, onClose }: ModalFotosProps) {
   const [current, setCurrent] = useState(0)
   const [fade, setFade] = useState(true)
 
-  // Reset al abrir/cerrar
   useEffect(() => {
-    if (!open) setCurrent(0)
+    if (open) setCurrent(0)
   }, [open])
 
-  // Funciones memoizadas para evitar recreación
   const goPrev = useCallback(() => {
+    if (fotos.length <= 1) return
     setFade(false)
     setTimeout(() => {
       setCurrent((prev) => (prev === 0 ? fotos.length - 1 : prev - 1))
@@ -29,6 +28,7 @@ export default function ModalFotos({ open, fotos, onClose }: ModalFotosProps) {
   }, [fotos.length])
 
   const goNext = useCallback(() => {
+    if (fotos.length <= 1) return
     setFade(false)
     setTimeout(() => {
       setCurrent((prev) => (prev === fotos.length - 1 ? 0 : prev + 1))
@@ -36,114 +36,116 @@ export default function ModalFotos({ open, fotos, onClose }: ModalFotosProps) {
     }, 150)
   }, [fotos.length])
 
-  // Navegación por teclado
   useEffect(() => {
     if (!open) return
-
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowLeft') goPrev()
       if (e.key === 'ArrowRight') goNext()
       if (e.key === 'Escape') onClose()
     }
-
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [open, goPrev, goNext, onClose])
-
-  // Precarga de imágenes adyacentes
-  useEffect(() => {
-    if (fotos.length > 1) {
-      const nextIndex = (current + 1) % fotos.length
-      const prevIndex = (current - 1 + fotos.length) % fotos.length
-      new window.Image().src = fotos[nextIndex]
-      new window.Image().src = fotos[prevIndex]
-    }
-  }, [current, fotos])
 
   if (!fotos || fotos.length === 0) return null
 
   return (
     <Transition.Root show={open} as={Fragment}>
       <HDialog as="div" className="relative z-50" onClose={onClose}>
-        {/* Overlay */}
         <Transition.Child
           as={Fragment}
-          enter="ease-out duration-200"
+          enter="ease-out duration-300"
           enterFrom="opacity-0"
           enterTo="opacity-100"
-          leave="ease-in duration-150"
+          leave="ease-in duration-200"
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm transition-opacity" />
+          <div className="fixed inset-0 bg-black/70 backdrop-blur-md transition-opacity" />
         </Transition.Child>
 
-        {/* Dialog content */}
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4">
           <Transition.Child
             as={Fragment}
-            enter="ease-out duration-200"
+            enter="ease-out duration-300"
             enterFrom="opacity-0 scale-95"
             enterTo="opacity-100 scale-100"
-            leave="ease-in duration-150"
+            leave="ease-in duration-200"
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-95"
           >
-            <HDialog.Panel className="relative w-full max-w-md sm:max-w-lg rounded-2xl bg-white shadow-xl ring-1 ring-black/5 p-0">
-              {/* Botón Cerrar */}
-              <button
-                type="button"
-                className="absolute right-4 top-4 text-gray-400 hover:text-orange-500 transition"
-                onClick={onClose}
-                aria-label="Cerrar"
-              >
-                <X className="w-6 h-6" />
-              </button>
+            <HDialog.Panel className="relative w-full max-w-2xl bg-white rounded-3xl border border-gray-100 shadow-sm flex flex-col overflow-hidden">
+              {/* HEADER DEL MODAL (Aísla la X de la imagen) */}
+              <div className="flex justify-end p-3 md:p-4 border-b border-gray-50 md:border-none">
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="p-1.5 rounded-full text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400"
+                  aria-label="Cerrar modal"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
 
-              {/* Carrusel */}
-              <div className="flex flex-col items-center px-4 py-8">
-                <div className="flex flex-row items-center w-full justify-center gap-4">
-                  {/* Botón izquierdo */}
+              {/* ÁREA DEL CARRUSEL */}
+              <div className="flex flex-col p-4 md:p-8 pt-0 md:pt-0">
+                <div className="relative flex items-center justify-center min-h-[300px] md:min-h-[450px]">
+                  {/* Botón Izquierdo */}
                   {fotos.length > 1 && (
                     <button
                       onClick={goPrev}
+                      className="absolute left-0 z-10 p-2 md:p-3 bg-white/90 md:bg-white border border-gray-100 rounded-full text-gray-500 hover:text-orange-500 transition-all active:scale-95 shadow-sm"
                       aria-label="Anterior"
-                      className="p-2 rounded-full bg-white border shadow hover:transition group z-10"
                     >
-                      <ChevronLeft className="w-5 h-5 md:w-6 md:h-6 text-gray-600 transition-colors group-hover:text-orange-500" />
+                      <ChevronLeft className="w-6 h-6" />
                     </button>
                   )}
-                  {/* Imagen con fade */}
-                  <div className="flex items-center justify-center max-w-[95vw] max-h-[80vh]">
+
+                  {/* Imagen Principal */}
+                  <div className="w-full flex justify-center items-center px-2">
                     <Image
                       src={fotos[current]}
-                      alt={`Foto ${current + 1}`}
-                      width={800}
-                      height={600}
-                      className={`object-contain rounded transition-opacity duration-200 ${
+                      alt={`Vista del producto ${current + 1}`}
+                      width={1000}
+                      height={1000}
+                      className={`max-h-[55vh] md:max-h-[65vh] object-contain transition-opacity duration-300 ${
                         fade ? 'opacity-100' : 'opacity-0'
                       }`}
-                      priority={false}
-                      sizes="95vw"
+                      unoptimized
+                      priority
                     />
                   </div>
 
-                  {/* Botón derecho */}
+                  {/* Botón Derecho */}
                   {fotos.length > 1 && (
                     <button
                       onClick={goNext}
+                      className="absolute right-0 z-10 p-2 md:p-3 bg-white/90 md:bg-white border border-gray-100 rounded-full text-gray-500 hover:text-orange-500 transition-all active:scale-95 shadow-sm"
                       aria-label="Siguiente"
-                      className="p-2 rounded-full bg-white border shadow hover:transition group z-10"
                     >
-                      <ChevronRight className="w-5 h-5 md:w-6 md:h-6 text-gray-600 transition-colors group-hover:text-orange-500" />
+                      <ChevronRight className="w-6 h-6" />
                     </button>
                   )}
                 </div>
 
-                {/* Indicador de foto */}
-                <div className="w-full pt-6 flex items-center justify-center">
-                  <span className="text-gray-500 text-sm">
-                    Foto {current + 1} de {fotos.length}
+                {/* FOOTER DEL MODAL */}
+                <div className="mt-4 md:mt-8 flex flex-col items-center gap-4">
+                  {/* Dots */}
+                  {fotos.length > 1 && (
+                    <div className="flex gap-1.5">
+                      {fotos.map((_, idx) => (
+                        <div
+                          key={idx}
+                          className={`h-1.5 rounded-full transition-all duration-300 ${
+                            idx === current ? 'w-6 bg-orange-500' : 'w-1.5 bg-gray-200'
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  )}
+
+                  <span className="text-gray-400 text-[10px] font-bold uppercase tracking-[0.2em]">
+                    {current + 1} de {fotos.length}
                   </span>
                 </div>
               </div>
